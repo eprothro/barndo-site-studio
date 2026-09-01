@@ -270,6 +270,27 @@
       align-items: center;
       gap: 10px;
       margin: 7px 0;
+      min-width: 0;
+    }
+
+    .preset-row select,
+    .preset-row input {
+      min-width: 0;
+      width: 0;
+      background: #0e110d;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 13px;
+    }
+
+    .preset-row select {
+      flex: 1.2;
+    }
+
+    .preset-row input {
+      flex: 1;
     }
 
     .row label {
@@ -707,13 +728,11 @@
 
         <div class="panel">
           <h2>Presets</h2>
-          <div class="row" style="margin:4px 0">
-            <select id="presetSel"
-              style="flex:1.2;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px">
+          <div class="row preset-row" style="margin:4px 0">
+            <select id="presetSel">
               <option value="">— named presets —</option>
             </select>
-            <input id="presetName" type="text" placeholder="name"
-              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:13px">
+            <input id="presetName" type="text" placeholder="name">
           </div>
           <div class="seg">
             <button id="presetSave">Save</button>
