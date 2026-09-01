@@ -321,57 +321,6 @@
       color: var(--accent);
     }
 
-    .checks {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .checks li {
-      display: flex;
-      gap: 8px;
-      align-items: baseline;
-      padding: 5px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 12.5px;
-    }
-
-    .checks li:last-child {
-      border-bottom: 0;
-    }
-
-    .checks .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex: none;
-      position: relative;
-      top: 4px;
-    }
-
-    .checks .name {
-      flex: 1;
-      color: var(--sub);
-    }
-
-    .checks .num {
-      color: var(--ink);
-      font-variant-numeric: tabular-nums;
-      text-align: right;
-    }
-
-    .dot.ok {
-      background: var(--ok);
-    }
-
-    .dot.warn {
-      background: var(--warn);
-    }
-
-    .dot.bad {
-      background: var(--bad);
-    }
-
     .stage {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -432,21 +381,12 @@
         <div class="panel">
           <h2>Siting</h2>
           <div class="overall" id="overallBox"></div>
-          <div class="row"><label>Living east → E fence</label>
-            <input type="range" id="eastGap" min="2" max="28" step="0.25"><span class="val" id="eastGap_v"></span>
-          </div>
-          <div class="row"><label>Shop north (s)</label>
-            <input type="range" id="bS0" min="-30" max="10" step="0.5"><span class="val" id="bS0_v"></span>
-          </div>
           <div class="row"><label>Tool</label>
             <div class="seg" style="flex:1.4">
-              <button data-tool="hand" id="tool_hand">hand</button>
-              <button data-tool="measure" id="tool_measure">cursor</button>
+              <button data-tool="hand" id="tool_hand">move</button>
+              <button data-tool="measure" id="tool_measure">measure</button>
             </div>
           </div>
-          <div class="hint">Hand moves the stacked shell and modules. Cursor drops a measure point — W/E/N/S to the
-            fences (and to the house rear). After you place it, the tape follows the mouse: ΔE/W and ΔN/S from the
-            point.</div>
           <div class="row"><label>Zoom</label>
             <input type="range" id="zoom" min="0.45" max="3.5" step="0.05"><span class="val" id="zoom_v"></span>
           </div>
@@ -454,32 +394,53 @@
             <button id="zoomFit">Fit site</button>
             <button id="zoomWork">Work</button>
           </div>
-          <div class="hint">Fit frames the whole lot. Work is 220% — living and court stay readable.</div>
         </div>
 
         <div class="panel">
           <h2>Components</h2>
-          <div class="hint">Show / hide · <b>Edit</b> for sizes and walls. Double-click a piece on the plan.</div>
-          <div class="comp-row" data-edit="living"><span class="ccheck"></span><span class="cname">Living</span><span class="area-meta" id="living_sf"></span><button type="button" class="ebtn" data-edit="living">Edit</button></div>
-          <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Dance/Gym</span><span class="area-meta" id="gym_sf"></span><button type="button" class="ebtn" data-edit="gym">Edit</button></div>
-          <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><span class="area-meta" id="shop_sf"></span><button type="button" class="ebtn" data-edit="shop">Edit</button></div>
-          <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span class="cname">Patio</span><span class="area-meta" id="patio_sf"></span><button type="button" class="ebtn" data-edit="patio">Edit</button></div>
-          <div class="comp-row" data-edit="cage"><input type="checkbox" id="enCage"><span class="cname">Batting cage</span><span class="area-meta" id="cage_sf"></span><button type="button" class="ebtn" data-edit="cage">Edit</button></div>
-          <div class="comp-row" data-edit="deck"><input type="checkbox" id="enDeck"><span class="cname">Pool deck</span><span class="area-meta" id="deck_sf"></span><button type="button" class="ebtn" data-edit="deck">Edit</button></div>
-          <div class="comp-row" data-edit="pool"><input type="checkbox" id="enPool"><span class="cname">Pool</span><span class="area-meta" id="pool_sf"></span><button type="button" class="ebtn" data-edit="pool">Edit</button></div>
-          <div class="comp-row" data-edit="court"><input type="checkbox" id="enCourt"><span class="cname">Pickleball</span><span class="area-meta" id="court_sf"></span><button type="button" class="ebtn" data-edit="court">Edit</button></div>
-          <div class="comp-row" data-edit="fire"><input type="checkbox" id="enFire"><span class="cname">Fire pit</span><span class="area-meta" id="fire_sf"></span><button type="button" class="ebtn" data-edit="fire">Edit</button></div>
-          <div class="comp-row" data-edit="office"><input type="checkbox" id="enOffice"><span class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
-          <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
-          <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
-          <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span class="cname">Bunk</span><button type="button" class="ebtn" data-edit="bunk">Edit</button></div>
-          <div class="comp-row" data-edit="media"><input type="checkbox" id="enMedia"><span class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
-          <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
-          <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
-          <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool table</span><button type="button" class="ebtn" data-edit="ptable">Edit</button></div>
-          <div class="comp-row" data-edit="dining"><input type="checkbox" id="enDining"><span class="cname">Dining</span><button type="button" class="ebtn" data-edit="dining">Edit</button></div>
-          <div class="comp-row" data-edit="sit"><input type="checkbox" id="enSit"><span class="cname">Sitting</span><button type="button" class="ebtn" data-edit="sit">Edit</button></div>
-          <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span class="cname">Bar</span><button type="button" class="ebtn" data-edit="bar">Edit</button></div>
+          <div class="hint">Double-click a component on plan to edit.</div>
+          <div class="comp-row" data-edit="living"><span class="ccheck"></span><span class="cname">Living</span><button
+              type="button" class="ebtn" data-edit="living">Edit</button></div>
+          <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Dance/Gym</span><button
+              type="button" class="ebtn" data-edit="gym">Edit</button></div>
+          <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><button
+              type="button" class="ebtn" data-edit="shop">Edit</button></div>
+          <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span
+              class="cname">Patio</span><button type="button" class="ebtn" data-edit="patio">Edit</button></div>
+          <div class="comp-row" data-edit="cage"><input type="checkbox" id="enCage"><span class="cname">Batting
+              cage</span><button type="button" class="ebtn" data-edit="cage">Edit</button></div>
+          <div class="comp-row" data-edit="deck"><input type="checkbox" id="enDeck"><span class="cname">Pool
+              deck</span><button type="button" class="ebtn" data-edit="deck">Edit</button></div>
+          <div class="comp-row" data-edit="pool"><input type="checkbox" id="enPool"><span
+              class="cname">Pool</span><button type="button" class="ebtn" data-edit="pool">Edit</button></div>
+          <div class="comp-row" data-edit="spa"><input type="checkbox" id="enSpa"><span class="cname">Hot
+              tub</span><button type="button" class="ebtn" data-edit="spa">Edit</button></div>
+          <div class="comp-row" data-edit="court"><input type="checkbox" id="enCourt"><span
+              class="cname">Pickleball</span><button type="button" class="ebtn" data-edit="court">Edit</button></div>
+          <div class="comp-row" data-edit="fire"><input type="checkbox" id="enFire"><span class="cname">Fire
+              pit</span><button type="button" class="ebtn" data-edit="fire">Edit</button></div>
+          <div class="comp-row" data-edit="office"><input type="checkbox" id="enOffice"><span
+              class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
+          <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool
+              closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
+          <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span
+              class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
+          <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span
+              class="cname">Bunk</span><button type="button" class="ebtn" data-edit="bunk">Edit</button></div>
+          <div class="comp-row" data-edit="media"><input type="checkbox" id="enMedia"><span
+              class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
+          <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span
+              class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
+          <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game
+              table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
+          <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool
+              table</span><button type="button" class="ebtn" data-edit="ptable">Edit</button></div>
+          <div class="comp-row" data-edit="dining"><input type="checkbox" id="enDining"><span
+              class="cname">Dining</span><button type="button" class="ebtn" data-edit="dining">Edit</button></div>
+          <div class="comp-row" data-edit="sit"><input type="checkbox" id="enSit"><span
+              class="cname">Sitting</span><button type="button" class="ebtn" data-edit="sit">Edit</button></div>
+          <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span class="cname">Bar</span><button
+              type="button" class="ebtn" data-edit="bar">Edit</button></div>
         </div>
 
         <dialog id="editDlg">
@@ -488,219 +449,228 @@
             <button type="button" class="ebtn" id="editClose">Done</button>
           </div>
           <div class="edit-pane" data-edit="living">
-          <div class="row"><label>Width (E–W)</label>
-            <input type="range" id="livingW" min="22" max="48" step="0.5"><span class="val" id="livingW_v"></span>
-          </div>
-          <div class="row"><label>Depth (N–S)</label>
-            <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
-          </div>
-          <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. East edge is the
-            siting slider.</div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="livingW" min="22" max="48" step="0.5"><span class="val" id="livingW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
+            </div>
+            <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. East edge is the
+              siting slider.</div>
           </div>
           <div class="edit-pane" data-edit="gym">
-          <div class="row"><label>Width (E–W)</label>
-            <input type="range" id="gymW" min="14" max="48" step="0.5"><span class="val" id="gymW_v"></span>
-          </div>
-          <div class="row"><label>Depth (N–S)</label>
-            <input type="range" id="gymD" min="12" max="30" step="0.5"><span class="val" id="gymD_v"></span>
-          </div>
-          <div class="row"><label>Vs living</label>
-            <div class="seg" style="flex:1.4">
-              <button data-gymside="N" id="gymside_N">north</button>
-              <button data-gymside="S" id="gymside_S">south</button>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="gymW" min="14" max="48" step="0.5"><span class="val" id="gymW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="gymD" min="12" max="30" step="0.5"><span class="val" id="gymD_v"></span>
+            </div>
+            <div class="row"><label>Vs living</label>
+              <div class="seg" style="flex:1.4">
+                <button data-gymside="N" id="gymside_N">north</button>
+                <button data-gymside="S" id="gymside_S">south</button>
+              </div>
+            </div>
+            <div class="row"><label>Flush to living</label>
+              <div class="seg" style="flex:1.4">
+                <button data-gymflush="E" id="gymFlush_E">east</button>
+                <button data-gymflush="W" id="gymFlush_W">west</button>
+              </div>
+            </div>
+            <div class="hint">East = share living’s east face (narrow gym insets west). West = share living’s west face
+              (narrow gym insets east). C-2 is gym <b>north</b>, both 36′.</div>
+            <div class="row"><label>Mirror + barre</label><input type="checkbox" id="enMirror"></div>
+            <div class="row"><label>Mirror wall</label>
+              <div class="seg" style="flex:1.4">
+                <button data-mirrwall="N" id="mirrwall_N">N</button>
+                <button data-mirrwall="S" id="mirrwall_S">S</button>
+                <button data-mirrwall="E" id="mirrwall_E">E</button>
+                <button data-mirrwall="W" id="mirrwall_W">W</button>
+              </div>
+            </div>
+            <div class="hint">Barre is on the <b id="barreWall_v">S</b> wall (opposite the mirror). Drag each along its
+              wall.</div>
+            <div class="row"><label>Mirror length</label>
+              <input type="range" id="mirrorLen" min="6" max="36" step="0.5"><span class="val" id="mirrorLen_v"></span>
+            </div>
+            <div class="row"><label>Barre length</label>
+              <input type="range" id="barreLen" min="4" max="24" step="0.5"><span class="val" id="barreLen_v"></span>
             </div>
           </div>
-          <div class="row"><label>Flush to living</label>
-            <div class="seg" style="flex:1.4">
-              <button data-gymflush="E" id="gymFlush_E">east</button>
-              <button data-gymflush="W" id="gymFlush_W">west</button>
-            </div>
-          </div>
-          <div class="hint">East = share living’s east face (narrow gym insets west). West = share living’s west face
-            (narrow gym insets east). C-2 is gym <b>north</b>, both 36′.</div>
-          <div class="row"><label>Mirror + barre</label><input type="checkbox" id="enMirror"></div>
-          <div class="row"><label>Mirror wall</label>
-            <div class="seg" style="flex:1.4">
-              <button data-mirrwall="N" id="mirrwall_N">N</button>
-              <button data-mirrwall="S" id="mirrwall_S">S</button>
-              <button data-mirrwall="E" id="mirrwall_E">E</button>
-              <button data-mirrwall="W" id="mirrwall_W">W</button>
-            </div>
-          </div>
-          <div class="hint">Barre is on the <b id="barreWall_v">S</b> wall (opposite the mirror). Drag each along its
-            wall.</div>
-          <div class="row"><label>Mirror length</label>
-            <input type="range" id="mirrorLen" min="6" max="36" step="0.5"><span class="val" id="mirrorLen_v"></span>
-          </div>
-          <div class="row"><label>Barre length</label>
-            <input type="range" id="barreLen" min="4" max="24" step="0.5"><span class="val" id="barreLen_v"></span>
-          </div>
-        </div>
 
           <div class="edit-pane" data-edit="shop">
-          <div class="row"><label>Width (E–W)</label>
-            <input type="range" id="garageW" min="28" max="56" step="0.5"><span class="val" id="garageW_v"></span>
-          </div>
-          <div class="row"><label>Depth (N–S)</label>
-            <input type="range" id="garageD" min="20" max="44" step="0.5"><span class="val" id="garageD_v"></span>
-          </div>
-          <div class="row"><label>Flush to living</label>
-            <div class="seg" style="flex:1.4">
-              <button data-shopflush="E" id="shopFlush_E">east</button>
-              <button data-shopflush="W" id="shopFlush_W">west</button>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="garageW" min="28" max="56" step="0.5"><span class="val" id="garageW_v"></span>
             </div>
-          </div>
-          <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
-            continuous (extra shop hangs east, toward the cage).</div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="garageD" min="20" max="44" step="0.5"><span class="val" id="garageD_v"></span>
+            </div>
+            <div class="row"><label>Flush to living</label>
+              <div class="seg" style="flex:1.4">
+                <button data-shopflush="E" id="shopFlush_E">east</button>
+                <button data-shopflush="W" id="shopFlush_W">west</button>
+              </div>
+            </div>
+            <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
+              continuous (extra shop hangs east, toward the cage).</div>
           </div>
           <div class="edit-pane" data-edit="patio">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="patio">↻ <span id="face_patio"></span></button>
-          </div>
-          <div class="row"><label>Length along wall (N–S)</label>
-            <input type="range" id="patioRun" min="12" max="80" step="0.5"><span class="val" id="patioRun_v"></span>
-          </div>
-          <div class="row"><label>Depth off wall (E–W)</label>
-            <input type="range" id="patioDep" min="8" max="28" step="0.5"><span class="val" id="patioDep_v"></span>
-          </div>
-          <div class="hint">East edge is glued to the living west face (gym and shop join that wall when flush west).
-            Drag slides it along that wall; it snaps to zone joints.</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="patio">↻ <span id="face_patio"></span></button>
+            </div>
+            <div class="row"><label>Length along wall (N–S)</label>
+              <input type="range" id="patioRun" min="12" max="80" step="0.5"><span class="val" id="patioRun_v"></span>
+            </div>
+            <div class="row"><label>Depth off wall (E–W)</label>
+              <input type="range" id="patioDep" min="8" max="28" step="0.5"><span class="val" id="patioDep_v"></span>
+            </div>
+            <div class="hint">East edge is glued to the living west face (gym and shop join that wall when flush west).
+              Drag slides it along that wall; it snaps to zone joints.</div>
           </div>
           <div class="edit-pane" data-edit="cage">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="cage">↻ <span id="face_cage"></span></button>
-          </div>
-          <div class="row"><label>Length</label>
-            <input type="range" id="cageLen" min="40" max="80" step="1"><span class="val" id="cageLen_v"></span>
-          </div>
-          <div class="row"><label>Width (net)</label>
-            <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
-          </div>
-          <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path).</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="cage">↻ <span id="face_cage"></span></button>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="cageLen" min="40" max="80" step="1"><span class="val" id="cageLen_v"></span>
+            </div>
+            <div class="row"><label>Width (net)</label>
+              <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
+            </div>
+            <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path).</div>
           </div>
           <div class="edit-pane" data-edit="deck">
-          <div class="row"><label>East edge</label>
-            <input type="range" id="deckE" min="-14" max="18" step="0.5"><span class="val" id="deckE_v"></span>
-          </div>
-          <div class="row"><label>North edge</label>
-            <input type="range" id="deckN" min="-14" max="18" step="0.5"><span class="val" id="deckN_v"></span>
-          </div>
-          <div class="hint">Drag the deck to move it. East / north sliders push that face out (positive) or pull it
-            in toward the pool (negative). 0 is the CAD shape (east already pulled 5′-10″).</div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="deckW" min="50" max="82" step="0.5"><span class="val" id="deckW_v"></span>
+            </div>
+            <div class="row"><label>Length (N–S)</label>
+              <input type="range" id="deckL" min="65" max="98" step="0.5"><span class="val" id="deckL_v"></span>
+            </div>
+            <div class="hint">Drag the deck to move it. Width grows east; length grows north.</div>
           </div>
           <div class="edit-pane" data-edit="pool">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="pool">↻ <span id="face_pool"></span></button>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="pool">↻ <span id="face_pool"></span></button>
+            </div>
+            <div class="hint">Drag the lagoon. South is the 8′ diving hopper + board. North is 3.5′ play. The hot tub
+              is its own piece — it does not ride with the pool.</div>
           </div>
-          <div class="hint">Drag the lagoon. Rotate swaps the bounding box; the kidney stays the CAD shape.</div>
+          <div class="edit-pane" data-edit="spa">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="spa" disabled>↻ <span id="face_spa"></span></button>
+            </div>
+            <div class="hint">CAD spa: 13′ × 11′ freeform at the NE lobe. Drag to place. Rotate stays off.</div>
           </div>
           <div class="edit-pane" data-edit="court">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="court">↻ <span id="face_court"></span></button>
-          </div>
-          <div class="hint">60×30 pickleball. Drag freely. ↻ swaps the long axis.</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="court">↻ <span id="face_court"></span></button>
+            </div>
+            <div class="hint">60×30 pickleball. Drag freely. ↻ swaps the long axis.</div>
           </div>
           <div class="edit-pane" data-edit="fire">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="fire" disabled>↻ <span id="face_fire"></span></button>
-          </div>
-          <div class="hint">16′ circle. Drag to place. Rotate stays off — it’s a square.</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="fire" disabled>↻ <span id="face_fire"></span></button>
+            </div>
+            <div class="hint">16′ circle. Drag to place. Rotate stays off — it’s a square.</div>
           </div>
           <div class="edit-pane" data-edit="office">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="office">↻ <span id="face_office"></span></button>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="office">↻ <span id="face_office"></span></button>
+            </div>
           </div>
           <div class="edit-pane" data-edit="closet">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
+            </div>
           </div>
           <div class="edit-pane" data-edit="bath">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
-          </div>
-          <div class="row"><label>Along face</label>
-            <input type="range" id="bathAlong" min="5" max="14" step="0.5"><span class="val" id="bathAlong_v"></span>
-          </div>
-          <div class="row"><label>Depth off face</label>
-            <input type="range" id="bathInto" min="6" max="16" step="0.5"><span class="val" id="bathInto_v"></span>
-          </div>
-          <div class="hint">C-2 is 7′-6″ along the west wall × 10′-6″ into the gym.</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
+            </div>
+            <div class="row"><label>Along face</label>
+              <input type="range" id="bathAlong" min="5" max="14" step="0.5"><span class="val" id="bathAlong_v"></span>
+            </div>
+            <div class="row"><label>Depth off face</label>
+              <input type="range" id="bathInto" min="6" max="16" step="0.5"><span class="val" id="bathInto_v"></span>
+            </div>
+            <div class="hint">C-2 is 7′-6″ along the west wall × 10′-6″ into the gym.</div>
           </div>
           <div class="edit-pane" data-edit="bunk">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="bunk">↻ <span id="face_bunk"></span></button>
-          </div>
-          <div class="row"><label>Length</label>
-            <input type="range" id="bunkLen" min="10" max="22" step="0.5"><span class="val" id="bunkLen_v"></span>
-          </div>
-          <div class="hint">Along the face. Width stays 13′ (east column). C-2 is 14′.</div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="bunk">↻ <span id="face_bunk"></span></button>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="bunkLen" min="10" max="22" step="0.5"><span class="val" id="bunkLen_v"></span>
+            </div>
+            <div class="hint">Along the face. Width stays 13′ (east column). C-2 is 14′.</div>
           </div>
           <div class="edit-pane" data-edit="media">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
+            </div>
           </div>
           <div class="edit-pane" data-edit="weights">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
+            </div>
           </div>
           <div class="edit-pane" data-edit="table">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="table">↻ <span id="face_table"></span></button>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="table">↻ <span id="face_table"></span></button>
+            </div>
           </div>
           <div class="edit-pane" data-edit="ptable">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="ptable">↻ <span id="face_ptable"></span></button>
-          </div>
-          <div class="row"><label>Table length</label>
-            <div class="seg" style="flex:1.4">
-              <button data-pt="7" id="pt_7">7'</button>
-              <button data-pt="8" id="pt_8">8'</button>
-              <button data-pt="9" id="pt_9">9'</button>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="ptable">↻ <span id="face_ptable"></span></button>
             </div>
-          </div>
-          <div class="hint">Dashed envelope is cue clearance: 13×18 for 8′ (7′ → 12×17, 9′ → 14×19). Face = long axis.</div>
+            <div class="row"><label>Table length</label>
+              <div class="seg" style="flex:1.4">
+                <button data-pt="7" id="pt_7">7'</button>
+                <button data-pt="8" id="pt_8">8'</button>
+                <button data-pt="9" id="pt_9">9'</button>
+              </div>
+            </div>
+            <div class="hint">Dashed envelope is cue clearance: 13×18 for 8′ (7′ → 12×17, 9′ → 14×19). Face = long axis.
+            </div>
           </div>
           <div class="edit-pane" data-edit="dining">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="dining">↻ <span id="face_dining"></span></button>
-          </div>
-          <div class="row"><label>Table width</label>
-            <input type="range" id="diningW" min="3" max="5" step="0.25"><span class="val" id="diningW_v"></span>
-          </div>
-          <div class="row"><label>Table length</label>
-            <input type="range" id="diningLen" min="4" max="14" step="0.5"><span class="val" id="diningLen_v"></span>
-          </div>
-          <div class="row"><label>Chairs per long side</label>
-            <input type="range" id="diningChairs" min="1" max="6" step="1"><span class="val" id="diningChairs_v"></span>
-          </div>
-          <div class="row"><label>End chairs (head/foot)</label><input type="checkbox" id="diningEnds"></div>
-          <div class="hint">Dashed envelope = table + chair + <b>36″</b> pull-out/walk each seated side (24″ at ends).</div>
-          </div>
-          <div class="edit-pane" data-edit="sit">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="sit">↻ <span id="face_sit"></span></button>
-          </div>
-          <div class="row"><label>Layout</label>
-            <div class="seg" style="flex:1.4">
-              <button data-sit="pair" id="sit_pair">2 chairs</button>
-              <button data-sit="love" id="sit_love">love + 1</button>
-              <button data-sit="lounge" id="sit_lounge">sofa + 1</button>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="dining">↻ <span id="face_dining"></span></button>
+            </div>
+            <div class="row"><label>Table width</label>
+              <input type="range" id="diningW" min="3" max="5" step="0.25"><span class="val" id="diningW_v"></span>
+            </div>
+            <div class="row"><label>Table length</label>
+              <input type="range" id="diningLen" min="4" max="14" step="0.5"><span class="val" id="diningLen_v"></span>
+            </div>
+            <div class="row"><label>Chairs per long side</label>
+              <input type="range" id="diningChairs" min="1" max="6" step="1"><span class="val"
+                id="diningChairs_v"></span>
+            </div>
+            <div class="row"><label>End chairs (head/foot)</label><input type="checkbox" id="diningEnds"></div>
+            <div class="hint">Dashed envelope = table + chair + <b>36″</b> pull-out/walk each seated side (24″ at ends).
             </div>
           </div>
-          <div class="hint">8×8 pair · 10×9 loveseat + chair · 12×10 sofa + chair. Face = open side.</div>
+          <div class="edit-pane" data-edit="sit">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="sit">↻ <span id="face_sit"></span></button>
+            </div>
+            <div class="row"><label>Layout</label>
+              <div class="seg" style="flex:1.4">
+                <button data-sit="pair" id="sit_pair">2 chairs</button>
+                <button data-sit="love" id="sit_love">love + 1</button>
+                <button data-sit="lounge" id="sit_lounge">sofa + 1</button>
+              </div>
+            </div>
+            <div class="hint">8×8 pair · 10×9 loveseat + chair · 12×10 sofa + chair. Face = open side.</div>
           </div>
           <div class="edit-pane" data-edit="bar">
-          <div class="row"><label>Rotate</label>
-            <button class="rbtn" data-rot="bar">↻ <span id="face_bar"></span></button>
-          </div>
-          <div class="row"><label>Bar length</label>
-            <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
-          </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="bar">↻ <span id="face_bar"></span></button>
+            </div>
+            <div class="row"><label>Bar length</label>
+              <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
+            </div>
           </div>
         </dialog>
 
@@ -744,6 +714,7 @@
             <span><b style="color:#3f97b3">cage</b> + 2′ dotted</span>
             <span><b style="color:#3a6fa8">court</b> 60×30</span>
             <span><b style="color:#2f6f82">pool</b></span>
+            <span><b style="color:#2a6a78">hot tub</b></span>
             <span><b style="color:#2f6f4a">pool tbl</b></span>
             <span><b style="color:#a8894f">dining</b></span>
             <span><b style="color:#6b5a8a">sitting</b></span>
@@ -751,10 +722,6 @@
             <span><b style="color:#8a6a3a">fire</b></span>
             <span><b style="color:#c0392b">fence / ag</b></span>
           </div>
-        </div>
-        <div class="panel" style="margin-top:14px">
-          <h2>Clearance &amp; siting checks</h2>
-          <ul class="checks" id="checks"></ul>
         </div>
       </div>
     </div>
@@ -805,6 +772,19 @@
       [86.1, 68], [92.1, 58], [86.1, 50], [79.1, 45],
     ];
     const SPA_C = [107.1, 41];
+    const SPA_RX = 6.5, SPA_RY = 5.5, SPA_ROT = 50; // CAD −40, then +90° CW
+    const SPA_CAD_E0 = SPA_C[0] - SPA_RX, SPA_CAD_S0 = SPA_C[1] - SPA_RY;
+    const SPA_CAD_W = SPA_RX * 2, SPA_CAD_H = SPA_RY * 2;
+    const POOL_MID = [
+      POOL_CAD.reduce((a, p) => a + p[0], 0) / POOL_CAD.length,
+      POOL_CAD.reduce((a, p) => a + p[1], 0) / POOL_CAD.length,
+    ];
+    // Deep hopper inset from the SW walls. Board on the west-south lip, aimed at mid.
+    const DEEP_C = [94.2, 70.0];
+    const DEEP_R = 6.5;
+    const BOARD_LEN = 8.2, BOARD_W = 1.8;
+    const BOARD_STAND = [83.2, 81.6]; // +1.6 E, +1.2 S from 81.6 / 80.4
+    const BOARD_YAW = 10;             // CW from aim-at-mid
     const DECK_E_PULL = 5 + 10 / 12;   // east deck pulled west (owner 2026-08-29) — baked into DECK_PTS
     const DECK_PTS = [
       [74.1, 18], [100.1, 18], [119.8, 18], [134.8 - DECK_E_PULL, 24],
@@ -840,22 +820,22 @@
       gymSide: "N",
       shopFlush: "E",
       gymFlush: "E",
-      eastGap: 14 + 2 / 12 + 4.1,    // hold barndo; fence moved +4.1' (was 14'-2")
-      bS0: -20,
-      patioRun: 50, patioDep: 18,
+      eastGap: 28,                   // living east → east fence
+      bS0: -10,                      // barndo north (pushed up from −20)
+      patioRun: 39.5, patioDep: 15,
       cageLen: 70, cageWid: 14,
       barLen: 14,
       bathAlong: 7.5, bathInto: 10.5,
       bunkLen: 14,
       mirrorLen: 14, barreLen: 10,
-      deckE: 0, deckN: 0,
+      deckW: 62.5, deckL: 76.5,
       poolLen: 8,
       diningW: 3.5, diningLen: 11, diningChairs: 5, diningEnds: true,
       sitCfg: "love",
       enPatio: true, enCage: true, enOffice: true, enCloset: true,
       enBath: true, enBunk: true, enMedia: true, enWeights: true,
       enTable: true, enPtable: true, enDining: false, enSit: false,
-      enBar: true, enPool: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
+      enBar: true, enPool: true, enSpa: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
       tool: "hand",
       zoom: 2.2,
     };
@@ -1098,12 +1078,19 @@
       F.pool.s = cs - F.pool.h / 2;
     }
 
+    function applySpa() {
+      if (!F.spa) return;
+      F.spa.w = SPA_CAD_W;
+      F.spa.h = SPA_CAD_H;
+    }
+
     function deckPts() {
       if (!F.deck) return DECK_PTS;
       const de = F.deck.e - DECK_CAD_E0, ds = F.deck.s - DECK_CAD_S0;
+      const dE = S.deckW - DECK_CAD_W, dN = S.deckL - DECK_CAD_H;
       return DECK_PTS.map(([e, s]) => {
-        const ee = e + de + (e >= DECK_CAD_E1 - 0.6 ? S.deckE : 0);
-        const ss = s + ds - (s <= DECK_CAD_S0 + 0.6 ? S.deckN : 0);
+        const ee = e + de + (e >= DECK_CAD_E1 - 0.6 ? dE : 0);
+        const ss = s + ds - (s <= DECK_CAD_S0 + 0.6 ? dN : 0);
         return [ee, ss];
       });
     }
@@ -1231,15 +1218,15 @@
       S.gymSide = "N";
       S.shopFlush = "E";
       S.gymFlush = "E";
-      S.eastGap = 14 + 2 / 12 + 4.1;
-      S.bS0 = -20;
-      S.patioRun = 50; S.patioDep = 18;
+      S.eastGap = 28;
+      S.bS0 = -10;
+      S.patioRun = 39.5; S.patioDep = 15;
       S.cageLen = 70; S.cageWid = 14;
       S.barLen = 14;
       S.bathAlong = 7.5; S.bathInto = 10.5;
       S.bunkLen = 14;
       S.mirrorLen = 14; S.barreLen = 10;
-      S.deckE = 0; S.deckN = 0;
+      S.deckW = 62.5; S.deckL = 76.5;
       S.poolLen = 8;
       S.zoom = 2.2;
       S.diningW = 3.5; S.diningLen = 11; S.diningChairs = 5; S.diningEnds = true;
@@ -1247,7 +1234,7 @@
       S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true;
       S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true;
       S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
-      S.enBar = true; S.enPool = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
+      S.enBar = true; S.enPool = true; S.enSpa = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
       const z = zones();
       seedModule("office", {
         label: "office", e: z.shop.e1 - 12, s: z.shop.s1 - 10, w: 12, h: 10, face: "W",
@@ -1270,7 +1257,7 @@
         c: "#dfeacf", ec: "#6f8a4a", tc: "#43541f"
       });
       seedModule("weights", {
-        label: "weights", e: z.gym.e1 - 8, s: z.gym.s0 + 10.1, w: 8, h: 7.5, face: "W",
+        label: "weights", e: z.gym.e0 + 0.31, s: z.gym.s0 + 0.16, w: 8, h: 7.5, face: "W",
         c: "#e4eadc", ec: "#6a7f4a", tc: "#3a4a28"
       });
       seedModule("table", {
@@ -1294,11 +1281,11 @@
         c: "#e8dccf", ec: "#8a6b4a", tc: "#5a3f2a"
       });
       seedModule("patio", {
-        label: "covered patio", e: z.gym.e0 - 18, s: z.gym.s0, w: 18, h: 50, face: "E",
+        label: "covered patio", e: z.gym.e0 - S.patioDep, s: z.gym.s0 + 0.5, w: S.patioDep, h: S.patioRun, face: "E",
         c: "#e6d4b8", ec: "#8a744a", tc: "#5a3f1a"
       });
       seedModule("cage", {
-        label: "cage", e: 189.0, s: 0, w: 14, h: 70, face: "N",
+        label: "cage", e: 181.23, s: 0.01, w: 14, h: 70, face: "N",
         c: "#d5eaf0", ec: "#3f97b3", tc: "#1f4a5a"
       });
       seedModule("court", {
@@ -1306,11 +1293,15 @@
         c: "#9ec0e8", ec: "#2a5080", tc: "#0f2848"
       });
       seedModule("pool", {
-        label: "pool", e: POOL_CAD_E0, s: POOL_CAD_S0, w: POOL_CAD_W, h: POOL_CAD_H, face: "N",
+        label: "pool", e: 79.06, s: 32.31, w: POOL_CAD_W, h: POOL_CAD_H, face: "N",
         c: "#7eb6c9", ec: "#2f6f82", tc: "#123844"
       });
+      seedModule("spa", {
+        label: "hot tub", e: 102.56, s: 30.82, w: SPA_CAD_W, h: SPA_CAD_H, face: "N",
+        c: "#9fd0dc", ec: "#2a6a78", tc: "#123844"
+      });
       seedModule("deck", {
-        label: "deck", e: DECK_CAD_E0, s: DECK_CAD_S0, w: DECK_CAD_W, h: DECK_CAD_H, face: "N",
+        label: "deck", e: 65.46, s: 14.95, w: S.deckW, h: S.deckL, face: "N",
         c: "#cbb896", ec: "#8a744a", tc: "#5a3f1a"
       });
       seedModule("fire", {
@@ -1318,11 +1309,11 @@
         c: "#d8c8a8", ec: "#8a6a3a", tc: "#5a3f1a"
       });
       seedModule("mirror", {
-        label: "mirror", e: z.gym.e0 + (S.gymW - S.mirrorLen) / 2, s: z.gym.s0, w: S.mirrorLen, h: MIRROR_INTO, face: "N",
+        label: "mirror", e: 162.19, s: z.gym.s0, w: S.mirrorLen, h: MIRROR_INTO, face: "N",
         c: "#c5d8e4", ec: "#3a6a82", tc: "#1a3a48"
       });
       seedModule("barre", {
-        label: "barre", e: z.gym.e0 + (S.gymW - S.barreLen) / 2, s: z.gym.s1 - BARRE_INTO, w: S.barreLen, h: BARRE_INTO, face: "S",
+        label: "barre", e: 166.68, s: z.gym.s1 - BARRE_INTO, w: S.barreLen, h: BARRE_INTO, face: "S",
         c: "#e8d4b0", ec: "#8a6a38", tc: "#5a3f1a"
       });
       applySized();
@@ -1339,19 +1330,19 @@
     function applySized() {
       applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyTable();
       applyPtable(); applyDining(); applySit();
-      applyCage(); applyCourt(); applyPool(); applyPatio(); applyDeck();
+      applyCage(); applyCourt(); applyPool(); applySpa(); applyPatio(); applyDeck();
       applyMirror(); applyBarre();
     }
 
     const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
-    const SITE_MODS = ["patio", "cage", "court", "pool", "fire", "deck"];
+    const SITE_MODS = ["patio", "cage", "court", "pool", "spa", "fire", "deck"];
 
     function enabledKeys() {
       const map = {
         office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
         media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
-        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
+        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
       };
       return Object.keys(map).filter(k => S[map[k]] && F[k]);
@@ -1398,8 +1389,6 @@
       el("gymD_v").textContent = fmtFt(S.gymD);
       el("garageW_v").textContent = fmtFt(S.garageW);
       el("garageD_v").textContent = fmtFt(S.garageD);
-      el("eastGap_v").textContent = fmtFt(S.eastGap);
-      el("bS0_v").textContent = fmtFt(S.bS0);
       el("patioRun_v").textContent = fmtFt(S.patioRun);
       el("patioDep_v").textContent = fmtFt(S.patioDep);
       el("cageLen_v").textContent = fmtFt(S.cageLen);
@@ -1410,8 +1399,8 @@
       el("bunkLen_v").textContent = fmtFt(S.bunkLen);
       el("mirrorLen_v").textContent = fmtFt(S.mirrorLen);
       el("barreLen_v").textContent = fmtFt(S.barreLen);
-      el("deckE_v").textContent = (S.deckE >= 0 ? "+" : "") + fmtFt(S.deckE);
-      el("deckN_v").textContent = (S.deckN >= 0 ? "+" : "") + fmtFt(S.deckN);
+      el("deckW_v").textContent = fmtFt(S.deckW);
+      el("deckL_v").textContent = fmtFt(S.deckL);
       el("diningW_v").textContent = fmtFt(S.diningW);
       el("diningLen_v").textContent = fmtFt(S.diningLen);
       el("diningChairs_v").textContent = String(S.diningChairs);
@@ -1420,12 +1409,12 @@
 
       for (const [id, key] of [
         ["livingW", "livingW"], ["livingD", "livingD"], ["gymW", "gymW"], ["gymD", "gymD"],
-        ["garageW", "garageW"], ["garageD", "garageD"], ["eastGap", "eastGap"],
-        ["bS0", "bS0"], ["patioRun", "patioRun"], ["patioDep", "patioDep"],
+        ["garageW", "garageW"], ["garageD", "garageD"],
+        ["patioRun", "patioRun"], ["patioDep", "patioDep"],
         ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkLen", "bunkLen"],
         ["mirrorLen", "mirrorLen"], ["barreLen", "barreLen"],
-        ["deckE", "deckE"], ["deckN", "deckN"],
+        ["deckW", "deckW"], ["deckL", "deckL"],
         ["diningW", "diningW"], ["diningLen", "diningLen"], ["diningChairs", "diningChairs"],
         ["zoom", "zoom"],
       ]) el(id).value = S[key];
@@ -1444,6 +1433,7 @@
       el("enSit").checked = S.enSit;
       el("enBar").checked = S.enBar;
       el("enPool").checked = S.enPool;
+      el("enSpa").checked = S.enSpa;
       el("enCourt").checked = S.enCourt;
       el("enFire").checked = S.enFire;
       el("enMirror").checked = S.enMirror;
@@ -1479,43 +1469,36 @@
       const shopSf = S.garageW * S.garageD;
       const gymSf = S.gymW * S.gymD;
       const livSf = S.livingW * S.livingD;
-      el("living_sf").textContent = areaLine(S.livingW, S.livingD);
-      el("gym_sf").textContent = areaLine(S.gymW, S.gymD);
-      el("shop_sf").textContent = areaLine(S.garageW, S.garageD);
-      el("patio_sf").textContent = S.enPatio ? areaLine(S.patioRun, S.patioDep) : "off";
-      el("cage_sf").textContent = S.enCage ? areaLine(S.cageLen, S.cageWid) : "off";
-      el("deck_sf").textContent = S.enDeck && F.deck ? areaLine(F.deck.w, F.deck.h) : "off";
-      el("pool_sf").textContent = S.enPool && F.pool ? areaLine(F.pool.w, F.pool.h) : "off";
-      el("court_sf").textContent = S.enCourt && F.court ? areaLine(F.court.w, F.court.h) : "off";
-      el("fire_sf").textContent = S.enFire ? "16′ ⌀" : "off";
-      const stack = S.gymSide === "S" ? "shop → living → gym" : "shop → gym → living";
-      const shape = isL()
-        ? `L · shop ${fmtFt(S.garageW)} × ${fmtFt(S.garageD)} · gym ${fmtFt(S.gymW)} × ${fmtFt(S.gymD)} · living ${fmtFt(S.livingW)} × ${fmtFt(S.livingD)} · ${stack}`
-        : `bar · ${fmtFt(S.livingW)} × ${fmtFt(overallD)} · ${stack}`;
+      const officeSf = (S.enOffice && F.office) ? F.office.w * F.office.h : 0;
+      const acSf = gymSf + livSf + officeSf;
+      const noAcSf = shopSf - officeSf;
+      const patioSf = S.patioRun * S.patioDep;
       el("overallBox").innerHTML =
-        `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall<br>${shape}<br>` +
-        `${Math.round(shopSf + gymSf + livSf)} sf  · shop ${Math.round(shopSf)} · gym ${Math.round(gymSf)} · living ${Math.round(livSf)}`;
+        `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall<br>` +
+        `A/C · ${Math.round(acSf)} sqft (living + gym + office)<br>` +
+        `no A/C · ${Math.round(noAcSf)} sqft (shop − office)<br>` +
+        (S.enPatio ? `patio · ${Math.round(patioSf)} sqft` : `patio · off`);
 
       const faceName = { N: "N", S: "S", W: "W", E: "E" };
       const enKey = {
         office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
         media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
-        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
+        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
       };
       for (const k of Object.keys(F)) {
         const s = el("face_" + k);
         if (s) s.textContent = faceName[F[k].face] || F[k].face;
         const btn = document.querySelector(`[data-rot="${k}"]`);
-        if (btn) btn.disabled = k === "fire" || !S[enKey[k]];
+        if (btn) btn.disabled = k === "fire" || k === "spa" || !S[enKey[k]];
       }
 
       const VW = M * 2 + CAN_W * PXFT, VH = M * 2 + CAN_H * PXFT;
       let g = "";
       const pe = 'style="pointer-events:none"';
 
-      // yard (also the click target in cursor mode)
+      // yard (also the click target in measure mode)
       g += `<rect data-bg="1" x="${fx(CAN_E0)}" y="${fy(CAN_S0)}" width="${CAN_W * PXFT}" height="${CAN_H * PXFT}" fill="#e8eadc" stroke="none"/>`;
 
       // pasture south of ag / south fence
@@ -1538,15 +1521,17 @@
       g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28)}" text-anchor="middle" font-size="12" fill="#5a5348" font-weight="700" ${pe}>HOUSE</text>`;
       g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28) + 13}" text-anchor="middle" font-size="9" fill="#5a5348" ${pe}>${fmtFt(HOUSE_E1 - HOUSE_E0)} × ${fmtFt(-HOUSE_S0)}</text>`;
 
-      // Covered recess (kitchen U + covered patio)
-      g += `<rect x="${fx(HPATIO_E0)}" y="${fy(HPATIO_S0)}" width="${(HPATIO_E1 - HPATIO_E0) * PXFT}" height="${(-HPATIO_S0) * PXFT}" fill="#d4c4a8" stroke="none"/>`;
-      g += `<rect x="${fx(KIT_U_E0)}" y="${fy(KIT_U_S)}" width="${(KIT_U_E1 - KIT_U_E0) * PXFT}" height="${(-KIT_U_S) * PXFT}" fill="#d4c4a8" stroke="none"/>`;
+      // Uncovered pad — south run is straight; radius only at the SE corner.
       const padPoly = [
         [HPATIO_E0, 0], [PAD_E1, 0], [PAD_E1, 12],
         [103.5, 15.5], [101.0, PAD_S1], [HPATIO_E0, PAD_S1],
       ];
       g += `<polygon points="${polyPts(padPoly)}" fill="#cbb896" stroke="#8a744a" stroke-width="1.2"/>`;
-      g += `<text x="${fx((HPATIO_E0 + PAD_E1) / 2)}" y="${fy(8)}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>HOUSE PATIO</text>`;
+      // Covered patio roof only (CAD roof_patio_cover). Stops at the east pier —
+      // kitchen U is open sky, not under the deep cover.
+      g += `<rect x="${fx(HPATIO_E0)}" y="${fy(HPATIO_S0)}" width="${(HPATIO_E1 - HPATIO_E0) * PXFT}" height="${(-HPATIO_S0 + 0.45) * PXFT}" fill="#b89a6e" fill-opacity="0.55" stroke="#6a5340" stroke-width="1" ${pe}/>`;
+      g += `<text x="${fx((HPATIO_E0 + HPATIO_E1) / 2)}" y="${fy(-5.5)}" text-anchor="middle" font-size="9" fill="#5a3f1a" font-weight="700" ${pe}>COVERED</text>`;
+      g += `<text x="${fx((HPATIO_E0 + PAD_E1) / 2)}" y="${fy(9)}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>HOUSE PATIO</text>`;
 
       // Existing AC / mower pad + dogleg wood (params.FENCE_AC_DOGLEG)
       g += `<polygon points="${polyPts(HOUSE_SE_PAD)}" fill="#b8b0a0" stroke="#6a6358" stroke-width="1.2"/>`;
@@ -1616,6 +1601,10 @@
         }
       }
       g += dimLine(bb.e1, (bb.s0 + bb.s1) / 2, EAST_FENCE, (bb.s0 + bb.s1) / 2, `${fmtFt(EAST_FENCE - bb.e1)} → E fence`);
+      {
+        const xe = Math.min(DRIVE_E, z.shop.e0);
+        g += dimLine(xe, DRIVE_S1, xe, z.shop.s0, `${fmtFt(Math.abs(z.shop.s0 - DRIVE_S1))} barndo → drive`);
+      }
       g += dimLine((bb.e0 + bb.e1) / 2, bb.s1, (bb.e0 + bb.e1) / 2, SOUTH_FENCE, `${fmtFt(SOUTH_FENCE - bb.s1)} → S fence / ag`);
 
       const acc = { s: g };
@@ -1623,6 +1612,7 @@
       if (S.enPatio) drawPatio(acc);
       if (S.enDeck) drawDeck(acc);
       if (S.enPool) drawPool(acc);
+      if (S.enSpa) drawSpa(acc);
       if (S.enCage) drawCage(acc);
       if (S.enCourt) drawCourt(acc);
       if (S.enOffice) drawSimple(acc, "office");
@@ -1681,7 +1671,6 @@
       el("svgHost").innerHTML =
         `<svg id="plan" width="${VW}" height="${VH}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" style="cursor:${svgCursor}">${acc.s}</svg>`;
       attachDrag();
-      runChecks();
     }
 
     function faceEdge(f) {
@@ -1713,11 +1702,30 @@
     function drawBath(g) {
       const f = F.bath;
       const pe = 'style="pointer-events:none"';
+      // Same local layout as bath-studio (no fridge): x from west, y from north.
+      const bits = [
+        { lx: 0, ly: 0, w: 2.25, h: 2.67, label: "W/D", c: "#e8dccf", ec: "#8a6b4a", tc: "#5a3f2a" },
+        { lx: 4.83, ly: 0, w: 2.6, h: 1.8, label: "vanity", c: "#dfeacf", ec: "#6f8a4a", tc: "#43541f", sink: true },
+        { lx: 7.5, ly: 0, w: 3.0, h: 2.417, label: "toilet", c: "#efe3cf", ec: "#a8863f", tc: "#6a531f", bowl: true },
+        { lx: 4.05, ly: 4.5, w: 4.0, h: 3.0, label: "shower", c: "#b8d4d9", ec: "#4a6f78", tc: "#2a4650", xout: true },
+      ];
       let body = "";
-      body += `<rect x="${fx(f.e + 0.2)}" y="${fy(f.s + 0.2)}" width="${1.8 * PXFT}" height="${2.2 * PXFT}" fill="#b8d4d9" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
-      body += `<rect x="${fx(f.e + f.w - 3.6)}" y="${fy(f.s + 0.25)}" width="${3.3 * PXFT}" height="${3.3 * PXFT}" fill="#b8d4d9" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
-      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h) - 5}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
-      wrapMod(g, "bath", body);
+      for (const t of bits) {
+        const e = f.e + t.lx, s = f.s + t.ly;
+        body += `<rect x="${fx(e)}" y="${fy(s)}" width="${t.w * PXFT}" height="${t.h * PXFT}" rx="1.5" fill="${t.c}" stroke="${t.ec}" stroke-width="0.7" ${pe}/>`;
+        if (t.xout) {
+          body += `<line x1="${fx(e)}" y1="${fy(s)}" x2="${fx(e + t.w)}" y2="${fy(s + t.h)}" stroke="${t.ec}" stroke-width="0.6" opacity="0.5" ${pe}/>`;
+          body += `<line x1="${fx(e + t.w)}" y1="${fy(s)}" x2="${fx(e)}" y2="${fy(s + t.h)}" stroke="${t.ec}" stroke-width="0.6" opacity="0.5" ${pe}/>`;
+        }
+        if (t.bowl)
+          body += `<circle cx="${fx(e + t.w / 2)}" cy="${fy(s + 0.75)}" r="${0.45 * PXFT}" fill="none" stroke="${t.ec}" stroke-width="0.8" ${pe}/>`;
+        if (t.sink)
+          body += `<circle cx="${fx(e + t.w / 2)}" cy="${fy(s + t.h / 2)}" r="${0.26 * PXFT}" fill="none" stroke="${t.ec}" stroke-width="0.8" ${pe}/>`;
+        body += `<text x="${fx(e + t.w / 2)}" y="${fy(s + t.h / 2) + 3}" text-anchor="middle" font-size="7" fill="${t.tc}" font-weight="700" ${pe}>${t.label}</text>`;
+      }
+      body += `<text x="${fx(f.e + 2.15)}" y="${fy(f.s + f.h) - 16}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>pool bath</text>`;
+      body += `<text x="${fx(f.e + 2.15)}" y="${fy(f.s + f.h) - 4}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      wrapMod(g, "bath", body, { skipLabel: true });
     }
 
     function drawBunk(g) {
@@ -2002,8 +2010,11 @@
     function drawPatio(g) {
       const f = F.patio;
       const pe = 'style="pointer-events:none"';
-      const body = `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 1.1)}" text-anchor="middle" font-size="9" fill="${f.tc}" ${pe}>${fmtFt(f.w)} × ${fmtFt(f.h)}</text>`;
-      wrapMod(g, "patio", body, { fillOp: 0.55 });
+      const cx = fx(f.e + f.w / 2), cy = fy(f.s + f.h / 2);
+      const body =
+        `<text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>COVERED PATIO</text>` +
+        `<text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="9" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      wrapMod(g, "patio", body, { fillOp: 0.55, skipLabel: true });
     }
 
     function drawCage(g) {
@@ -2068,7 +2079,20 @@
       g.s += `<g data-fx="deck" style="cursor:grab">`;
       g.s += `<rect x="${fx(be)}" y="${fy(bs)}" width="${bw * PXFT}" height="${bh * PXFT}" fill="transparent"/>`;
       g.s += `<polygon points="${polyPts(pts)}" fill="#cbb896" fill-opacity="0.55" stroke="#8a744a" stroke-width="1.2"/>`;
-      g.s += `<text x="${fx(be + bw / 2)}" y="${fy(bs + bh / 2) + 4}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>DECK</text>`;
+      g.s += `<text x="${fx(be + bw * 0.62)}" y="${fy(bs + 2.8)}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>POOL DECK</text>`;
+      g.s += `<text x="${fx(be + bw * 0.62)}" y="${fy(bs + 5.2)}" text-anchor="middle" font-size="8" fill="#5a3f1a" ${pe}>${areaLine(bw, bh)}</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawSpa(g) {
+      if (!F.spa) return;
+      const f = F.spa;
+      const pe = 'style="pointer-events:none"';
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      g.s += `<g data-fx="spa" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="transparent"/>`;
+      g.s += `<ellipse cx="${fx(ce)}" cy="${fy(cs)}" rx="${SPA_RX * PXFT}" ry="${SPA_RY * PXFT}" transform="rotate(${SPA_ROT} ${fx(ce)} ${fy(cs)})" fill="${f.c}" fill-opacity="0.78" stroke="${f.ec}" stroke-width="1.3"/>`;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 3}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>HOT TUB</text>`;
       g.s += `</g>`;
     }
 
@@ -2077,13 +2101,29 @@
       const pe = 'style="pointer-events:none"';
       const de = f.e - POOL_CAD_E0, ds = f.s - POOL_CAD_S0;
       const pts = POOL_CAD.map(p => [p[0] + de, p[1] + ds]);
-      const spa = [SPA_C[0] + de, SPA_C[1] + ds];
+      const es = pts.map(p => p[0]), ss = pts.map(p => p[1]);
+      const e0 = Math.min(...es), e1 = Math.max(...es);
+      const s0 = Math.min(...ss), s1 = Math.max(...ss);
       g.s += `<g data-fx="pool" style="cursor:grab">`;
-      g.s += `<polygon points="${polyPts(pts)}" fill="${f.c}" fill-opacity="0.55" stroke="${f.ec}" stroke-width="1.6"/>`;
-      g.s += `<ellipse cx="${fx(spa[0])}" cy="${fy(spa[1])}" rx="${6.5 * PXFT}" ry="${5.5 * PXFT}" fill="#9fd0dc" fill-opacity="0.7" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
-      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
-      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 4}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>POOL</text>`;
+      g.s += `<polygon points="${polyPts(pts)}" fill="${f.c}" fill-opacity="0.5" stroke="${f.ec}" stroke-width="1.6"/>`;
+      const dc = [DEEP_C[0] + de, DEEP_C[1] + ds];
+      g.s += `<circle cx="${fx(dc[0])}" cy="${fy(dc[1])}" r="${DEEP_R * PXFT}" fill="#3a6a7a" fill-opacity="0.55" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+      g.s += `<text x="${fx(dc[0])}" y="${fy(dc[1]) + 3}" text-anchor="middle" font-size="9" fill="#eef6f8" font-weight="700" ${pe}>deep end</text>`;
+      g.s += `<text x="${fx(95.1 + de)}" y="${fy(42 + ds)}" text-anchor="middle" font-size="8" fill="${f.tc}" font-weight="700" ${pe}>3.5′</text>`;
+      const se = BOARD_STAND[0] + de, stS = BOARD_STAND[1] + ds;
+      const aimE = POOL_MID[0] + de, aimS = POOL_MID[1] + ds;
+      const ang = Math.atan2(aimE - se, -(aimS - stS)) * 180 / Math.PI + BOARD_YAW;
+      const sx = fx(se), sy = fy(stS);
+      g.s += `<g transform="rotate(${ang.toFixed(1)} ${sx} ${sy})">`;
+      g.s += `<rect x="${fx(se - 1.4)}" y="${fy(stS)}" width="${2.8 * PXFT}" height="${1.3 * PXFT}" fill="#6a4a28" stroke="#3a2814" stroke-width="0.7"/>`;
+      g.s += `<rect x="${fx(se - BOARD_W / 2)}" y="${fy(stS - BOARD_LEN)}" width="${BOARD_W * PXFT}" height="${BOARD_LEN * PXFT}" rx="2" fill="#c4a06a" stroke="#6a4a28" stroke-width="1"/>`;
+      g.s += `<text x="${fx(se)}" y="${fy(stS - BOARD_LEN * 0.45)}" text-anchor="middle" font-size="7" fill="#4a3014" font-weight="700" ${pe}>BOARD</text>`;
       g.s += `</g>`;
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2 - 4;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs)}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>POOL</text>`;
+      g.s += `</g>`;
+      dimLine(e1 + 2.4, s0, e1 + 2.4, s1, `${fmtFt(s1 - s0)} N–S`);
+      dimLine(e0, s0 - 2.6, e1, s0 - 2.6, `${fmtFt(e1 - e0)} E–W`, "above");
     }
 
     // ---- drag ----
@@ -2235,7 +2275,7 @@
       else if (k === "patio") applyPatio();
       else if (k === "mirror") { setMirrorWall(nextFace[f.face]); draw(); return; }
       else if (k === "barre") { setMirrorWall(OPP_WALL[nextFace[f.face]] || f.face); draw(); return; }
-      else if (k === "fire" || k === "deck") { /* keep w/h */ }
+      else if (k === "fire" || k === "deck" || k === "spa") { /* keep w/h */ }
       else {
         const nw = f.h, nh = f.w;
         f.w = nw; f.h = nh;
@@ -2245,127 +2285,6 @@
         f.s = cs - f.h / 2;
       }
       draw();
-    }
-
-    function rectsOverlap(a, b) {
-      return a.e < b.e + b.w && a.e + a.w > b.e && a.s < b.s + b.h && a.s + a.h > b.s;
-    }
-    function chk(name, val, level) {
-      return `<li><span class="dot ${level}"></span><span class="name">${name}</span><span class="num">${val}</span></li>`;
-    }
-
-    function runChecks() {
-      const items = [];
-      const z = zones();
-      const bb = bbox();
-      const overallW = bb.e1 - bb.e0, overallD = bb.s1 - bb.s0;
-      items.push(chk("Overall envelope", `${fmtFt(overallW)} × ${fmtFt(overallD)}${isL() ? "  · L" : "  · bar"}`, "ok"));
-      items.push(chk("Shop / living / gym",
-        `${fmtFt(S.garageW)}×${fmtFt(S.garageD)} ${S.shopFlush} · ${fmtFt(S.livingW)}×${fmtFt(S.livingD)} · gym ${fmtFt(S.gymW)}×${fmtFt(S.gymD)} ${S.gymFlush} ${S.gymSide === "S" ? "S of living" : "N of living"}`,
-        "ok"));
-
-      const eGap = EAST_FENCE - bb.e1;
-      items.push(chk("Building → east fence", fmtFt(eGap), eGap >= 12 ? "ok" : eGap >= 8 ? "warn" : "bad"));
-      const sGap = SOUTH_FENCE - bb.s1;
-      items.push(chk("Building → south fence / ag", fmtFt(sGap), sGap >= 20 ? "ok" : sGap >= 12 ? "warn" : "bad"));
-      items.push(chk("House SW → west fence", `${fmtFt(HOUSE_E0)}  · locked satellite`,
-        Math.abs(HOUSE_E0 - 53.8) < 0.05 ? "ok" : "bad"));
-      const houseToFence = EAST_FENCE - HOUSE_E1;
-      items.push(chk("House SE → east fence", `${fmtFt(houseToFence)}  · owner 85′ (was 80.9′ satellite)`,
-        Math.abs(houseToFence - 85) < 0.05 ? "ok" : "bad"));
-      const houseGap = bb.e0 - HOUSE_E1;
-      items.push(chk("Building → house SE", houseGap >= 0 ? fmtFt(houseGap) : `overlaps house ${fmtFt(-houseGap)}`,
-        houseGap >= 8 ? "ok" : houseGap >= 0 ? "warn" : "bad"));
-      if (bb.s1 > SOUTH_FENCE + 0.05)
-        items.push(chk("Ag line", "building crosses south fence", "bad"));
-
-      if (S.enCourt && F.court) {
-        const c = F.court;
-        const toE = EAST_FENCE - (c.e + c.w);
-        const toS = SOUTH_FENCE - (c.s + c.h);
-        const toN = c.s - bb.s1;
-        items.push(chk("Court → east fence", fmtFt(toE), toE >= 4 ? "ok" : toE >= 0 ? "warn" : "bad"));
-        items.push(chk("Court → south fence / ag", fmtFt(toS), toS >= 8 ? "ok" : toS >= 0 ? "warn" : "bad"));
-        items.push(chk("Court → building south", toN >= 0 ? fmtFt(toN) : `overlaps ${fmtFt(-toN)}`,
-          toN >= 10 ? "ok" : toN >= 0 ? "warn" : "bad"));
-        if (c.s + c.h > SOUTH_FENCE + 0.05)
-          items.push(chk("Court vs ag", "court crosses south fence", "bad"));
-      }
-
-      if (S.enCage && F.cage) {
-        const c = F.cage;
-        const longNS = (c.face === "N" || c.face === "S");
-        const envE0 = c.e - (longNS ? CAGE_SIDE : 0);
-        const envE1 = c.e + c.w + (longNS ? CAGE_SIDE : 0);
-        const toE = EAST_FENCE - envE1;
-        const toB = envE0 - bb.e1;
-        items.push(chk("Cage 2′ side → east fence", fmtFt(toE), toE >= 0 ? "ok" : "bad"));
-        items.push(chk("Cage 2′ side → building", toB >= 0 ? fmtFt(toB) : `clips ${fmtFt(-toB)}`,
-          toB >= 0 ? "ok" : "warn"));
-      }
-
-      if (S.enPatio && F.patio) {
-        const wall = westWall();
-        const onWall = Math.abs((F.patio.e + F.patio.w) - wall.e) < 0.15;
-        items.push(chk("Patio on west wall", onWall ? "snapped" : "off the wall", onWall ? "ok" : "warn"));
-        const run = F.patio.h;
-        const along = wall.s1 - wall.s0;
-        items.push(chk("Patio run vs west face", `${fmtFt(run)} on ${fmtFt(along)} wall`,
-          run <= along + 0.05 ? "ok" : "warn"));
-      }
-
-      const keys = enabledKeys();
-      const name = k => (F[k] && F[k].label) || k;
-      let overlaps = [];
-      for (let a = 0; a < keys.length; a++) {
-        for (let b = a + 1; b < keys.length; b++) {
-          const A = F[keys[a]], B = F[keys[b]];
-          if (!A || !B) continue;
-          if (keys[a] === "pool" || keys[b] === "pool") continue;
-          if (keys[a] === "patio" && SITE_MODS.includes(keys[b])) continue;
-          if (keys[b] === "patio" && SITE_MODS.includes(keys[a])) continue;
-          if (keys[a] === "court" || keys[b] === "court") continue;
-          if (keys[a] === "cage" || keys[b] === "cage") continue;
-          if (keys[a] === "deck" || keys[b] === "deck") continue;
-          if ((keys[a] === "mirror" && keys[b] === "barre") || (keys[a] === "barre" && keys[b] === "mirror")) continue;
-          if (rectsOverlap(A, B)) overlaps.push(`${name(keys[a])}×${name(keys[b])}`);
-        }
-      }
-      if (S.enDining && F.dining) {
-        const seats = S.diningChairs * 2 + (S.diningEnds ? 2 : 0);
-        const per = S.diningLen * 12 / S.diningChairs;
-        items.push(chk("Dining seats", `${seats}  (${S.diningChairs}/side${S.diningEnds ? " + 2 ends" : ""})`, "ok"));
-        items.push(chk("Side chair width", `${per.toFixed(0)}"  · want ≥24`, per >= 24 ? "ok" : per >= 21 ? "warn" : "bad"));
-      }
-      if (S.enPtable && F.ptable) {
-        const f = F.ptable;
-        const clipped = f.e < z.liv.e0 - 0.05 || f.e + f.w > z.liv.e1 + 0.05
-          || f.s < z.liv.s0 - 0.05 || f.s + f.h > z.liv.s1 + 0.05;
-        items.push(chk("Pool-table clear fits living", clipped ? "clips wall — short cue" : `${fmtFt(f.w)}×${fmtFt(f.h)} envelope in living`,
-          clipped ? "warn" : "ok"));
-      }
-      if (S.enMirror && F.mirror) {
-        const wall = gymWallLen(F.mirror.face);
-        const barreWall = F.barre ? gymWallLen(F.barre.face) : wall;
-        items.push(chk("Mirror + barre",
-          `${fmtFt(S.mirrorLen)} ${F.mirror.face} · ${fmtFt(S.barreLen)} barre ${F.barre ? F.barre.face : "—"}`,
-          F.barre && F.barre.face === OPP_WALL[F.mirror.face] ? "ok" : "warn"));
-        items.push(chk("Mirror fits gym wall",
-          S.mirrorLen <= wall + 0.05 ? `${fmtFt(S.mirrorLen)} on ${fmtFt(wall)}` : `needs ${fmtFt(S.mirrorLen)} · wall ${fmtFt(wall)}`,
-          S.mirrorLen <= wall + 0.05 ? "ok" : "warn"));
-        items.push(chk("Barre fits gym wall",
-          S.barreLen <= barreWall + 0.05 ? `${fmtFt(S.barreLen)} on ${fmtFt(barreWall)}` : `needs ${fmtFt(S.barreLen)} · wall ${fmtFt(barreWall)}`,
-          S.barreLen <= barreWall + 0.05 ? "ok" : "warn"));
-      }
-      if (S.enSit && F.sit) {
-        const tag = S.sitCfg === "pair" ? "2 chairs" : S.sitCfg === "love" ? "loveseat + chair" : "sofa + chair";
-        items.push(chk("Sitting area", `${tag} · ${fmtFt(F.sit.w)}×${fmtFt(F.sit.h)}`, "ok"));
-      }
-
-      items.push(chk("Interior overlaps", overlaps.length ? overlaps.join(", ") : "none",
-        overlaps.length ? "bad" : "ok"));
-
-      el("checks").innerHTML = items.join("");
     }
 
     function paramsText() {
@@ -2402,8 +2321,8 @@ bathInto  = ${S.bathInto}
 bunkLen   = ${S.bunkLen}
 mirrorLen = ${S.mirrorLen}
 barreLen  = ${S.barreLen}
-deckE     = ${S.deckE}
-deckN     = ${S.deckN}
+deckW     = ${S.deckW}
+deckL     = ${S.deckL}
 poolLen   = ${S.poolLen}
 diningW   = ${S.diningW}
 diningLen = ${S.diningLen}
@@ -2425,6 +2344,7 @@ patio     = ${o(S.enPatio, "patio")}
 cage      = ${o(S.enCage, "cage")}
 court     = ${o(S.enCourt, "court")}
 pool      = ${o(S.enPool, "pool")}
+spa       = ${o(S.enSpa, "spa")}
 deck      = ${o(S.enDeck, "deck")}
 fire      = ${o(S.enFire, "fire")}
 mirror    = ${o(S.enMirror, "mirror")}
@@ -2496,16 +2416,6 @@ barre     = ${o(S.enMirror, "barre")}`;
       shiftSouthOf(cut, zones().shop.s1 - cut);
       applyPatio(); draw();
     });
-    el("eastGap").addEventListener("input", e => {
-      const prev = rememberBldg();
-      S.eastGap = parseFloat(e.target.value);
-      afterBldgMove(prev); draw();
-    });
-    el("bS0").addEventListener("input", e => {
-      const prev = rememberBldg();
-      S.bS0 = parseFloat(e.target.value);
-      afterBldgMove(prev); draw();
-    });
     el("patioRun").addEventListener("input", e => { S.patioRun = parseFloat(e.target.value); applyPatio(); draw(); });
     el("patioDep").addEventListener("input", e => { S.patioDep = parseFloat(e.target.value); applyPatio(); draw(); });
     el("cageLen").addEventListener("input", e => { S.cageLen = parseFloat(e.target.value); applyCage(); draw(); });
@@ -2516,8 +2426,8 @@ barre     = ${o(S.enMirror, "barre")}`;
     el("bunkLen").addEventListener("input", e => { S.bunkLen = parseFloat(e.target.value); applyBunk(); draw(); });
     el("mirrorLen").addEventListener("input", e => { S.mirrorLen = parseFloat(e.target.value); applyMirror(); applyBarre(); draw(); });
     el("barreLen").addEventListener("input", e => { S.barreLen = parseFloat(e.target.value); applyBarre(); draw(); });
-    el("deckE").addEventListener("input", e => { S.deckE = parseFloat(e.target.value); applyDeck(); draw(); });
-    el("deckN").addEventListener("input", e => { S.deckN = parseFloat(e.target.value); applyDeck(); draw(); });
+    el("deckW").addEventListener("input", e => { S.deckW = parseFloat(e.target.value); applyDeck(); draw(); });
+    el("deckL").addEventListener("input", e => { S.deckL = parseFloat(e.target.value); applyDeck(); draw(); });
     function canvasHost() { return el("svgHost"); }
 
     function setZoom(z, origin) {
@@ -2600,7 +2510,7 @@ barre     = ${o(S.enMirror, "barre")}`;
     ["enCloset", "enCloset"], ["enBath", "enBath"], ["enBunk", "enBunk"],
     ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enTable", "enTable"],
     ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
-    ["enBar", "enBar"], ["enPool", "enPool"], ["enCourt", "enCourt"], ["enFire", "enFire"],
+    ["enBar", "enBar"], ["enPool", "enPool"], ["enSpa", "enSpa"], ["enCourt", "enCourt"], ["enFire", "enFire"],
     ["enMirror", "enMirror"], ["enDeck", "enDeck"]]
       .forEach(([id, key]) => el(id).addEventListener("change", e => { S[key] = e.target.checked; draw(); }));
 
@@ -2608,7 +2518,7 @@ barre     = ${o(S.enMirror, "barre")}`;
 
     const EDIT_TITLES = {
       living: "Living", gym: "Dance/Gym", shop: "Shop", patio: "Patio", cage: "Batting cage",
-      deck: "Pool deck", pool: "Pool", court: "Pickleball", fire: "Fire pit",
+      deck: "Pool deck", pool: "Pool", spa: "Hot tub", court: "Pickleball", fire: "Fire pit",
       office: "Office", closet: "Pool closet", bath: "Bathroom", bunk: "Bunk",
       media: "Media", weights: "Weights", table: "Game table", ptable: "Pool table",
       dining: "Dining", sit: "Sitting", bar: "Bar",
@@ -2687,15 +2597,22 @@ barre     = ${o(S.enMirror, "barre")}`;
       Object.assign(S, clone(snap.S));
       if (!S.shopFlush) S.shopFlush = S.flush || "E";
       if (!S.gymFlush) S.gymFlush = S.flush || "E";
-      if (S.deckE == null) S.deckE = 0;
-      if (S.deckN == null) S.deckN = 0;
+      if (S.deckW == null) S.deckW = DECK_CAD_W + (S.deckE || 0);
+      if (S.deckL == null) S.deckL = DECK_CAD_H + (S.deckN || 0);
       if (S.enDeck == null) S.enDeck = true;
+      if (S.enSpa == null) S.enSpa = true;
       delete S.flush;
       F = clone(snap.F);
       if (!F.deck) {
         seedModule("deck", {
           label: "deck", e: DECK_CAD_E0, s: DECK_CAD_S0, w: DECK_CAD_W, h: DECK_CAD_H, face: "N",
           c: "#cbb896", ec: "#8a744a", tc: "#5a3f1a"
+        });
+      }
+      if (!F.spa) {
+        seedModule("spa", {
+          label: "hot tub", e: SPA_CAD_E0, s: SPA_CAD_S0, w: SPA_CAD_W, h: SPA_CAD_H, face: "N",
+          c: "#9fd0dc", ec: "#2a6a78", tc: "#123844"
         });
       }
       el("presetName").value = name;
@@ -2720,7 +2637,7 @@ barre     = ${o(S.enMirror, "barre")}`;
     schemeC2();
     {
       const store = loadStore();
-      if (!store["C-2 NEW"]) store["C-2 NEW"] = { S: clone(S), F: clone(F) };
+      store["C-2 NEW"] = { S: clone(S), F: clone(F) };
       if (!store["L shop 44"]) {
         schemeL();
         store["L shop 44"] = { S: clone(S), F: clone(F) };
