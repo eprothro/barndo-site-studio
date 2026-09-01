@@ -396,6 +396,11 @@
       min-height: 0;
     }
 
+    #plan.measure,
+    #plan.measure * {
+      cursor: crosshair !important;
+    }
+
     svg {
       display: block;
       width: auto;
@@ -1699,7 +1704,7 @@
         const nTxt = MP.s >= 0 ? `${fmtFt(MP.s)} N · rear` : `${fmtFt(-MP.s)} S of rear`;
         acc.s += `<text x="${nx}" y="${ny}" text-anchor="middle" font-size="10" font-weight="700" fill="${RD}" transform="rotate(-90 ${nx} ${ny})" pointer-events="none" style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px">${nTxt}</text>`;
         acc.s += `<text x="${sx}" y="${sy}" text-anchor="middle" font-size="10" font-weight="700" fill="${RD}" transform="rotate(-90 ${sx} ${sy})" pointer-events="none" style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px">${fmtFt(SOUTH_FENCE - MP.s)} S</text>`;
-        acc.s += `<g data-measure="1" style="cursor:move">`;
+        acc.s += `<g data-measure="1">`;
         acc.s += `<circle cx="${fx(MP.e)}" cy="${fy(MP.s)}" r="14" fill="transparent"/>`;
         acc.s += `<circle cx="${fx(MP.e)}" cy="${fy(MP.s)}" r="5" fill="${RD}" fill-opacity="0.2" stroke="${RD}" stroke-width="1.5"/>`;
         acc.s += `</g>`;
@@ -1709,8 +1714,9 @@
       acc.s += `<g id="dimLayer">${dimBuf}</g>`;
 
       const svgCursor = S.tool === "measure" ? "crosshair" : "default";
+      el("svgHost").style.cursor = svgCursor;
       el("svgHost").innerHTML =
-        `<svg id="plan" width="${VW}" height="${VH}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" style="cursor:${svgCursor}">${acc.s}</svg>`;
+        `<svg id="plan" class="${S.tool === "measure" ? "measure" : ""}" width="${VW}" height="${VH}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" style="cursor:${svgCursor}">${acc.s}</svg>`;
       attachDrag();
     }
 
@@ -2214,16 +2220,15 @@
     function attachDrag() {
       const svg = el("plan");
       if (S.tool === "measure") {
-        const place = e => {
+        svg.addEventListener("pointerdown", e => {
           const p = ptFt(e); if (!p) return;
           MP.e = clamp(Math.round(p.e * 100) / 100, CAN_E0, CAN_E1);
           MP.s = clamp(Math.round(p.s * 100) / 100, CAN_S0, CAN_S1);
           measurePlaced = true;
           Hover = null;
-          drag = { type: "m" };
+          draw();
           e.preventDefault();
-        };
-        svg.addEventListener("pointerdown", place);
+        });
         return;
       }
       svg.querySelectorAll("[data-fx]").forEach(gEl => {
