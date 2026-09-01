@@ -1,0 +1,2501 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>House Remodel — Site Studio (whole site · L envelope · court)</title>
+  <style>
+    :root {
+      --bg: #10130f;
+      --panel: #1a1e18;
+      --line: #2c322a;
+      --ink: #eef1ea;
+      --sub: #9aa494;
+      --accent: #b9c9a3;
+      --accent-ink: #10130f;
+      --ok: #7fb069;
+      --warn: #d9a441;
+      --bad: #d9634a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    header h1 {
+      font-size: 15px;
+      margin: 0;
+      letter-spacing: .3px;
+      font-weight: 600;
+    }
+
+    header .meta {
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    header .spacer {
+      flex: 1;
+    }
+
+    header a.nav {
+      color: var(--sub);
+      text-decoration: none;
+      font-size: 13px;
+      margin-left: 10px;
+    }
+
+    header a.nav:hover {
+      color: var(--ink);
+    }
+
+    .note {
+      margin: 12px 18px 0;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--sub);
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #14170f;
+    }
+
+    .note b {
+      color: var(--ink);
+    }
+
+    .page {
+      max-width: 2100px;
+      margin: 0 auto;
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .panel h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--sub);
+      margin: 0 0 2px;
+    }
+
+    .area-meta {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      margin: 0 0 10px;
+    }
+
+    .panel+.panel {
+      margin-top: 14px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 7px 0;
+    }
+
+    .row label {
+      flex: 1;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .row .val {
+      width: 72px;
+      text-align: right;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+    }
+
+    .row input[type="checkbox"] {
+      flex: none;
+    }
+
+    input[type="range"] {
+      flex: 1.4;
+      accent-color: var(--accent);
+    }
+
+    input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+    }
+
+    .hint {
+      color: var(--sub);
+      font-size: 11.5px;
+      margin: 2px 0 8px;
+    }
+
+    .seg {
+      display: flex;
+      gap: 6px;
+    }
+
+    .seg button {
+      flex: 1;
+      background: #0e110d;
+      color: var(--sub);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .seg button.on {
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .rbtn {
+      background: #0e110d;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      min-width: 58px;
+      flex: none;
+    }
+
+    .rbtn:hover {
+      border-color: var(--accent);
+    }
+
+    .rbtn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .rbtn span {
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .overall {
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+      color: var(--ink);
+      background: #0e110d;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin: 4px 0 8px;
+    }
+
+    .overall b {
+      color: var(--accent);
+    }
+
+    .checks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checks li {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+
+    .checks li:last-child {
+      border-bottom: 0;
+    }
+
+    .checks .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex: none;
+      position: relative;
+      top: 4px;
+    }
+
+    .checks .name {
+      flex: 1;
+      color: var(--sub);
+    }
+
+    .checks .num {
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .dot.ok {
+      background: var(--ok);
+    }
+
+    .dot.warn {
+      background: var(--warn);
+    }
+
+    .dot.bad {
+      background: var(--bad);
+    }
+
+    .stage {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    #svgHost {
+      overflow: auto;
+      height: calc(100vh - 200px);
+      min-height: 420px;
+    }
+
+    svg {
+      display: block;
+      width: auto;
+      max-width: none;
+      height: auto;
+      touch-action: none;
+    }
+
+    .legend {
+      font-size: 11.5px;
+      color: var(--sub);
+      margin-top: 6px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legend b {
+      color: var(--ink);
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <h1>Site Studio</h1>
+      <span class="meta">whole site · L envelope · drag modules · patio snaps west</span>
+      <span class="spacer"></span>
+    </header>
+
+    <div class="note">
+      Whole backyard in estate feet (e = east, s = south; house rear = 0).
+      West fence → house SW is <b>53′-10″ (53.8′)</b>; house SE → east fence is
+      <b>85′</b>. House, patio, drive, chicken run, garden, trees,
+      and pool sit on CAD. Fire pit is a module — drag it. <b>Zoom</b> to work the living; <b>Fit site</b> to see the
+      lot.
+      <b>Drag</b> modules · patio slides on the west wall.
+    </div>
+
+    <div class="wrap">
+      <div>
+        <div class="panel">
+          <h2>Siting</h2>
+          <div class="overall" id="overallBox"></div>
+          <div class="row"><label>Living east → E fence</label>
+            <input type="range" id="eastGap" min="2" max="28" step="0.25"><span class="val" id="eastGap_v"></span>
+          </div>
+          <div class="row"><label>Shop north (s)</label>
+            <input type="range" id="bS0" min="-30" max="10" step="0.5"><span class="val" id="bS0_v"></span>
+          </div>
+          <div class="row"><label>Tool</label>
+            <div class="seg" style="flex:1.4">
+              <button data-tool="hand" id="tool_hand">hand</button>
+              <button data-tool="measure" id="tool_measure">cursor</button>
+            </div>
+          </div>
+          <div class="hint">Hand moves the stacked shell and modules. Cursor drops a measure point — W/E/N/S to the
+            fences (and to the house rear). After you place it, the tape follows the mouse: ΔE/W and ΔN/S from the
+            point.</div>
+          <div class="row"><label>Zoom</label>
+            <input type="range" id="zoom" min="0.45" max="3.5" step="0.05"><span class="val" id="zoom_v"></span>
+          </div>
+          <div class="seg">
+            <button id="zoomFit">Fit site</button>
+            <button id="zoomWork">Work</button>
+          </div>
+          <div class="hint">Fit frames the whole lot. Work is 160% — living and court stay readable.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Living</h2>
+          <div class="area-meta" id="living_sf"></div>
+          <div class="row"><label>Width (E–W)</label>
+            <input type="range" id="livingW" min="22" max="48" step="0.5"><span class="val" id="livingW_v"></span>
+          </div>
+          <div class="row"><label>Depth (N–S)</label>
+            <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
+          </div>
+          <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. East edge is the
+            siting slider.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Dance/Gym</h2>
+          <div class="area-meta" id="gym_sf"></div>
+          <div class="row"><label>Width (E–W)</label>
+            <input type="range" id="gymW" min="14" max="48" step="0.5"><span class="val" id="gymW_v"></span>
+          </div>
+          <div class="row"><label>Depth (N–S)</label>
+            <input type="range" id="gymD" min="12" max="30" step="0.5"><span class="val" id="gymD_v"></span>
+          </div>
+          <div class="row"><label>Vs living</label>
+            <div class="seg" style="flex:1.4">
+              <button data-gymside="N" id="gymside_N">north</button>
+              <button data-gymside="S" id="gymside_S">south</button>
+            </div>
+          </div>
+          <div class="row"><label>Flush to living</label>
+            <div class="seg" style="flex:1.4">
+              <button data-gymflush="E" id="gymFlush_E">east</button>
+              <button data-gymflush="W" id="gymFlush_W">west</button>
+            </div>
+          </div>
+          <div class="hint">East = share living’s east face (narrow gym insets west). West = share living’s west face
+            (narrow gym insets east). C-2 is gym <b>north</b>, both 36′.</div>
+          <div class="row"><label>Mirror + barre</label><input type="checkbox" id="enMirror"></div>
+          <div class="row"><label>Mirror wall</label>
+            <div class="seg" style="flex:1.4">
+              <button data-mirrwall="N" id="mirrwall_N">N</button>
+              <button data-mirrwall="S" id="mirrwall_S">S</button>
+              <button data-mirrwall="E" id="mirrwall_E">E</button>
+              <button data-mirrwall="W" id="mirrwall_W">W</button>
+            </div>
+          </div>
+          <div class="hint">Barre is on the <b id="barreWall_v">S</b> wall (opposite the mirror). Drag each along its
+            wall.</div>
+          <div class="row"><label>Mirror length</label>
+            <input type="range" id="mirrorLen" min="6" max="36" step="0.5"><span class="val" id="mirrorLen_v"></span>
+          </div>
+          <div class="row"><label>Barre length</label>
+            <input type="range" id="barreLen" min="4" max="24" step="0.5"><span class="val" id="barreLen_v"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Shop</h2>
+          <div class="area-meta" id="shop_sf"></div>
+          <div class="row"><label>Width (E–W)</label>
+            <input type="range" id="garageW" min="28" max="56" step="0.5"><span class="val" id="garageW_v"></span>
+          </div>
+          <div class="row"><label>Depth (N–S)</label>
+            <input type="range" id="garageD" min="20" max="44" step="0.5"><span class="val" id="garageD_v"></span>
+          </div>
+          <div class="row"><label>Flush to living</label>
+            <div class="seg" style="flex:1.4">
+              <button data-shopflush="E" id="shopFlush_E">east</button>
+              <button data-shopflush="W" id="shopFlush_W">west</button>
+            </div>
+          </div>
+          <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
+            continuous (extra shop hangs east, toward the cage).</div>
+        </div>
+
+        <div class="panel">
+          <h2>Patio</h2>
+          <div class="area-meta" id="patio_sf"></div>
+          <div class="row"><label>On</label><input type="checkbox" id="enPatio">
+            <button class="rbtn" data-rot="patio">↻ <span id="face_patio"></span></button>
+          </div>
+          <div class="row"><label>Length along wall (N–S)</label>
+            <input type="range" id="patioRun" min="12" max="80" step="0.5"><span class="val" id="patioRun_v"></span>
+          </div>
+          <div class="row"><label>Depth off wall (E–W)</label>
+            <input type="range" id="patioDep" min="8" max="28" step="0.5"><span class="val" id="patioDep_v"></span>
+          </div>
+          <div class="hint">East edge is glued to the living west face (gym and shop join that wall when flush west).
+            Drag
+            slides it along that wall; it snaps to zone joints.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Batting cage</h2>
+          <div class="area-meta" id="cage_sf"></div>
+          <div class="row"><label>On</label><input type="checkbox" id="enCage">
+            <button class="rbtn" data-rot="cage">↻ <span id="face_cage"></span></button>
+          </div>
+          <div class="row"><label>Length</label>
+            <input type="range" id="cageLen" min="40" max="80" step="1"><span class="val" id="cageLen_v"></span>
+          </div>
+          <div class="row"><label>Width (net)</label>
+            <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
+          </div>
+          <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path).</div>
+        </div>
+
+        <div class="panel">
+          <h2>Modules</h2>
+          <div class="hint">Toggle · ↻ rotates 90° (face = open / building side).</div>
+          <div class="row"><label>Office</label><input type="checkbox" id="enOffice">
+            <button class="rbtn" data-rot="office">↻ <span id="face_office"></span></button>
+          </div>
+          <div class="row"><label>Pool closet</label><input type="checkbox" id="enCloset">
+            <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
+          </div>
+          <div class="row"><label>Bathroom</label><input type="checkbox" id="enBath">
+            <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
+          </div>
+          <div class="row"><label>Bunk room</label><input type="checkbox" id="enBunk">
+            <button class="rbtn" data-rot="bunk">↻ <span id="face_bunk"></span></button>
+          </div>
+          <div class="row"><label>Media</label><input type="checkbox" id="enMedia">
+            <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
+          </div>
+          <div class="row"><label>Weight rack</label><input type="checkbox" id="enWeights">
+            <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
+          </div>
+          <div class="row"><label>Game table + 4 chairs</label><input type="checkbox" id="enTable">
+            <button class="rbtn" data-rot="table">↻ <span id="face_table"></span></button>
+          </div>
+          <div class="row"><label>Pool table + clear</label><input type="checkbox" id="enPtable">
+            <button class="rbtn" data-rot="ptable">↻ <span id="face_ptable"></span></button>
+          </div>
+          <div class="row"><label>Dining (table + chairs + clear)</label><input type="checkbox" id="enDining">
+            <button class="rbtn" data-rot="dining">↻ <span id="face_dining"></span></button>
+          </div>
+          <div class="row"><label>Sitting area</label><input type="checkbox" id="enSit">
+            <button class="rbtn" data-rot="sit">↻ <span id="face_sit"></span></button>
+          </div>
+          <div class="row"><label>Bar</label><input type="checkbox" id="enBar">
+            <button class="rbtn" data-rot="bar">↻ <span id="face_bar"></span></button>
+          </div>
+          <div class="row"><label>Pool (lagoon)</label><input type="checkbox" id="enPool">
+            <button class="rbtn" data-rot="pool">↻ <span id="face_pool"></span></button>
+          </div>
+          <div class="row"><label>Pickleball 60×30</label><input type="checkbox" id="enCourt">
+            <button class="rbtn" data-rot="court">↻ <span id="face_court"></span></button>
+          </div>
+          <div class="row"><label>Fire pit</label><input type="checkbox" id="enFire">
+            <button class="rbtn" data-rot="fire" disabled>↻ <span id="face_fire"></span></button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Bathroom</h2>
+          <div class="row"><label>Along face</label>
+            <input type="range" id="bathAlong" min="5" max="14" step="0.5"><span class="val" id="bathAlong_v"></span>
+          </div>
+          <div class="row"><label>Depth off face</label>
+            <input type="range" id="bathInto" min="6" max="16" step="0.5"><span class="val" id="bathInto_v"></span>
+          </div>
+          <div class="hint">C-2 is 7′-6″ along the west wall × 10′-6″ into the gym.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Bunk</h2>
+          <div class="row"><label>Length</label>
+            <input type="range" id="bunkLen" min="10" max="22" step="0.5"><span class="val" id="bunkLen_v"></span>
+          </div>
+          <div class="hint">Along the face. Width stays 13′ (east column). C-2 is 14′.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Bar</h2>
+          <div class="row"><label>Bar length</label>
+            <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Pool table</h2>
+          <div class="row"><label>Table length</label>
+            <div class="seg" style="flex:1.4">
+              <button data-pt="7" id="pt_7">7'</button>
+              <button data-pt="8" id="pt_8">8'</button>
+              <button data-pt="9" id="pt_9">9'</button>
+            </div>
+          </div>
+          <div class="hint">Dashed envelope is cue clearance: 13×18 for 8′ (7′ → 12×17, 9′ → 14×19). Face = long axis.
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Dining</h2>
+          <div class="row"><label>Table width</label>
+            <input type="range" id="diningW" min="3" max="5" step="0.25"><span class="val" id="diningW_v"></span>
+          </div>
+          <div class="row"><label>Table length</label>
+            <input type="range" id="diningLen" min="4" max="14" step="0.5"><span class="val" id="diningLen_v"></span>
+          </div>
+          <div class="row"><label>Chairs per long side</label>
+            <input type="range" id="diningChairs" min="1" max="6" step="1"><span class="val" id="diningChairs_v"></span>
+          </div>
+          <div class="row"><label>End chairs (head/foot)</label><input type="checkbox" id="diningEnds"></div>
+          <div class="hint">Dashed envelope = table + chair + <b>36″</b> pull-out/walk each seated side (24″ at ends).
+            Seat count = 2×side + ends.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Sitting area</h2>
+          <div class="row"><label>Layout</label>
+            <div class="seg" style="flex:1.4">
+              <button data-sit="pair" id="sit_pair">2 chairs</button>
+              <button data-sit="love" id="sit_love">love + 1</button>
+              <button data-sit="lounge" id="sit_lounge">sofa + 1</button>
+            </div>
+          </div>
+          <div class="hint">Three footprints: 8×8 pair · 10×9 loveseat + chair · 12×10 sofa + chair. Circles are chairs;
+            rects are seat + coffee. Face = open side.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Presets</h2>
+          <div class="seg">
+            <button id="preset_c2">C-2 now</button>
+            <button id="preset_l">L shop 44</button>
+          </div>
+          <div class="hint" style="margin-top:10px">Named presets stay in this browser.</div>
+          <div class="row">
+            <select id="presetSel"
+              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px">
+              <option value="">— saved presets —</option>
+            </select>
+          </div>
+          <div class="row">
+            <input id="presetName" type="text" placeholder="preset name"
+              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px">
+          </div>
+          <div class="seg">
+            <button id="presetSave">Save</button>
+            <button id="presetLoad">Load</button>
+            <button id="presetDelete">Delete</button>
+          </div>
+          <div class="seg" style="margin-top:6px">
+            <button id="copyBtn">Copy params</button>
+          </div>
+          <div class="hint" id="presetMsg" style="min-height:14px;margin-top:6px"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="stage">
+          <div id="svgHost"></div>
+          <div class="legend">
+            <span><b style="color:#6a7a5a">shop</b></span>
+            <span><b style="color:#8aa06a">gym</b></span>
+            <span><b style="color:#c9b896">living</b></span>
+            <span><b style="color:#8a744a">covered patio</b> · snaps west</span>
+            <span><b style="color:#3f97b3">cage</b> + 2′ dotted</span>
+            <span><b style="color:#3a6fa8">court</b> 60×30</span>
+            <span><b style="color:#2f6f82">pool</b></span>
+            <span><b style="color:#2f6f4a">pool tbl</b></span>
+            <span><b style="color:#a8894f">dining</b></span>
+            <span><b style="color:#6b5a8a">sitting</b></span>
+            <span><b style="color:#5c7a3c">run / garden</b></span>
+            <span><b style="color:#8a6a3a">fire</b></span>
+            <span><b style="color:#c0392b">fence / ag</b></span>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h2>Clearance &amp; siting checks</h2>
+          <ul class="checks" id="checks"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Estate feet (same frame as params.py):
+    //   e = east from west fence = 0
+    //   s = south from house rear = 0
+    // Canvas is the WHOLE backyard: west fence → east fence, drive turn → south fence.
+    const WEST_FENCE = 0.0;
+    const EAST_FENCE = 207.1;         // house SE 122.1 + 85' (owner 2026-08-29)
+    const SOUTH_FENCE = 134.0;
+    // House corners locked; east fence moved +4.1' when 80.9' satellite
+    // was corrected to 85' house-SE → E fence.
+    //   west fence → house SW = 53.8'
+    // The old site-plan "64 ft buffer" (house at e=130) is retired.
+    const HOUSE_E0 = 53.8;
+    const HOUSE_E1 = 122.1;
+    const HOUSE_S0 = -46.9;
+    const SE_WING_E0 = 105.2;        // 16.9' SE/master wing
+    const KIT_U_E0 = 95.5, KIT_U_E1 = 105.2, KIT_U_S = -12.5;
+    const HPATIO_E0 = 74.1, HPATIO_E1 = 95.5, HPATIO_S0 = -12.5;
+    const PAD_E1 = 105.2;            // uncovered pad ends at SE-wing SW corner
+    const PAD_S1 = 17 + 8 / 12;      // owner tape 17'8"
+    const DRIVE_E = 152.1;            // east edge = house SE + 30' (params.DRIVE)
+    const DRIVE_W = 18.0;
+    const DRIVE_E0 = DRIVE_E - DRIVE_W; // 134.1
+    const DRIVE_S1 = -20.0;           // ends 20' N of backyard N wood (s=0)
+    const DRIVE_TURN_E0 = 92.1;
+    const DRIVE_TURN_S0 = -78.0;
+    const DRIVE_TURN_S1 = -46.5;
+    const HOUSE_SE_PAD = [           // AC / mower pad east of house (params.HOUSE_SE_PAD)
+      [122.1, -24], [127.1, -24], [127.1, -10],
+      [132.1, -10], [132.1, 0], [122.1, 0],
+    ];
+    const RUN = { e0: 0, e1: HOUSE_E0, s0: -26.9, s1: 0 };
+    const COOP = { e0: 22.9, e1: 30.9, s0: -16.95, s1: -9.95 };
+    const GARDEN = { e0: 1, e1: 22, s0: 1.5, s1: 32 };
+    const GARDEN_BEDS = [[3, 4], [13, 4], [3, 13], [3, 22], [13, 22]];
+    const GARDEN_TABLE = [16, 15];
+    const FIRE = { e: 71.1, s: 104, r: 8 };
+    const TREES = [[44.1, 62], [38.1, 88], [54.1, 103]];
+    // CAD kidney (params.POOL_PTS, _DE = −7.9). Beach / east lobe toward the patio.
+    const POOL_CAD = [
+      [80.1, 40], [95.1, 37], [110.1, 43], [119.1, 56],
+      [115.1, 70], [102.1, 81], [89.1, 83], [81.1, 77],
+      [86.1, 68], [92.1, 58], [86.1, 50], [79.1, 45],
+    ];
+    const SPA_C = [107.1, 41];
+    const DECK_E_PULL = 5 + 10 / 12;   // east deck pulled west (owner 2026-08-29)
+    const DECK_PTS = [
+      [74.1, 18], [100.1, 18], [119.8, 18], [134.8 - DECK_E_PULL, 24],
+      [134.8 - DECK_E_PULL, 40], [134.8 - DECK_E_PULL, 60], [134.8 - DECK_E_PULL, 90],
+      [124.8 - DECK_E_PULL, 92], [112.8, 96], [102.1, 97.5], [90.1, 95.5],
+      [80.1, 90], [74.1, 88],
+      [68.1, 82], [66.6, 77], [66.1, 73], [66.6, 69], [67.6, 66.5],
+      [68.6, 64.5], [69.6, 63], [70.6, 61.5], [71.1, 60.5], [71.1, 59.5],
+      [70.6, 58.5], [69.6, 57], [68.6, 55], [67.6, 52.5], [66.6, 49],
+      [65.6, 44], [65.1, 38], [65.6, 32], [67.1, 27], [70.1, 22],
+    ];
+    const CAN_E0 = WEST_FENCE;
+    const CAN_S0 = DRIVE_TURN_S0;    // north enough for the turnaround
+    const CAN_E1 = EAST_FENCE;
+    const CAN_S1 = SOUTH_FENCE;
+    const CAN_W = CAN_E1 - CAN_E0;
+    const CAN_H = CAN_S1 - CAN_S0;
+
+    const BASE_PX = 4.0, M = 52;
+    let PXFT = BASE_PX;
+    const CAGE_SIDE = 2.0;           // dotted min each long side
+    const PATIO_SNAP = 1.25;
+
+    const S = {
+      livingW: 36, livingD: 32, gymW: 36, gymD: 18,
+      garageW: 36, garageD: 30,
+      gymSide: "N",
+      shopFlush: "E",
+      gymFlush: "E",
+      eastGap: 14 + 2 / 12 + 4.1,    // hold barndo; fence moved +4.1' (was 14'-2")
+      bS0: -20,
+      patioRun: 50, patioDep: 18,
+      cageLen: 70, cageWid: 14,
+      barLen: 14,
+      bathAlong: 7.5, bathInto: 10.5,
+      bunkLen: 14,
+      mirrorLen: 14, barreLen: 10,
+      poolLen: 8,
+      diningW: 3.5, diningLen: 11, diningChairs: 5, diningEnds: true,
+      sitCfg: "love",
+      enPatio: true, enCage: true, enOffice: true, enCloset: true,
+      enBath: true, enBunk: true, enMedia: true, enWeights: true,
+      enTable: true, enPtable: true, enDining: false, enSit: false,
+      enBar: true, enPool: true, enCourt: true, enFire: true, enMirror: true,
+      tool: "hand",
+      zoom: 1,
+    };
+
+    // Dining clearance (ft): CD = chair depth ~1'-8". sideC/endC are beyond the chair back.
+    const DIN = { CD: 1.67, sideC: 3.0, endC: 2.0 };
+    // Sitting layouts: along × into (ft). Circles = chairs; rects = bench + coffee.
+    const SIT = {
+      pair: { along: 8, into: 8 },
+      love: { along: 10, into: 9 },
+      lounge: { along: 12, into: 10 },
+    };
+
+    let F = {};
+
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const el = id => document.getElementById(id);
+    const fmtFt = ft => {
+      const s = Math.sign(ft) < 0 ? "-" : "";
+      ft = Math.abs(ft);
+      const f = Math.floor(ft + 1e-6);
+      const i = Math.round((ft - f) * 12);
+      return i === 0 ? `${s}${f}'` : (f === 0 ? `${s}${i}"` : `${s}${f}'-${i}"`);
+    };
+    const fmtNum = ft => (Math.abs(ft - Math.round(ft)) < 0.01 ? String(Math.round(ft)) : String(Math.round(ft * 10) / 10));
+    const areaLine = (w, d) => `${fmtNum(w)}x${fmtNum(d)} (${Math.round(w * d)} sqft)`;
+
+    function fx(e) { return M + (e - CAN_E0) * PXFT; }
+    function fy(s) { return M + (s - CAN_S0) * PXFT; }
+
+    function zones() {
+      const shopS0 = S.bS0;
+      const shopS1 = shopS0 + S.garageD;
+      let gymS0, gymS1, livS0, livS1;
+      if (S.gymSide === "S") {
+        livS0 = shopS1;
+        livS1 = livS0 + S.livingD;
+        gymS0 = livS1;
+        gymS1 = gymS0 + S.gymD;
+      } else {
+        gymS0 = shopS1;
+        gymS1 = gymS0 + S.gymD;
+        livS0 = gymS1;
+        livS1 = livS0 + S.livingD;
+      }
+      const livE1 = EAST_FENCE - S.eastGap;
+      const livE0 = livE1 - S.livingW;
+      const shop = flushToLiving(S.garageW, S.shopFlush, livE0, livE1);
+      const gym = flushToLiving(S.gymW, S.gymFlush, livE0, livE1);
+      const shopE0 = shop.e0, shopE1 = shop.e1, gymE0 = gym.e0, gymE1 = gym.e1;
+      return {
+        shop: { e0: shopE0, e1: shopE1, s0: shopS0, s1: shopS1 },
+        gym: { e0: gymE0, e1: gymE1, s0: gymS0, s1: gymS1 },
+        liv: { e0: livE0, e1: livE1, s0: livS0, s1: livS1 },
+      };
+    }
+
+    function flushToLiving(width, flush, livE0, livE1) {
+      if (flush === "W") return { e0: livE0, e1: livE0 + width };
+      return { e0: livE1 - width, e1: livE1 };
+    }
+
+    function bbox() {
+      const z = zones();
+      return {
+        e0: Math.min(z.shop.e0, z.gym.e0, z.liv.e0),
+        e1: Math.max(z.shop.e1, z.gym.e1, z.liv.e1),
+        s0: z.shop.s0,
+        s1: Math.max(z.liv.s1, z.gym.s1),
+      };
+    }
+
+    function isL() {
+      return Math.abs(S.garageW - S.livingW) > 0.05 || Math.abs(S.gymW - S.livingW) > 0.05;
+    }
+
+    // West-wall run the patio is allowed to slide on — living west face.
+    // Gym/shop join the run only when their west face matches living.
+    function westWall() {
+      const z = zones();
+      const e = z.liv.e0;
+      const flushW = band => Math.abs(band.e0 - e) < 0.05;
+      let s0 = z.liv.s0, s1 = z.liv.s1;
+      const joints = [z.liv.s0, z.liv.s1];
+      if (S.gymSide === "N") {
+        // shop → gym → living. Shop only joins if gym’s west face is also flush.
+        if (flushW(z.gym)) {
+          s0 = z.gym.s0;
+          joints.push(z.gym.s0, z.gym.s1);
+          if (flushW(z.shop)) {
+            s0 = z.shop.s0;
+            joints.push(z.shop.s0, z.shop.s1);
+          }
+        }
+      } else {
+        // shop → living → gym
+        if (flushW(z.gym)) {
+          s1 = z.gym.s1;
+          joints.push(z.gym.s0, z.gym.s1);
+        }
+        if (flushW(z.shop)) {
+          s0 = z.shop.s0;
+          joints.push(z.shop.s0, z.shop.s1);
+        }
+      }
+      return {
+        e,
+        s0,
+        s1,
+        joints: [...new Set(joints.map(v => Math.round(v * 100) / 100))].sort((a, b) => a - b),
+      };
+    }
+
+    function applyBunk() {
+      if (!F.bunk) return;
+      const along = S.bunkLen, into = 13;
+      const ce = F.bunk.e + F.bunk.w / 2, cs = F.bunk.s + F.bunk.h / 2;
+      if (F.bunk.face === "N" || F.bunk.face === "S") { F.bunk.w = along; F.bunk.h = into; }
+      else { F.bunk.w = into; F.bunk.h = along; }
+      F.bunk.e = ce - F.bunk.w / 2;
+      F.bunk.s = cs - F.bunk.h / 2;
+    }
+
+    function applyBath() {
+      if (!F.bath) return;
+      const along = S.bathAlong, into = S.bathInto;
+      const ce = F.bath.e + F.bath.w / 2, cs = F.bath.s + F.bath.h / 2;
+      if (F.bath.face === "N" || F.bath.face === "S") { F.bath.w = along; F.bath.h = into; }
+      else { F.bath.w = into; F.bath.h = along; }
+      F.bath.e = ce - F.bath.w / 2;
+      F.bath.s = cs - F.bath.h / 2;
+    }
+
+    function applyBar() {
+      if (!F.bar) return;
+      const len = S.barLen, d = 9.5;
+      const ce = F.bar.e + F.bar.w / 2, cs = F.bar.s + F.bar.h / 2;
+      if (F.bar.face === "W" || F.bar.face === "E") { F.bar.w = d; F.bar.h = len; }
+      else { F.bar.w = len; F.bar.h = d; }
+      F.bar.e = ce - F.bar.w / 2;
+      F.bar.s = cs - F.bar.h / 2;
+    }
+
+    function applyMedia() {
+      if (!F.media) return;
+      const across = 18.0, along = 13.5;
+      const ce = F.media.e + F.media.w / 2, cs = F.media.s + F.media.h / 2;
+      if (F.media.face === "N" || F.media.face === "S") { F.media.w = across; F.media.h = along; }
+      else { F.media.w = along; F.media.h = across; }
+      F.media.e = ce - F.media.w / 2;
+      F.media.s = cs - F.media.h / 2;
+    }
+
+    function applyWeights() {
+      if (!F.weights) return;
+      const along = 7.5, into = 8.0;
+      const ce = F.weights.e + F.weights.w / 2, cs = F.weights.s + F.weights.h / 2;
+      if (F.weights.face === "W" || F.weights.face === "E") { F.weights.w = into; F.weights.h = along; }
+      else { F.weights.w = along; F.weights.h = into; }
+      F.weights.e = ce - F.weights.w / 2;
+      F.weights.s = cs - F.weights.h / 2;
+    }
+
+    function applyTable() {
+      if (!F.table) return;
+      // 36" square + 2' min clear each seated side (1-1-1-1) → 7×7 drag footprint
+      const along = 7, across = 7;
+      const ce = F.table.e + F.table.w / 2, cs = F.table.s + F.table.h / 2;
+      if (F.table.face === "N" || F.table.face === "S") { F.table.w = along; F.table.h = across; }
+      else { F.table.w = across; F.table.h = along; }
+      F.table.e = ce - F.table.w / 2;
+      F.table.s = cs - F.table.h / 2;
+    }
+
+    function applyPtable() {
+      if (!F.ptable) return;
+      // Owner: 8' → 13×18 clear. 7'/9' scale the envelope.
+      const along = S.poolLen === 9 ? 19 : S.poolLen === 7 ? 17 : 18;
+      const across = S.poolLen === 9 ? 14 : S.poolLen === 7 ? 12 : 13;
+      const ce = F.ptable.e + F.ptable.w / 2, cs = F.ptable.s + F.ptable.h / 2;
+      if (F.ptable.face === "N" || F.ptable.face === "S") { F.ptable.w = along; F.ptable.h = across; }
+      else { F.ptable.w = across; F.ptable.h = along; }
+      F.ptable.e = ce - F.ptable.w / 2;
+      F.ptable.s = cs - F.ptable.h / 2;
+    }
+
+    function diningEnvelope() {
+      const along = S.diningLen + (S.diningEnds ? 2 * (DIN.CD + DIN.endC) : 0);
+      const across = S.diningW + 2 * (DIN.CD + DIN.sideC);
+      return [along, across];
+    }
+
+    function applyDining() {
+      if (!F.dining) return;
+      const [along, across] = diningEnvelope();
+      const ce = F.dining.e + F.dining.w / 2, cs = F.dining.s + F.dining.h / 2;
+      if (F.dining.face === "N" || F.dining.face === "S") { F.dining.w = along; F.dining.h = across; }
+      else { F.dining.w = across; F.dining.h = along; }
+      F.dining.e = ce - F.dining.w / 2;
+      F.dining.s = cs - F.dining.h / 2;
+    }
+
+    function applySit() {
+      if (!F.sit) return;
+      const cfg = SIT[S.sitCfg] || SIT.love;
+      const ce = F.sit.e + F.sit.w / 2, cs = F.sit.s + F.sit.h / 2;
+      if (F.sit.face === "N" || F.sit.face === "S") { F.sit.w = cfg.along; F.sit.h = cfg.into; }
+      else { F.sit.w = cfg.into; F.sit.h = cfg.along; }
+      F.sit.e = ce - F.sit.w / 2;
+      F.sit.s = cs - F.sit.h / 2;
+    }
+
+    function applyCage() {
+      if (!F.cage) return;
+      const along = S.cageLen, across = S.cageWid;
+      const ce = F.cage.e + F.cage.w / 2, cs = F.cage.s + F.cage.h / 2;
+      if (F.cage.face === "N" || F.cage.face === "S") { F.cage.w = across; F.cage.h = along; }
+      else { F.cage.w = along; F.cage.h = across; }
+      F.cage.e = ce - F.cage.w / 2;
+      F.cage.s = cs - F.cage.h / 2;
+    }
+
+    function applyCourt() {
+      if (!F.court) return;
+      const ce = F.court.e + F.court.w / 2, cs = F.court.s + F.court.h / 2;
+      if (F.court.face === "N" || F.court.face === "S") { F.court.w = 60; F.court.h = 30; }
+      else { F.court.w = 30; F.court.h = 60; }
+      F.court.e = ce - F.court.w / 2;
+      F.court.s = cs - F.court.h / 2;
+    }
+
+    const POOL_CAD_E0 = 79.1, POOL_CAD_S0 = 37.0, POOL_CAD_W = 40.0, POOL_CAD_H = 46.0;
+
+    function applyPool() {
+      if (!F.pool) return;
+      const ce = F.pool.e + F.pool.w / 2, cs = F.pool.s + F.pool.h / 2;
+      if (F.pool.face === "N" || F.pool.face === "S") { F.pool.w = POOL_CAD_W; F.pool.h = POOL_CAD_H; }
+      else { F.pool.w = POOL_CAD_H; F.pool.h = POOL_CAD_W; }
+      F.pool.e = ce - F.pool.w / 2;
+      F.pool.s = cs - F.pool.h / 2;
+    }
+
+    function applyPatio() {
+      if (!F.patio) return;
+      const wall = westWall();
+      const along = S.patioRun, depth = S.patioDep;
+      // Face E = against the building (default). Rotate swaps which dim is along the wall.
+      const ns = (F.patio.face === "E" || F.patio.face === "W");
+      F.patio.w = ns ? depth : along;
+      F.patio.h = ns ? along : depth;
+      // Glue the building-side edge to the west wall, then slide N–S (or E–W if rotated).
+      if (ns) {
+        F.patio.e = wall.e - F.patio.w;
+        const lo = wall.s0, hi = wall.s1 - F.patio.h;
+        F.patio.s = clamp(F.patio.s, lo, Math.max(lo, hi));
+      } else {
+        // Rotated: patio runs E–W off the wall; keep the east edge on the wall and
+        // center the short N–S dim on the current s.
+        F.patio.e = wall.e - F.patio.w;
+        const mid = F.patio.s + F.patio.h / 2;
+        F.patio.s = clamp(mid - F.patio.h / 2, wall.s0, wall.s1 - F.patio.h);
+      }
+    }
+
+    function snapPatioS(s) {
+      const wall = westWall();
+      const hi = wall.s1 - F.patio.h;
+      let ns = clamp(s, wall.s0, Math.max(wall.s0, hi));
+      for (const j of wall.joints) {
+        if (Math.abs(ns - j) < PATIO_SNAP) ns = j;
+        if (Math.abs(ns + F.patio.h - j) < PATIO_SNAP) ns = j - F.patio.h;
+      }
+      return clamp(ns, wall.s0, Math.max(wall.s0, hi));
+    }
+
+    const OPP_WALL = { N: "S", S: "N", E: "W", W: "E" };
+    const MIRROR_INTO = 0.8;
+    const BARRE_INTO = 0.9;
+
+    function gymWallLen(face) {
+      const g = zones().gym;
+      return (face === "N" || face === "S") ? g.e1 - g.e0 : g.s1 - g.s0;
+    }
+
+    function alongFrac(f, g) {
+      if (f.face === "N" || f.face === "S") {
+        const lo = g.e0, hi = g.e1 - f.w;
+        return hi <= lo + 0.01 ? 0.5 : (f.e - lo) / (hi - lo);
+      }
+      const lo = g.s0, hi = g.s1 - f.h;
+      return hi <= lo + 0.01 ? 0.5 : (f.s - lo) / (hi - lo);
+    }
+
+    function placeByFrac(f, frac) {
+      const g = zones().gym;
+      const t = clamp(frac, 0, 1);
+      if (f.face === "N" || f.face === "S") {
+        const lo = g.e0, hi = Math.max(lo, g.e1 - f.w);
+        f.e = lo + t * (hi - lo);
+      } else {
+        const lo = g.s0, hi = Math.max(lo, g.s1 - f.h);
+        f.s = lo + t * (hi - lo);
+      }
+    }
+
+    function glueToGymWall(f, length, into) {
+      if (!f) return;
+      const g = zones().gym;
+      const along = Math.min(length, gymWallLen(f.face));
+      if (f.face === "N" || f.face === "S") {
+        f.w = along; f.h = into;
+        f.e = clamp(f.e, g.e0, Math.max(g.e0, g.e1 - f.w));
+        f.s = f.face === "N" ? g.s0 : g.s1 - f.h;
+      } else {
+        f.w = into; f.h = along;
+        f.s = clamp(f.s, g.s0, Math.max(g.s0, g.s1 - f.h));
+        f.e = f.face === "W" ? g.e0 : g.e1 - f.w;
+      }
+    }
+
+    function applyMirror() {
+      if (!F.mirror) return;
+      glueToGymWall(F.mirror, S.mirrorLen, MIRROR_INTO);
+      if (F.barre) F.barre.face = OPP_WALL[F.mirror.face];
+    }
+
+    function applyBarre() {
+      if (!F.barre) return;
+      if (F.mirror) F.barre.face = OPP_WALL[F.mirror.face];
+      glueToGymWall(F.barre, S.barreLen, BARRE_INTO);
+    }
+
+    function setMirrorWall(face) {
+      if (!F.mirror || F.mirror.face === face) { applyMirror(); applyBarre(); return; }
+      const g = zones().gym;
+      const fracM = alongFrac(F.mirror, g);
+      const fracB = F.barre ? alongFrac(F.barre, g) : 0.5;
+      F.mirror.face = face;
+      if (F.barre) F.barre.face = OPP_WALL[face];
+      applyMirror();
+      applyBarre();
+      placeByFrac(F.mirror, fracM);
+      if (F.barre) placeByFrac(F.barre, fracB);
+      applyMirror();
+      applyBarre();
+    }
+
+    function seedModule(key, spec) {
+      F[key] = Object.assign({ face: "W" }, spec);
+    }
+
+    function schemeC2() {
+      S.livingW = 36; S.livingD = 32; S.gymW = 36; S.gymD = 18;
+      S.garageW = 36; S.garageD = 30;
+      S.gymSide = "N";
+      S.shopFlush = "E";
+      S.gymFlush = "E";
+      S.eastGap = 14 + 2 / 12 + 4.1;
+      S.bS0 = -20;
+      S.patioRun = 50; S.patioDep = 18;
+      S.cageLen = 70; S.cageWid = 14;
+      S.barLen = 14;
+      S.bathAlong = 7.5; S.bathInto = 10.5;
+      S.bunkLen = 14;
+      S.mirrorLen = 14; S.barreLen = 10;
+      S.poolLen = 8;
+      S.diningW = 3.5; S.diningLen = 11; S.diningChairs = 5; S.diningEnds = true;
+      S.sitCfg = "love";
+      S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true;
+      S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true;
+      S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
+      S.enBar = true; S.enPool = true; S.enCourt = true; S.enFire = true; S.enMirror = true;
+      const z = zones();
+      seedModule("office", {
+        label: "office", e: z.shop.e1 - 12, s: z.shop.s1 - 10, w: 12, h: 10, face: "W",
+        c: "#e8eef2", ec: "#4a6a78", tc: "#1f3a48"
+      });
+      seedModule("closet", {
+        label: "pool closet", e: z.shop.e0, s: z.shop.s1 - 8, w: 6, h: 8, face: "W",
+        c: "#d7e0d4", ec: "#4a6a48", tc: "#1f3a20"
+      });
+      seedModule("bath", {
+        label: "pool bath", e: z.gym.e0, s: z.gym.s1 - 7.5, w: 10.5, h: 7.5, face: "W",
+        c: "#cfe6ea", ec: "#4a6f78", tc: "#2a4650"
+      });
+      seedModule("bunk", {
+        label: "bunk", e: z.liv.e0 + 22.5, s: z.liv.s1 - S.bunkLen, w: 13, h: S.bunkLen, face: "E",
+        c: "#efe3cf", ec: "#a8863f", tc: "#6a531f"
+      });
+      seedModule("media", {
+        label: "media", e: z.liv.e0 + 22.5, s: z.liv.s0, w: 13.5, h: 18, face: "E",
+        c: "#dfeacf", ec: "#6f8a4a", tc: "#43541f"
+      });
+      seedModule("weights", {
+        label: "weights", e: z.gym.e1 - 8, s: z.gym.s0 + 10.1, w: 8, h: 7.5, face: "W",
+        c: "#e4eadc", ec: "#6a7f4a", tc: "#3a4a28"
+      });
+      seedModule("table", {
+        label: "", e: z.liv.e0 + 1.1, s: z.liv.s0 + 1.01, w: 7, h: 7, face: "N",
+        c: "#e9e2d0", ec: "#8f7a45", tc: "#5a4a20"
+      });
+      seedModule("ptable", {
+        label: "pool tbl", e: z.liv.e0, s: z.liv.s0 + 14, w: 13, h: 18, face: "E",
+        c: "#d5e8dc", ec: "#2f6f4a", tc: "#1a3f2a"
+      });
+      seedModule("dining", {
+        label: "", e: z.liv.e0 + 8, s: z.liv.s0 + 1, w: 20, h: 13, face: "N",
+        c: "#efe6d3", ec: "#a8894f", tc: "#5f4a1f"
+      });
+      seedModule("sit", {
+        label: "", e: z.liv.e0 + 10, s: z.liv.s0 + 1, w: 10, h: 9, face: "W",
+        c: "#e0dceb", ec: "#6b5a8a", tc: "#3f2a5a"
+      });
+      seedModule("bar", {
+        label: "bar", e: z.liv.e0 + 12.97, s: z.liv.s1 - 14, w: 9.5, h: 14, face: "W",
+        c: "#e8dccf", ec: "#8a6b4a", tc: "#5a3f2a"
+      });
+      seedModule("patio", {
+        label: "covered patio", e: z.gym.e0 - 18, s: z.gym.s0, w: 18, h: 50, face: "E",
+        c: "#e6d4b8", ec: "#8a744a", tc: "#5a3f1a"
+      });
+      seedModule("cage", {
+        label: "cage", e: 189.0, s: 0, w: 14, h: 70, face: "N",
+        c: "#d5eaf0", ec: "#3f97b3", tc: "#1f4a5a"
+      });
+      seedModule("court", {
+        label: "pickleball", e: 134.83, s: 82, w: 60, h: 30, face: "N",
+        c: "#9ec0e8", ec: "#2a5080", tc: "#0f2848"
+      });
+      seedModule("pool", {
+        label: "pool", e: POOL_CAD_E0, s: POOL_CAD_S0, w: POOL_CAD_W, h: POOL_CAD_H, face: "N",
+        c: "#7eb6c9", ec: "#2f6f82", tc: "#123844"
+      });
+      seedModule("fire", {
+        label: "fire", e: FIRE.e - FIRE.r, s: FIRE.s - FIRE.r, w: FIRE.r * 2, h: FIRE.r * 2, face: "N",
+        c: "#d8c8a8", ec: "#8a6a3a", tc: "#5a3f1a"
+      });
+      seedModule("mirror", {
+        label: "mirror", e: z.gym.e0 + (S.gymW - S.mirrorLen) / 2, s: z.gym.s0, w: S.mirrorLen, h: MIRROR_INTO, face: "N",
+        c: "#c5d8e4", ec: "#3a6a82", tc: "#1a3a48"
+      });
+      seedModule("barre", {
+        label: "barre", e: z.gym.e0 + (S.gymW - S.barreLen) / 2, s: z.gym.s1 - BARRE_INTO, w: S.barreLen, h: BARRE_INTO, face: "S",
+        c: "#e8d4b0", ec: "#8a6a38", tc: "#5a3f1a"
+      });
+      applySized();
+    }
+
+    function schemeL() {
+      schemeC2();
+      S.garageW = 44;
+      S.shopFlush = "E";
+      S.gymFlush = "E";
+      applyPatio();
+    }
+
+    function applySized() {
+      applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyTable();
+      applyPtable(); applyDining(); applySit();
+      applyCage(); applyCourt(); applyPool(); applyPatio();
+      applyMirror(); applyBarre();
+    }
+
+    const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
+    const SITE_MODS = ["patio", "cage", "court", "pool", "fire"];
+
+    function enabledKeys() {
+      const map = {
+        office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+        media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
+        dining: "enDining", sit: "enSit", bar: "enBar",
+        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
+        mirror: "enMirror", barre: "enMirror",
+      };
+      return Object.keys(map).filter(k => S[map[k]] && F[k]);
+    }
+
+    function shiftInteriors(de, ds) {
+      for (const k of INTERIOR) {
+        if (!F[k]) continue;
+        F[k].e += de; F[k].s += ds;
+      }
+    }
+
+    function polyPts(pts) {
+      return pts.map(p => `${fx(p[0]).toFixed(1)},${fy(p[1]).toFixed(1)}`).join(" ");
+    }
+
+    function dimLine(e1, s1, e2, s2, label, side) {
+      const pe = 'style="pointer-events:none"';
+      const x1 = fx(e1), y1 = fy(s1), x2 = fx(e2), y2 = fy(s2);
+      const col = "#c0392b";
+      let g = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="1" ${pe}/>`;
+      const tick = 5;
+      if (Math.abs(e1 - e2) < 0.01) {
+        g += `<line x1="${x1 - tick}" y1="${y1}" x2="${x1 + tick}" y2="${y1}" stroke="${col}" stroke-width="1" ${pe}/>`;
+        g += `<line x1="${x2 - tick}" y1="${y2}" x2="${x2 + tick}" y2="${y2}" stroke="${col}" stroke-width="1" ${pe}/>`;
+      } else {
+        g += `<line x1="${x1}" y1="${y1 - tick}" x2="${x1}" y2="${y1 + tick}" stroke="${col}" stroke-width="1" ${pe}/>`;
+        g += `<line x1="${x2}" y1="${y2 - tick}" x2="${x2}" y2="${y2 + tick}" stroke="${col}" stroke-width="1" ${pe}/>`;
+      }
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      const rot = Math.abs(e1 - e2) < 0.01 ? `transform="rotate(-90 ${mx} ${my})"` : "";
+      const dy = side === "below" ? 12 : side === "above" ? -6 : 4;
+      g += `<text x="${mx}" y="${my + dy}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}" ${rot} ${pe} style="paint-order:stroke;stroke:#f4f0e6;stroke-width:3px">${label}</text>`;
+      return g;
+    }
+
+    function draw() {
+      el("livingW_v").textContent = fmtFt(S.livingW);
+      el("livingD_v").textContent = fmtFt(S.livingD);
+      el("gymW_v").textContent = fmtFt(S.gymW);
+      el("gymD_v").textContent = fmtFt(S.gymD);
+      el("garageW_v").textContent = fmtFt(S.garageW);
+      el("garageD_v").textContent = fmtFt(S.garageD);
+      el("eastGap_v").textContent = fmtFt(S.eastGap);
+      el("bS0_v").textContent = fmtFt(S.bS0);
+      el("patioRun_v").textContent = fmtFt(S.patioRun);
+      el("patioDep_v").textContent = fmtFt(S.patioDep);
+      el("cageLen_v").textContent = fmtFt(S.cageLen);
+      el("cageWid_v").textContent = fmtFt(S.cageWid);
+      el("barLen_v").textContent = fmtFt(S.barLen);
+      el("bathAlong_v").textContent = fmtFt(S.bathAlong);
+      el("bathInto_v").textContent = fmtFt(S.bathInto);
+      el("bunkLen_v").textContent = fmtFt(S.bunkLen);
+      el("mirrorLen_v").textContent = fmtFt(S.mirrorLen);
+      el("barreLen_v").textContent = fmtFt(S.barreLen);
+      el("diningW_v").textContent = fmtFt(S.diningW);
+      el("diningLen_v").textContent = fmtFt(S.diningLen);
+      el("diningChairs_v").textContent = String(S.diningChairs);
+      el("zoom_v").textContent = Math.round(S.zoom * 100) + "%";
+      PXFT = BASE_PX * S.zoom;
+
+      for (const [id, key] of [
+        ["livingW", "livingW"], ["livingD", "livingD"], ["gymW", "gymW"], ["gymD", "gymD"],
+        ["garageW", "garageW"], ["garageD", "garageD"], ["eastGap", "eastGap"],
+        ["bS0", "bS0"], ["patioRun", "patioRun"], ["patioDep", "patioDep"],
+        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["barLen", "barLen"],
+        ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkLen", "bunkLen"],
+        ["mirrorLen", "mirrorLen"], ["barreLen", "barreLen"],
+        ["diningW", "diningW"], ["diningLen", "diningLen"], ["diningChairs", "diningChairs"],
+        ["zoom", "zoom"],
+      ]) el(id).value = S[key];
+
+      el("enPatio").checked = S.enPatio;
+      el("enCage").checked = S.enCage;
+      el("enOffice").checked = S.enOffice;
+      el("enCloset").checked = S.enCloset;
+      el("enBath").checked = S.enBath;
+      el("enBunk").checked = S.enBunk;
+      el("enMedia").checked = S.enMedia;
+      el("enWeights").checked = S.enWeights;
+      el("enTable").checked = S.enTable;
+      el("enPtable").checked = S.enPtable;
+      el("enDining").checked = S.enDining;
+      el("enSit").checked = S.enSit;
+      el("enBar").checked = S.enBar;
+      el("enPool").checked = S.enPool;
+      el("enCourt").checked = S.enCourt;
+      el("enFire").checked = S.enFire;
+      el("enMirror").checked = S.enMirror;
+      el("diningEnds").checked = S.diningEnds;
+      el("pt_7").classList.toggle("on", S.poolLen === 7);
+      el("pt_8").classList.toggle("on", S.poolLen === 8);
+      el("pt_9").classList.toggle("on", S.poolLen === 9);
+      el("sit_pair").classList.toggle("on", S.sitCfg === "pair");
+      el("sit_love").classList.toggle("on", S.sitCfg === "love");
+      el("sit_lounge").classList.toggle("on", S.sitCfg === "lounge");
+      el("tool_hand").classList.toggle("on", S.tool === "hand");
+      el("tool_measure").classList.toggle("on", S.tool === "measure");
+      el("shopFlush_E").classList.toggle("on", S.shopFlush === "E");
+      el("shopFlush_W").classList.toggle("on", S.shopFlush === "W");
+      el("gymFlush_E").classList.toggle("on", S.gymFlush === "E");
+      el("gymFlush_W").classList.toggle("on", S.gymFlush === "W");
+      el("gymside_N").classList.toggle("on", S.gymSide === "N");
+      el("gymside_S").classList.toggle("on", S.gymSide === "S");
+      const mirrFace = (F.mirror && F.mirror.face) || "N";
+      for (const w of ["N", "S", "E", "W"]) {
+        el("mirrwall_" + w).classList.toggle("on", mirrFace === w);
+        el("mirrwall_" + w).disabled = !S.enMirror;
+      }
+      el("barreWall_v").textContent = OPP_WALL[mirrFace];
+
+      applySized();
+
+      const z = zones();
+      const bb = bbox();
+      const overallW = bb.e1 - bb.e0;
+      const overallD = bb.s1 - bb.s0;
+      const shopSf = S.garageW * S.garageD;
+      const gymSf = S.gymW * S.gymD;
+      const livSf = S.livingW * S.livingD;
+      el("living_sf").textContent = areaLine(S.livingW, S.livingD);
+      el("gym_sf").textContent = areaLine(S.gymW, S.gymD);
+      el("shop_sf").textContent = areaLine(S.garageW, S.garageD);
+      el("patio_sf").textContent = S.enPatio ? areaLine(S.patioRun, S.patioDep) : "off";
+      el("cage_sf").textContent = S.enCage ? areaLine(S.cageLen, S.cageWid) : "off";
+      const stack = S.gymSide === "S" ? "shop → living → gym" : "shop → gym → living";
+      const shape = isL()
+        ? `L · shop ${fmtFt(S.garageW)} × ${fmtFt(S.garageD)} · gym ${fmtFt(S.gymW)} × ${fmtFt(S.gymD)} · living ${fmtFt(S.livingW)} × ${fmtFt(S.livingD)} · ${stack}`
+        : `bar · ${fmtFt(S.livingW)} × ${fmtFt(overallD)} · ${stack}`;
+      el("overallBox").innerHTML =
+        `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall<br>${shape}<br>` +
+        `${Math.round(shopSf + gymSf + livSf)} sf  · shop ${Math.round(shopSf)} · gym ${Math.round(gymSf)} · living ${Math.round(livSf)}`;
+
+      const faceName = { N: "N", S: "S", W: "W", E: "E" };
+      const enKey = {
+        office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+        media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
+        dining: "enDining", sit: "enSit", bar: "enBar",
+        patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
+        mirror: "enMirror", barre: "enMirror",
+      };
+      for (const k of Object.keys(F)) {
+        const s = el("face_" + k);
+        if (s) s.textContent = faceName[F[k].face] || F[k].face;
+        const btn = document.querySelector(`[data-rot="${k}"]`);
+        if (btn) btn.disabled = k === "fire" || !S[enKey[k]];
+      }
+
+      const VW = M * 2 + CAN_W * PXFT, VH = M * 2 + CAN_H * PXFT;
+      let g = "";
+      const pe = 'style="pointer-events:none"';
+
+      // yard (also the click target in cursor mode)
+      g += `<rect data-bg="1" x="${fx(CAN_E0)}" y="${fy(CAN_S0)}" width="${CAN_W * PXFT}" height="${CAN_H * PXFT}" fill="#e8eadc" stroke="none"/>`;
+
+      // pasture south of ag / south fence
+      g += `<rect x="${fx(CAN_E0)}" y="${fy(SOUTH_FENCE)}" width="${CAN_W * PXFT}" height="${8 * PXFT}" fill="#d4d8c4" stroke="none"/>`;
+
+      // Existing driveway (params.DRIVE): 18' lane, east edge = house SE + 30' = 152.1,
+      // south end at s=-20. Widens west to the house east wall. Turnaround at the
+      // garage. No existing concrete east of 152.1.
+      g += `<rect x="${fx(DRIVE_E0)}" y="${fy(DRIVE_TURN_S0)}" width="${DRIVE_W * PXFT}" height="${(DRIVE_S1 - DRIVE_TURN_S0) * PXFT}" fill="#b8b3a6" stroke="none"/>`;
+      g += `<polygon points="${polyPts([[HOUSE_E1, HOUSE_S0], [DRIVE_E, HOUSE_S0], [DRIVE_E, DRIVE_S1], [HOUSE_E1, DRIVE_S1]])}" fill="#c5c0b4" stroke="#8a8378" stroke-width="1"/>`;
+      g += `<text x="${fx((HOUSE_E1 + DRIVE_E) / 2)}" y="${fy((HOUSE_S0 + DRIVE_S1) / 2) + 3}" text-anchor="middle" font-size="10" fill="#5a5348" font-weight="700" ${pe}>EXISTING DRIVE</text>`;
+
+      // Full house (params.HOUSE) — west bedroom @ s=0, covered recess, SE wing @ s=0
+      const housePoly = [
+        [HOUSE_E0, HOUSE_S0], [HOUSE_E1, HOUSE_S0], [HOUSE_E1, 0],
+        [SE_WING_E0, 0], [SE_WING_E0, KIT_U_S], [HPATIO_E0, KIT_U_S],
+        [HPATIO_E0, 0], [HOUSE_E0, 0],
+      ];
+      g += `<polygon points="${polyPts(housePoly)}" fill="#c8c2b4" stroke="#5a5348" stroke-width="1.6"/>`;
+      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28)}" text-anchor="middle" font-size="12" fill="#5a5348" font-weight="700" ${pe}>HOUSE</text>`;
+      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28) + 13}" text-anchor="middle" font-size="9" fill="#5a5348" ${pe}>${fmtFt(HOUSE_E1 - HOUSE_E0)} × ${fmtFt(-HOUSE_S0)}</text>`;
+
+      // Covered recess (kitchen U + covered patio)
+      g += `<rect x="${fx(HPATIO_E0)}" y="${fy(HPATIO_S0)}" width="${(HPATIO_E1 - HPATIO_E0) * PXFT}" height="${(-HPATIO_S0) * PXFT}" fill="#d4c4a8" stroke="none"/>`;
+      g += `<rect x="${fx(KIT_U_E0)}" y="${fy(KIT_U_S)}" width="${(KIT_U_E1 - KIT_U_E0) * PXFT}" height="${(-KIT_U_S) * PXFT}" fill="#d4c4a8" stroke="none"/>`;
+      const padPoly = [
+        [HPATIO_E0, 0], [PAD_E1, 0], [PAD_E1, 12],
+        [103.5, 15.5], [101.0, PAD_S1], [HPATIO_E0, PAD_S1],
+      ];
+      g += `<polygon points="${polyPts(padPoly)}" fill="#cbb896" stroke="#8a744a" stroke-width="1.2"/>`;
+      g += `<text x="${fx((HPATIO_E0 + PAD_E1) / 2)}" y="${fy(8)}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>HOUSE PATIO</text>`;
+
+      // Existing AC / mower pad + dogleg wood (params.FENCE_AC_DOGLEG)
+      g += `<polygon points="${polyPts(HOUSE_SE_PAD)}" fill="#b8b0a0" stroke="#6a6358" stroke-width="1.2"/>`;
+      g += `<text x="${fx(127.2)}" y="${fy(-11)}" text-anchor="middle" font-size="9" fill="#5a5348" font-weight="700" ${pe}>existing pad</text>`;
+      g += `<polyline points="${polyPts([[HOUSE_E1, -24], [132.1, -24], [132.1, 0]])}" fill="none" stroke="#6a6358" stroke-width="1.6" ${pe}/>`;
+
+      // Chicken run + coop (west of house)
+      g += `<rect x="${fx(RUN.e0)}" y="${fy(RUN.s0)}" width="${(RUN.e1 - RUN.e0) * PXFT}" height="${(RUN.s1 - RUN.s0) * PXFT}" fill="#d5e0c8" stroke="#5c7a3c" stroke-width="1.2"/>`;
+      g += `<rect x="${fx(COOP.e0)}" y="${fy(COOP.s0)}" width="${(COOP.e1 - COOP.e0) * PXFT}" height="${(COOP.s1 - COOP.s0) * PXFT}" fill="#c4b48a" stroke="#6a5a38" stroke-width="1"/>`;
+      g += `<text x="${fx((RUN.e0 + RUN.e1) / 2)}" y="${fy((RUN.s0 + RUN.s1) / 2)}" text-anchor="middle" font-size="10" fill="#3a4a28" font-weight="700" ${pe}>CHICKEN RUN</text>`;
+
+      // Garden (west fence, south of picket)
+      g += `<rect x="${fx(GARDEN.e0)}" y="${fy(GARDEN.s0)}" width="${(GARDEN.e1 - GARDEN.e0) * PXFT}" height="${(GARDEN.s1 - GARDEN.s0) * PXFT}" fill="#c8d6b0" stroke="#5c7a3c" stroke-width="1.1"/>`;
+      for (const [be, bs] of GARDEN_BEDS) {
+        g += `<rect x="${fx(be)}" y="${fy(bs)}" width="${6 * PXFT}" height="${4 * PXFT}" rx="2" fill="#b98d5e" stroke="#6f4f2a" stroke-width="0.8" ${pe}/>`;
+      }
+      g += `<circle cx="${fx(GARDEN_TABLE[0])}" cy="${fy(GARDEN_TABLE[1])}" r="${1.4 * PXFT}" fill="#efe7d8" stroke="#8a744a" stroke-width="0.8" ${pe}/>`;
+      g += `<text x="${fx((GARDEN.e0 + GARDEN.e1) / 2)}" y="${fy(GARDEN.s0 + 2.2)}" text-anchor="middle" font-size="9" fill="#3a4a28" font-weight="700" ${pe}>GARDEN</text>`;
+
+      // Pool deck (CAD DECK_PTS) — under the pool module
+      g += `<polygon points="${polyPts(DECK_PTS)}" fill="#cbb896" fill-opacity="0.55" stroke="#8a744a" stroke-width="1" ${pe}/>`;
+
+      // Trees (CAD). Fire pit is a movable module.
+      for (const [te, ts] of TREES) {
+        g += `<circle cx="${fx(te)}" cy="${fy(ts)}" r="${4.5 * PXFT}" fill="#7a9a5a" fill-opacity="0.45" stroke="#4a6a38" stroke-width="1" ${pe}/>`;
+      }
+
+      // House SW → west fence + house SE → east fence
+      g += dimLine(WEST_FENCE, -2.4, HOUSE_E0, -2.4, `${fmtFt(HOUSE_E0)} house SW → W fence`, "above");
+      g += dimLine(HOUSE_E1, -2.4, EAST_FENCE, -2.4, `${fmtFt(EAST_FENCE - HOUSE_E1)} house SE → E fence`, "above");
+      g += dimLine(HOUSE_E1, DRIVE_S1 - 2.2, DRIVE_E, DRIVE_S1 - 2.2, `${fmtFt(DRIVE_E - HOUSE_E1)} house → drive E`, "above");
+
+      // fences
+      g += `<line x1="${fx(WEST_FENCE)}" y1="${fy(CAN_S0)}" x2="${fx(WEST_FENCE)}" y2="${fy(SOUTH_FENCE)}" stroke="#c0392b" stroke-width="3" ${pe}/>`;
+      g += `<line x1="${fx(EAST_FENCE)}" y1="${fy(CAN_S0)}" x2="${fx(EAST_FENCE)}" y2="${fy(SOUTH_FENCE)}" stroke="#c0392b" stroke-width="3" ${pe}/>`;
+      g += `<line x1="${fx(WEST_FENCE)}" y1="${fy(SOUTH_FENCE)}" x2="${fx(EAST_FENCE)}" y2="${fy(SOUTH_FENCE)}" stroke="#c0392b" stroke-width="3" ${pe}/>`;
+      g += `<text x="${fx(WEST_FENCE) - 14}" y="${fy((0 + SOUTH_FENCE) / 2)}" text-anchor="middle" font-size="11" fill="#c0392b" font-weight="700" transform="rotate(-90 ${fx(WEST_FENCE) - 14} ${fy((0 + SOUTH_FENCE) / 2)})" ${pe}>WEST FENCE</text>`;
+      g += `<text x="${fx(EAST_FENCE) + 14}" y="${fy((0 + SOUTH_FENCE) / 2)}" text-anchor="middle" font-size="11" fill="#c0392b" font-weight="700" transform="rotate(90 ${fx(EAST_FENCE) + 14} ${fy((0 + SOUTH_FENCE) / 2)})" ${pe}>EAST FENCE</text>`;
+      g += `<text x="${fx((WEST_FENCE + EAST_FENCE) / 2)}" y="${fy(SOUTH_FENCE) + 16}" text-anchor="middle" font-size="11" fill="#c0392b" font-weight="700" ${pe}>SOUTH FENCE · ag line · Lot 5 / 6</text>`;
+
+      // north wood at s=0: chicken picket (W of house) + dashed east of house
+      g += `<line x1="${fx(WEST_FENCE)}" y1="${fy(0)}" x2="${fx(HOUSE_E0)}" y2="${fy(0)}" stroke="#6a6358" stroke-width="2" ${pe}/>`;
+      g += `<line x1="${fx(HOUSE_E1)}" y1="${fy(0)}" x2="${fx(EAST_FENCE)}" y2="${fy(0)}" stroke="#6a6358" stroke-width="1.2" stroke-dasharray="5 4" ${pe}/>`;
+
+      // building zones (drag the shell)
+      g += `<g data-fx="building" style="cursor:grab">`;
+      g += `<rect x="${fx(z.shop.e0)}" y="${fy(z.shop.s0)}" width="${S.garageW * PXFT}" height="${S.garageD * PXFT}" fill="#d8dcd0" stroke="#3a4036" stroke-width="2"/>`;
+      g += `<rect x="${fx(z.gym.e0)}" y="${fy(z.gym.s0)}" width="${S.gymW * PXFT}" height="${S.gymD * PXFT}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
+      g += `<rect x="${fx(z.liv.e0)}" y="${fy(z.liv.s0)}" width="${S.livingW * PXFT}" height="${S.livingD * PXFT}" fill="#f4efe4" stroke="#3a4036" stroke-width="2"/>`;
+      const zoneLabel = (cx, cy, title, w, d) => {
+        let t = `<text x="${cx}" y="${cy - 7}" text-anchor="middle" font-size="12" fill="#4a5346" font-weight="700" ${pe}>${title}</text>`;
+        t += `<text x="${cx}" y="${cy + 8}" text-anchor="middle" font-size="10" fill="#4a5346" ${pe}>${areaLine(w, d)}</text>`;
+        return t;
+      };
+      g += zoneLabel(fx((z.shop.e0 + z.shop.e1) / 2), fy((z.shop.s0 + z.shop.s1) / 2), "SHOP", S.garageW, S.garageD);
+      g += zoneLabel(fx((z.gym.e0 + z.gym.e1) / 2), fy((z.gym.s0 + z.gym.s1) / 2), "DANCE/GYM", S.gymW, S.gymD);
+      g += zoneLabel(fx((z.liv.e0 + z.liv.e1) / 2), fy((z.liv.s0 + z.liv.s1) / 2), "LIVING", S.livingW, S.livingD);
+      g += `</g>`;
+
+      // overall dims
+      g += dimLine(bb.e0, bb.s0 - 3.2, bb.e1, bb.s0 - 3.2, `${fmtFt(overallW)} overall`, "above");
+      g += dimLine(bb.e0 - 3.4, bb.s0, bb.e0 - 3.4, bb.s1, `${fmtFt(overallD)} N–S`, "above");
+      if (isL()) {
+        g += dimLine(z.shop.e0, z.shop.s0 - 6.2, z.shop.e1, z.shop.s0 - 6.2, `shop ${fmtFt(S.garageW)}`, "above");
+        g += dimLine(z.liv.e0, z.liv.s1 + 3.2, z.liv.e1, z.liv.s1 + 3.2, `living ${fmtFt(S.livingW)}`, "below");
+        if (Math.abs(S.gymW - S.livingW) > 0.05) {
+          const gy = S.gymSide === "S" ? z.gym.s1 + 3.2 : z.gym.s0 - 9.2;
+          const side = S.gymSide === "S" ? "below" : "above";
+          g += dimLine(z.gym.e0, gy, z.gym.e1, gy, `gym ${fmtFt(S.gymW)}`, side);
+        }
+      }
+      g += dimLine(bb.e1, (bb.s0 + bb.s1) / 2, EAST_FENCE, (bb.s0 + bb.s1) / 2, `${fmtFt(EAST_FENCE - bb.e1)} → E fence`);
+      g += dimLine((bb.e0 + bb.e1) / 2, bb.s1, (bb.e0 + bb.e1) / 2, SOUTH_FENCE, `${fmtFt(SOUTH_FENCE - bb.s1)} → S fence / ag`);
+
+      const acc = { s: g };
+
+      if (S.enPatio) drawPatio(acc);
+      if (S.enPool) drawPool(acc);
+      if (S.enCage) drawCage(acc);
+      if (S.enCourt) drawCourt(acc);
+      if (S.enOffice) drawSimple(acc, "office");
+      if (S.enCloset) drawSimple(acc, "closet");
+      if (S.enBath) drawBath(acc);
+      if (S.enBunk) drawBunk(acc);
+      if (S.enMedia) drawMedia(acc);
+      if (S.enWeights) drawWeights(acc);
+      if (S.enMirror) {
+        drawDanceStrip(acc, "mirror", `mirror ${fmtFt(S.mirrorLen)}`);
+        drawDanceStrip(acc, "barre", `barre ${fmtFt(S.barreLen)}`);
+      }
+      if (S.enTable) drawTable(acc);
+      if (S.enPtable) drawPtable(acc);
+      if (S.enDining) drawDining(acc);
+      if (S.enSit) drawSit(acc);
+      if (S.enBar) drawBar(acc);
+      if (S.enFire) drawFire(acc);
+
+      if (S.enCourt && F.court) {
+        const c = F.court;
+        acc.s += dimLine(c.e + c.w, c.s + c.h / 2, EAST_FENCE, c.s + c.h / 2, `${fmtFt(EAST_FENCE - (c.e + c.w))} court → E`);
+        acc.s += dimLine(c.e + c.w / 2, c.s + c.h, c.e + c.w / 2, SOUTH_FENCE, `${fmtFt(SOUTH_FENCE - (c.s + c.h))} court → S`);
+      }
+
+      if (S.tool === "measure") {
+        MP.e = clamp(MP.e, CAN_E0, CAN_E1);
+        MP.s = clamp(MP.s, CAN_S0, CAN_S1);
+        const RD = "#d9634a";
+        const mLine = (e1, s1, e2, s2) =>
+          `<line x1="${fx(e1)}" y1="${fy(s1)}" x2="${fx(e2)}" y2="${fy(s2)}" stroke="${RD}" stroke-width="1" stroke-dasharray="4 3" pointer-events="none"/>`;
+        const mLbl = (e, s, t) =>
+          `<text x="${fx(e)}" y="${fy(s)}" text-anchor="middle" font-size="10" font-weight="700" fill="${RD}" pointer-events="none" style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px">${t}</text>`;
+        acc.s += mLine(MP.e, MP.s, WEST_FENCE, MP.s) + mLine(MP.e, MP.s, EAST_FENCE, MP.s);
+        acc.s += mLine(MP.e, MP.s, MP.e, CAN_S0) + mLine(MP.e, MP.s, MP.e, SOUTH_FENCE);
+        acc.s += mLine(MP.e, MP.s, MP.e, 0);
+        acc.s += mLbl((MP.e + WEST_FENCE) / 2, MP.s - 0.4, fmtFt(MP.e - WEST_FENCE) + " W");
+        acc.s += mLbl((MP.e + EAST_FENCE) / 2, MP.s - 0.4, fmtFt(EAST_FENCE - MP.e) + " E");
+        const nMid = (MP.s + 0) / 2;
+        const sMid = (MP.s + SOUTH_FENCE) / 2;
+        const nx = fx(MP.e - 1.4), ny = fy(nMid);
+        const sx = fx(MP.e + 1.4), sy = fy(sMid);
+        const nTxt = MP.s >= 0 ? `${fmtFt(MP.s)} N · rear` : `${fmtFt(-MP.s)} S of rear`;
+        acc.s += `<text x="${nx}" y="${ny}" text-anchor="middle" font-size="10" font-weight="700" fill="${RD}" transform="rotate(-90 ${nx} ${ny})" pointer-events="none" style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px">${nTxt}</text>`;
+        acc.s += `<text x="${sx}" y="${sy}" text-anchor="middle" font-size="10" font-weight="700" fill="${RD}" transform="rotate(-90 ${sx} ${sy})" pointer-events="none" style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px">${fmtFt(SOUTH_FENCE - MP.s)} S</text>`;
+        acc.s += `<g data-measure="1" style="cursor:move">`;
+        acc.s += `<circle cx="${fx(MP.e)}" cy="${fy(MP.s)}" r="14" fill="transparent"/>`;
+        acc.s += `<circle cx="${fx(MP.e)}" cy="${fy(MP.s)}" r="5" fill="${RD}" fill-opacity="0.2" stroke="${RD}" stroke-width="1.5"/>`;
+        acc.s += `</g>`;
+        acc.s += `<g id="measureLive">${liveMeasureMarkup()}</g>`;
+      }
+
+      const svgCursor = S.tool === "measure" ? "crosshair" : "default";
+      el("svgHost").innerHTML =
+        `<svg id="plan" width="${VW}" height="${VH}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" style="cursor:${svgCursor}">${acc.s}</svg>`;
+      attachDrag();
+      runChecks();
+    }
+
+    function faceEdge(f) {
+      return f.face === "N" ? [f.e, f.s, f.e + f.w, f.s]
+        : f.face === "S" ? [f.e, f.s + f.h, f.e + f.w, f.s + f.h]
+          : f.face === "W" ? [f.e, f.s, f.e, f.s + f.h]
+            : [f.e + f.w, f.s, f.e + f.w, f.s + f.h];
+    }
+
+    function wrapMod(g, key, body, extra) {
+      const f = F[key];
+      g.s += `<g data-fx="${key}" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" stroke="${f.ec}" stroke-width="1.4" fill-opacity="${extra && extra.fillOp || 0.92}"/>`;
+      g.s += body;
+      const fe = faceEdge(f);
+      g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3.5" stroke-linecap="round" style="pointer-events:none"/>`;
+      if (f.label && !(extra && extra.skipLabel))
+        g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 3}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" style="pointer-events:none">${f.label}</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawSimple(g, key) {
+      const f = F[key];
+      const pe = 'style="pointer-events:none"';
+      const body = `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 0.85)}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      wrapMod(g, key, body);
+    }
+
+    function drawBath(g) {
+      const f = F.bath;
+      const pe = 'style="pointer-events:none"';
+      let body = "";
+      body += `<rect x="${fx(f.e + 0.2)}" y="${fy(f.s + 0.2)}" width="${1.8 * PXFT}" height="${2.2 * PXFT}" fill="#b8d4d9" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
+      body += `<rect x="${fx(f.e + f.w - 3.6)}" y="${fy(f.s + 0.25)}" width="${3.3 * PXFT}" height="${3.3 * PXFT}" fill="#b8d4d9" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
+      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h) - 5}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      wrapMod(g, "bath", body);
+    }
+
+    function drawBunk(g) {
+      const f = F.bunk;
+      const pe = 'style="pointer-events:none"';
+      const step = { W: 0, N: 1, E: 2, S: 3 }[f.face] || 0;
+      const odd = step % 2 === 1;
+      const nw = odd ? f.h : f.w, nh = odd ? f.w : f.h;
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      const nx = ce - nw / 2, ny = cs - nh / 2;
+      const inset = 0.2, bedL = 6.5, stairMin = 2.5;
+      const bedW = Math.min(5, Math.max(3.25, (nw - 2 * inset - stairMin) / 2));
+      const leftE = nx + inset, rightE = nx + nw - inset - bedW, bedS = ny + inset;
+      const stairE = leftE + bedW, stairW = rightE - stairE;
+      let inner = "";
+      inner += `<rect x="${fx(leftE)}" y="${fy(bedS)}" width="${bedW * PXFT}" height="${bedL * PXFT}" fill="#e8d9b8" stroke="${f.ec}" stroke-width="0.7"/>`;
+      inner += `<rect x="${fx(rightE)}" y="${fy(bedS)}" width="${bedW * PXFT}" height="${bedL * PXFT}" fill="#e8d9b8" stroke="${f.ec}" stroke-width="0.7"/>`;
+      if (stairW > 1.2) {
+        const treads = 6;
+        inner += `<rect x="${fx(stairE + 0.15)}" y="${fy(bedS + 0.3)}" width="${(stairW - 0.3) * PXFT}" height="${(bedL - 0.6) * PXFT}" fill="#d8c8a8" stroke="${f.ec}" stroke-width="0.5"/>`;
+        for (let i = 1; i < treads; i++) {
+          const ty = bedS + 0.3 + (bedL - 0.6) * i / treads;
+          inner += `<line x1="${fx(stairE + 0.15)}" y1="${fy(ty)}" x2="${fx(stairE + stairW - 0.15)}" y2="${fy(ty)}" stroke="${f.ec}" stroke-width="0.6"/>`;
+        }
+      }
+      const body =
+        `<g transform="rotate(${step * 90} ${fx(ce)} ${fy(cs)})" ${pe}>${inner}</g>` +
+        `<text x="${fx(ce)}" y="${fy(cs) + 12}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      wrapMod(g, "bunk", body);
+    }
+
+    function drawMedia(g) {
+      const f = F.media;
+      const pe = 'style="pointer-events:none"';
+      const sofaD = 3.25, chairR = 1.35;
+      let body = "";
+      if (f.face === "S") {
+        body += `<rect x="${fx(f.e + f.w / 2 - 3.5)}" y="${fy(f.s + f.h - 0.45)}" width="${7 * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
+        const seatFront = f.s + 0.75 + sofaD;
+        const baseW = 11.5, baseE = f.e + 1.0;
+        body += `<rect x="${fx(baseE)}" y="${fy(f.s + 0.75)}" width="${baseW * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<rect x="${fx(baseE)}" y="${fy(seatFront)}" width="${sofaD * PXFT}" height="${4.5 * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(baseE + 6)}" cy="${fy(seatFront + 2.2)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + 2.0)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + 5.5)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      } else if (f.face === "N") {
+        body += `<rect x="${fx(f.e + f.w / 2 - 3.5)}" y="${fy(f.s)}" width="${7 * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
+        const seatBack = f.s + f.h - 0.75 - sofaD;
+        const baseW = 11.5, baseE = f.e + 1.0;
+        body += `<rect x="${fx(baseE)}" y="${fy(seatBack)}" width="${baseW * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<rect x="${fx(baseE)}" y="${fy(seatBack - 4.5)}" width="${sofaD * PXFT}" height="${4.5 * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(baseE + 6)}" cy="${fy(seatBack - 2.2)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + f.h - 2.0)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + f.h - 5.5)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      } else if (f.face === "E") {
+        body += `<rect x="${fx(f.e + f.w - 0.45)}" y="${fy(f.s + f.h / 2 - 3.5)}" width="${0.4 * PXFT}" height="${7 * PXFT}" fill="#2b3542" ${pe}/>`;
+        const seatFront = f.e + 0.75 + sofaD;
+        const baseH = 11.5, baseS = f.s + 1.0;
+        body += `<rect x="${fx(f.e + 0.75)}" y="${fy(baseS)}" width="${sofaD * PXFT}" height="${baseH * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<rect x="${fx(seatFront)}" y="${fy(baseS)}" width="${4.5 * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(seatFront + 2.2)}" cy="${fy(baseS + 6)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + 2.0)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + 5.5)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      } else {
+        body += `<rect x="${fx(f.e)}" y="${fy(f.s + f.h / 2 - 3.5)}" width="${0.4 * PXFT}" height="${7 * PXFT}" fill="#2b3542" ${pe}/>`;
+        const seatBack = f.e + f.w - 0.75 - sofaD;
+        const baseH = 11.5, baseS = f.s + 1.0;
+        body += `<rect x="${fx(seatBack)}" y="${fy(baseS)}" width="${sofaD * PXFT}" height="${baseH * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<rect x="${fx(seatBack - 4.5)}" y="${fy(baseS)}" width="${4.5 * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(seatBack - 2.2)}" cy="${fy(baseS + 6)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 2.0)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        body += `<circle cx="${fx(f.e + f.w - 5.5)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      }
+      wrapMod(g, "media", body, { skipLabel: true });
+    }
+
+    function drawWeights(g) {
+      wrapMod(g, "weights", "");
+    }
+
+    function drawDanceStrip(g, key, title) {
+      const f = F[key];
+      if (!f) return;
+      const pe = 'style="pointer-events:none"';
+      const ns = f.face === "N" || f.face === "S";
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      g.s += `<g data-fx="${key}" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" stroke="${f.ec}" stroke-width="1.3"/>`;
+      if (key === "barre") {
+        if (ns) {
+          g.s += `<line x1="${fx(f.e + 0.25)}" y1="${fy(f.s + f.h / 2)}" x2="${fx(f.e + f.w - 0.25)}" y2="${fy(f.s + f.h / 2)}" stroke="${f.ec}" stroke-width="2.2" ${pe}/>`;
+        } else {
+          g.s += `<line x1="${fx(f.e + f.w / 2)}" y1="${fy(f.s + 0.25)}" x2="${fx(f.e + f.w / 2)}" y2="${fy(f.s + f.h - 0.25)}" stroke="${f.ec}" stroke-width="2.2" ${pe}/>`;
+        }
+      }
+      const rot = ns ? "" : `transform="rotate(-90 ${fx(ce)} ${fy(cs)})"`;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 3}" text-anchor="middle" font-size="8" fill="${f.tc}" font-weight="700" ${rot} ${pe}>${title}</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawBar(g) {
+      const f = F.bar;
+      const pe = 'style="pointer-events:none"';
+      const backT = 2.08, island = 2.25, stoolD = 1.75;
+      const stools = 5;
+      let body = "";
+      if (f.face === "W") {
+        body += `<rect x="${fx(f.e + f.w - backT)}" y="${fy(f.s)}" width="${backT * PXFT}" height="${f.h * PXFT}" fill="#3a2f22" ${pe}/>`;
+        body += `<rect x="${fx(f.e + stoolD)}" y="${fy(f.s + 0.5)}" width="${island * PXFT}" height="${(f.h - 1) * PXFT}" fill="#d9cdb4" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+        for (let i = 0; i < stools; i++) {
+          const sy = f.s + 0.8 + (f.h - 1.6) * (i + 0.5) / stools;
+          body += `<circle cx="${fx(f.e + stoolD / 2)}" cy="${fy(sy)}" r="${0.45 * PXFT}" fill="#efe7d8" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+        }
+      } else if (f.face === "E") {
+        body += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${backT * PXFT}" height="${f.h * PXFT}" fill="#3a2f22" ${pe}/>`;
+        body += `<rect x="${fx(f.e + f.w - stoolD - island)}" y="${fy(f.s + 0.5)}" width="${island * PXFT}" height="${(f.h - 1) * PXFT}" fill="#d9cdb4" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+        for (let i = 0; i < stools; i++) {
+          const sy = f.s + 0.8 + (f.h - 1.6) * (i + 0.5) / stools;
+          body += `<circle cx="${fx(f.e + f.w - stoolD / 2)}" cy="${fy(sy)}" r="${0.45 * PXFT}" fill="#efe7d8" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+        }
+      } else if (f.face === "S") {
+        body += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${backT * PXFT}" fill="#3a2f22" ${pe}/>`;
+        body += `<rect x="${fx(f.e + 0.5)}" y="${fy(f.s + f.h - stoolD - island)}" width="${(f.w - 1) * PXFT}" height="${island * PXFT}" fill="#d9cdb4" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+        for (let i = 0; i < stools; i++) {
+          const sx = f.e + 0.8 + (f.w - 1.6) * (i + 0.5) / stools;
+          body += `<circle cx="${fx(sx)}" cy="${fy(f.s + f.h - stoolD / 2)}" r="${0.45 * PXFT}" fill="#efe7d8" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+        }
+      } else {
+        body += `<rect x="${fx(f.e)}" y="${fy(f.s + f.h - backT)}" width="${f.w * PXFT}" height="${backT * PXFT}" fill="#3a2f22" ${pe}/>`;
+        body += `<rect x="${fx(f.e + 0.5)}" y="${fy(f.s + stoolD)}" width="${(f.w - 1) * PXFT}" height="${island * PXFT}" fill="#d9cdb4" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+        for (let i = 0; i < stools; i++) {
+          const sx = f.e + 0.8 + (f.w - 1.6) * (i + 0.5) / stools;
+          body += `<circle cx="${fx(sx)}" cy="${fy(f.s + stoolD / 2)}" r="${0.45 * PXFT}" fill="#efe7d8" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+        }
+      }
+      wrapMod(g, "bar", body, { skipLabel: true });
+    }
+
+    function drawTable(g) {
+      const f = F.table;
+      const pe = 'style="pointer-events:none"';
+      const longX = (f.face === "N" || f.face === "S");
+      const tl = 3, tw = 3;
+      const twd = longX ? tl : tw, thd = longX ? tw : tl;
+      const te = f.e + (f.w - twd) / 2, ts = f.s + (f.h - thd) / 2;
+      const ideal = 3;
+      const iw = twd + 2 * ideal, ih = thd + 2 * ideal;
+      const ie = te + twd / 2 - iw / 2, is_ = ts + thd / 2 - ih / 2;
+      g.s += `<g data-fx="table" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" fill-opacity="0.22" stroke="none"/>`;
+      g.s += `<rect x="${fx(ie)}" y="${fy(is_)}" width="${iw * PXFT}" height="${ih * PXFT}" rx="2" fill="none" stroke="${f.ec}" stroke-width="1.2" stroke-dasharray="5 3" ${pe}/>`;
+      const CD = 1.67, CW = 1.4;
+      const chair = (e, s, w, h) =>
+        `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" rx="2" fill="#e8dcc4" stroke="#7a6338" stroke-width="0.6" ${pe}/>`;
+      if (longX) {
+        chair(te + tl / 2 - CW / 2, ts - CD, CW, CD);
+        chair(te + tl / 2 - CW / 2, ts + thd, CW, CD);
+        chair(te - CD, ts + tw / 2 - CW / 2, CD, CW);
+        chair(te + twd, ts + tw / 2 - CW / 2, CD, CW);
+      } else {
+        chair(te - CD, ts + tl / 2 - CW / 2, CD, CW);
+        chair(te + twd, ts + tl / 2 - CW / 2, CD, CW);
+        chair(te + tw / 2 - CW / 2, ts - CD, CW, CD);
+        chair(te + tw / 2 - CW / 2, ts + thd, CW, CD);
+      }
+      g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${twd * PXFT}" height="${thd * PXFT}" rx="2" fill="#cbb890" stroke="#7a6338" stroke-width="1" ${pe}/>`;
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 3}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>36×36 · 4</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawPtable(g) {
+      const f = F.ptable;
+      const pe = 'style="pointer-events:none"';
+      g.s += `<g data-fx="ptable" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.35" stroke="${f.ec}" stroke-width="1.5" stroke-dasharray="6 4"/>`;
+      const tLen = S.poolLen === 9 ? 9 : S.poolLen === 7 ? 7 : 8;
+      const tW = 4.5;
+      const longX = (f.face === "N" || f.face === "S");
+      const tw = longX ? tLen : tW, th = longX ? tW : tLen;
+      const te = f.e + (f.w - tw) / 2, ts = f.s + (f.h - th) / 2;
+      g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${tw * PXFT}" height="${th * PXFT}" fill="#2f6f4a" stroke="#204d34" stroke-width="1.2" ${pe}/>`;
+      for (const [px, py] of [[0, 0], [0.5, 0], [1, 0], [0, 1], [0.5, 1], [1, 1]]) {
+        g.s += `<circle cx="${fx(te + tw * px)}" cy="${fy(ts + th * py)}" r="4" fill="#141414" ${pe}/>`;
+      }
+      const fe = faceEdge(f);
+      g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3.5" stroke-linecap="round" ${pe}/>`;
+      g.s += `<text x="${fx(te + tw / 2)}" y="${fy(ts + th / 2) - 2}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700" ${pe}>pool</text>`;
+      g.s += `<text x="${fx(te + tw / 2)}" y="${fy(ts + th / 2) + 10}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700" ${pe}>table</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawDining(g) {
+      const f = F.dining;
+      const pe = 'style="pointer-events:none"';
+      g.s += `<g data-fx="dining" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="3" fill="${f.c}" fill-opacity="0.30" stroke="${f.ec}" stroke-width="1.5" stroke-dasharray="6 4"/>`;
+      const longX = (f.face === "N" || f.face === "S");
+      const tLen = S.diningLen, TW = S.diningW;
+      const tw = longX ? tLen : TW, th = longX ? TW : tLen;
+      const te = f.e + (f.w - tw) / 2, ts = f.s + (f.h - th) / 2;
+      const CW = 1.5, CDd = 1.3, off = 0.18;
+      const chair = (e, s, w, h) =>
+        `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" rx="2.5" fill="#e8dcc4" stroke="#7a6338" stroke-width="0.7" ${pe}/>`;
+      const n = S.diningChairs;
+      if (longX) {
+        for (let i = 0; i < n; i++) {
+          const e = te + tLen * (i + 0.5) / n - CW / 2;
+          g.s += chair(e, ts - CDd - off, CW, CDd);
+          g.s += chair(e, ts + th + off, CW, CDd);
+        }
+        if (S.diningEnds) {
+          g.s += chair(te - CDd - off, ts + th / 2 - CW / 2, CDd, CW);
+          g.s += chair(te + tw + off, ts + th / 2 - CW / 2, CDd, CW);
+        }
+      } else {
+        for (let i = 0; i < n; i++) {
+          const s = ts + tLen * (i + 0.5) / n - CW / 2;
+          g.s += chair(te - CDd - off, s, CDd, CW);
+          g.s += chair(te + tw + off, s, CDd, CW);
+        }
+        if (S.diningEnds) {
+          g.s += chair(te + tw / 2 - CW / 2, ts - CDd - off, CW, CDd);
+          g.s += chair(te + tw / 2 - CW / 2, ts + th + off, CW, CDd);
+        }
+      }
+      g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${tw * PXFT}" height="${th * PXFT}" rx="3" fill="#cbb890" stroke="#7a6338" stroke-width="1.2" ${pe}/>`;
+      const seats = n * 2 + (S.diningEnds ? 2 : 0);
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 4}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>${seats}-seat dining · ${fmtFt(tLen)}×${fmtFt(TW)}</text>`;
+      g.s += `<text x="${fx(f.e + 0.3)}" y="${fy(f.s + 0.6)}" font-size="8" fill="${f.ec}" ${pe}>36" pull+walk · ${fmtFt(f.w)}×${fmtFt(f.h)} clear</text>`;
+      const fe = faceEdge(f);
+      g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3.5" stroke-linecap="round" ${pe}/>`;
+      g.s += `</g>`;
+    }
+
+    function sitXY(f, u, v) {
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      if (f.face === "W") return [f.e + f.w - v, cs + u];
+      if (f.face === "E") return [f.e + v, cs + u];
+      if (f.face === "N") return [ce + u, f.s + f.h - v];
+      return [ce - u, f.s + v];
+    }
+
+    function drawSit(g) {
+      const f = F.sit;
+      const pe = 'style="pointer-events:none"';
+      const ns = (f.face === "N" || f.face === "S");
+      const bench = (u, v, along, into) => {
+        const [e, s] = sitXY(f, u, v);
+        const w = ns ? along : into, h = ns ? into : along;
+        return `<rect x="${fx(e - w / 2)}" y="${fy(s - h / 2)}" width="${w * PXFT}" height="${h * PXFT}" rx="3" fill="#c8c0d4" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      };
+      const table = (u, v, along, into) => {
+        const [e, s] = sitXY(f, u, v);
+        const w = ns ? along : into, h = ns ? into : along;
+        return `<rect x="${fx(e - w / 2)}" y="${fy(s - h / 2)}" width="${w * PXFT}" height="${h * PXFT}" rx="1.5" fill="#d8d0c0" stroke="#7a6a48" stroke-width="0.7" ${pe}/>`;
+      };
+      const circ = (u, v, r) => {
+        const [e, s] = sitXY(f, u, v);
+        return `<circle cx="${fx(e)}" cy="${fy(s)}" r="${r * PXFT}" fill="#c8c0d4" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      };
+      g.s += `<g data-fx="sit" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="3" fill="${f.c}" fill-opacity="0.22" stroke="${f.ec}" stroke-width="1.3"/>`;
+      const cfg = S.sitCfg;
+      if (cfg === "pair") {
+        g.s += circ(-1.7, 2.3, 1.15);
+        g.s += circ(1.7, 2.3, 1.15);
+        g.s += table(0, 5.4, 2.2, 2.2);
+      } else if (cfg === "love") {
+        g.s += bench(0, 2.0, 5.5, 3.0);
+        g.s += table(-0.4, 5.4, 2.8, 2.0);
+        g.s += circ(3.2, 5.6, 1.15);
+      } else {
+        g.s += bench(-0.6, 2.15, 8.0, 3.25);
+        g.s += table(-0.8, 5.8, 3.4, 2.1);
+        g.s += circ(4.4, 6.2, 1.15);
+      }
+      const fe = faceEdge(f);
+      g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3.5" stroke-linecap="round" ${pe}/>`;
+      g.s += `</g>`;
+    }
+
+    function drawPatio(g) {
+      const f = F.patio;
+      const pe = 'style="pointer-events:none"';
+      const body = `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 1.1)}" text-anchor="middle" font-size="9" fill="${f.tc}" ${pe}>${fmtFt(f.w)} × ${fmtFt(f.h)}</text>`;
+      wrapMod(g, "patio", body, { fillOp: 0.55 });
+    }
+
+    function drawCage(g) {
+      const f = F.cage;
+      const pe = 'style="pointer-events:none"';
+      const longNS = (f.face === "N" || f.face === "S");
+      const sideE = longNS ? CAGE_SIDE : 0;
+      const sideS = longNS ? 0 : CAGE_SIDE;
+      g.s += `<g data-fx="cage" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e - sideE)}" y="${fy(f.s - sideS)}" width="${(f.w + 2 * sideE) * PXFT}" height="${(f.h + 2 * sideS) * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.35" stroke="${f.ec}" stroke-width="1.4"/>`;
+      const fe = faceEdge(f);
+      g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3" ${pe}/>`;
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2)}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>CAGE ${fmtFt(S.cageWid)} × ${fmtFt(S.cageLen)}</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawCourt(g) {
+      const f = F.court;
+      const pe = 'style="pointer-events:none"';
+      const longEW = (f.face === "N" || f.face === "S");
+      const playW = longEW ? 44 : 20, playH = longEW ? 20 : 44;
+      const pe0 = f.e + (f.w - playW) / 2, ps0 = f.s + (f.h - playH) / 2;
+      g.s += `<g data-fx="court" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.55" stroke="${f.ec}" stroke-width="1.6"/>`;
+      g.s += `<rect x="${fx(pe0)}" y="${fy(ps0)}" width="${playW * PXFT}" height="${playH * PXFT}" fill="none" stroke="#f4f7fb" stroke-width="1.2" ${pe}/>`;
+      if (longEW) {
+        const mid = pe0 + playW / 2;
+        g.s += `<line x1="${fx(mid)}" y1="${fy(ps0)}" x2="${fx(mid)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="1.4" ${pe}/>`;
+        g.s += `<line x1="${fx(mid - 7)}" y1="${fy(ps0)}" x2="${fx(mid - 7)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+        g.s += `<line x1="${fx(mid + 7)}" y1="${fy(ps0)}" x2="${fx(mid + 7)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+      } else {
+        const mid = ps0 + playH / 2;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid)}" x2="${fx(pe0 + playW)}" y2="${fy(mid)}" stroke="#f4f7fb" stroke-width="1.4" ${pe}/>`;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid - 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid - 7)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid + 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid + 7)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+      }
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 4}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>PICKLEBALL ${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawFire(g) {
+      const f = F.fire;
+      const pe = 'style="pointer-events:none"';
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      const r = Math.min(f.w, f.h) / 2;
+      g.s += `<g data-fx="fire" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="transparent"/>`;
+      g.s += `<circle cx="${fx(ce)}" cy="${fy(cs)}" r="${r * PXFT}" fill="${f.c}" stroke="${f.ec}" stroke-width="1.2"/>`;
+      g.s += `<circle cx="${fx(ce)}" cy="${fy(cs)}" r="${1.5 * PXFT}" fill="#6a4a28" ${pe}/>`;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) - r * PXFT - 4}" text-anchor="middle" font-size="8" fill="${f.tc}" font-weight="700" ${pe}>FIRE</text>`;
+      g.s += `</g>`;
+    }
+
+    function drawPool(g) {
+      const f = F.pool;
+      const pe = 'style="pointer-events:none"';
+      const de = f.e - POOL_CAD_E0, ds = f.s - POOL_CAD_S0;
+      const pts = POOL_CAD.map(p => [p[0] + de, p[1] + ds]);
+      const spa = [SPA_C[0] + de, SPA_C[1] + ds];
+      g.s += `<g data-fx="pool" style="cursor:grab">`;
+      g.s += `<polygon points="${polyPts(pts)}" fill="${f.c}" fill-opacity="0.55" stroke="${f.ec}" stroke-width="1.6"/>`;
+      g.s += `<ellipse cx="${fx(spa[0])}" cy="${fy(spa[1])}" rx="${6.5 * PXFT}" ry="${5.5 * PXFT}" fill="#9fd0dc" fill-opacity="0.7" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 4}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>POOL</text>`;
+      g.s += `</g>`;
+    }
+
+    // ---- drag ----
+    let MP = { e: 160, s: 90 };
+    let Hover = null;
+    let measurePlaced = false;
+    let drag = null;
+
+    function liveMeasureMarkup() {
+      if (S.tool !== "measure" || !measurePlaced || !Hover || drag) return "";
+      const he = Hover.e, hs = Hover.s;
+      const de = he - MP.e, ds = hs - MP.s;
+      if (Math.abs(de) < 0.04 && Math.abs(ds) < 0.04) return "";
+      const COL = "#3a7a4a";
+      const pe = 'pointer-events="none"';
+      let s = "";
+      s += `<line x1="${fx(MP.e)}" y1="${fy(MP.s)}" x2="${fx(he)}" y2="${fy(MP.s)}" stroke="${COL}" stroke-width="1.4" stroke-dasharray="5 3" ${pe}/>`;
+      s += `<line x1="${fx(he)}" y1="${fy(MP.s)}" x2="${fx(he)}" y2="${fy(hs)}" stroke="${COL}" stroke-width="1.4" stroke-dasharray="5 3" ${pe}/>`;
+      s += `<circle cx="${fx(he)}" cy="${fy(hs)}" r="3.5" fill="${COL}" fill-opacity="0.25" stroke="${COL}" stroke-width="1.2" ${pe}/>`;
+      const stroke = `style="paint-order:stroke;stroke:#e8eadc;stroke-width:3px"`;
+      if (Math.abs(de) >= 0.04) {
+        s += `<text x="${fx((MP.e + he) / 2)}" y="${fy(MP.s) - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="${COL}" ${pe} ${stroke}>${fmtFt(Math.abs(de))} ${de >= 0 ? "E" : "W"}</text>`;
+      }
+      if (Math.abs(ds) >= 0.04) {
+        const vx = fx(he) + 10, vy = fy((MP.s + hs) / 2);
+        s += `<text x="${vx}" y="${vy}" text-anchor="middle" font-size="11" font-weight="700" fill="${COL}" transform="rotate(-90 ${vx} ${vy})" ${pe} ${stroke}>${fmtFt(Math.abs(ds))} ${ds >= 0 ? "S" : "N"}</text>`;
+      }
+      return s;
+    }
+
+    function refreshMeasureLive() {
+      const g = el("measureLive");
+      if (g) g.innerHTML = liveMeasureMarkup();
+    }
+
+    function ptFt(evt) {
+      const svg = el("plan"); if (!svg) return null;
+      const ctm = svg.getScreenCTM();
+      return {
+        e: ((evt.clientX - ctm.e) / ctm.a - M) / PXFT + CAN_E0,
+        s: ((evt.clientY - ctm.f) / ctm.d - M) / PXFT + CAN_S0,
+      };
+    }
+
+    function attachDrag() {
+      const svg = el("plan");
+      if (S.tool === "measure") {
+        const place = e => {
+          const p = ptFt(e); if (!p) return;
+          MP.e = clamp(Math.round(p.e * 100) / 100, CAN_E0, CAN_E1);
+          MP.s = clamp(Math.round(p.s * 100) / 100, CAN_S0, CAN_S1);
+          measurePlaced = true;
+          Hover = null;
+          drag = { type: "m" };
+          e.preventDefault();
+        };
+        svg.addEventListener("pointerdown", place);
+        return;
+      }
+      svg.querySelectorAll("[data-fx]").forEach(gEl => {
+        gEl.addEventListener("pointerdown", e => {
+          const k = gEl.getAttribute("data-fx");
+          const p = ptFt(e); if (!p) return;
+          if (k === "building") {
+            drag = { type: "bldg", oe: S.eastGap, os: S.bS0, pe: p.e, ps: p.s };
+          } else {
+            const f = F[k];
+            drag = { type: "fx", key: k, oe: p.e - f.e, os: p.s - f.s };
+          }
+          e.preventDefault(); e.stopPropagation();
+        });
+      });
+    }
+
+    function onMove(e) {
+      if (S.tool === "measure" && !drag && measurePlaced) {
+        const p = ptFt(e);
+        if (p) { Hover = p; refreshMeasureLive(); }
+        return;
+      }
+      if (!drag) return;
+      const p = ptFt(e); if (!p) return;
+      if (drag.type === "m") {
+        MP.e = clamp(Math.round(p.e * 100) / 100, CAN_E0, CAN_E1);
+        MP.s = clamp(Math.round(p.s * 100) / 100, CAN_S0, CAN_S1);
+        draw(); return;
+      }
+      if (drag.type === "bldg") {
+        const z0 = zones();
+        const de = p.e - drag.pe;
+        const ds = p.s - drag.ps;
+        // eastGap shrinks when the building moves east
+        S.eastGap = clamp(Math.round((drag.oe - de) * 4) / 4, 2, 28);
+        S.bS0 = clamp(Math.round((drag.os + ds) * 2) / 2, -30, 10);
+        const z1 = zones();
+        shiftInteriors(z1.liv.e0 - z0.liv.e0, z1.shop.s0 - z0.shop.s0);
+        applyPatio();
+        draw(); return;
+      }
+      const f = F[drag.key];
+      if (drag.key === "patio") {
+        f.s = snapPatioS(p.s - drag.os);
+        applyPatio();
+        draw(); return;
+      }
+      if (drag.key === "mirror" || drag.key === "barre") {
+        const gym = zones().gym;
+        if (f.face === "N" || f.face === "S") {
+          f.e = clamp(Math.round((p.e - drag.oe) * 100) / 100, gym.e0, Math.max(gym.e0, gym.e1 - f.w));
+        } else {
+          f.s = clamp(Math.round((p.s - drag.os) * 100) / 100, gym.s0, Math.max(gym.s0, gym.s1 - f.h));
+        }
+        if (drag.key === "mirror") applyMirror();
+        else applyBarre();
+        draw(); return;
+      }
+      f.e = Math.round((p.e - drag.oe) * 100) / 100;
+      f.s = Math.round((p.s - drag.os) * 100) / 100;
+      draw();
+    }
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", () => { drag = null; });
+    document.addEventListener("pointercancel", () => { drag = null; });
+
+    const nextFace = { S: "W", W: "N", N: "E", E: "S" };
+    function rotate(k) {
+      if (!F[k]) return;
+      const f = F[k];
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      f.face = nextFace[f.face];
+      if (k === "bar") applyBar();
+      else if (k === "bath") applyBath();
+      else if (k === "bunk") applyBunk();
+      else if (k === "media") applyMedia();
+      else if (k === "weights") applyWeights();
+      else if (k === "table") applyTable();
+      else if (k === "ptable") applyPtable();
+      else if (k === "dining") applyDining();
+      else if (k === "sit") applySit();
+      else if (k === "cage") applyCage();
+      else if (k === "court") applyCourt();
+      else if (k === "pool") applyPool();
+      else if (k === "patio") applyPatio();
+      else if (k === "mirror") { setMirrorWall(nextFace[f.face]); draw(); return; }
+      else if (k === "barre") { setMirrorWall(OPP_WALL[nextFace[f.face]] || f.face); draw(); return; }
+      else if (k === "fire") { /* square — keep w/h */ }
+      else {
+        const nw = f.h, nh = f.w;
+        f.w = nw; f.h = nh;
+      }
+      if (k !== "patio") {
+        f.e = ce - f.w / 2;
+        f.s = cs - f.h / 2;
+      }
+      draw();
+    }
+
+    function rectsOverlap(a, b) {
+      return a.e < b.e + b.w && a.e + a.w > b.e && a.s < b.s + b.h && a.s + a.h > b.s;
+    }
+    function chk(name, val, level) {
+      return `<li><span class="dot ${level}"></span><span class="name">${name}</span><span class="num">${val}</span></li>`;
+    }
+
+    function runChecks() {
+      const items = [];
+      const z = zones();
+      const bb = bbox();
+      const overallW = bb.e1 - bb.e0, overallD = bb.s1 - bb.s0;
+      items.push(chk("Overall envelope", `${fmtFt(overallW)} × ${fmtFt(overallD)}${isL() ? "  · L" : "  · bar"}`, "ok"));
+      items.push(chk("Shop / living / gym",
+        `${fmtFt(S.garageW)}×${fmtFt(S.garageD)} ${S.shopFlush} · ${fmtFt(S.livingW)}×${fmtFt(S.livingD)} · gym ${fmtFt(S.gymW)}×${fmtFt(S.gymD)} ${S.gymFlush} ${S.gymSide === "S" ? "S of living" : "N of living"}`,
+        "ok"));
+
+      const eGap = EAST_FENCE - bb.e1;
+      items.push(chk("Building → east fence", fmtFt(eGap), eGap >= 12 ? "ok" : eGap >= 8 ? "warn" : "bad"));
+      const sGap = SOUTH_FENCE - bb.s1;
+      items.push(chk("Building → south fence / ag", fmtFt(sGap), sGap >= 20 ? "ok" : sGap >= 12 ? "warn" : "bad"));
+      items.push(chk("House SW → west fence", `${fmtFt(HOUSE_E0)}  · locked satellite`,
+        Math.abs(HOUSE_E0 - 53.8) < 0.05 ? "ok" : "bad"));
+      const houseToFence = EAST_FENCE - HOUSE_E1;
+      items.push(chk("House SE → east fence", `${fmtFt(houseToFence)}  · owner 85′ (was 80.9′ satellite)`,
+        Math.abs(houseToFence - 85) < 0.05 ? "ok" : "bad"));
+      const houseGap = bb.e0 - HOUSE_E1;
+      items.push(chk("Building → house SE", houseGap >= 0 ? fmtFt(houseGap) : `overlaps house ${fmtFt(-houseGap)}`,
+        houseGap >= 8 ? "ok" : houseGap >= 0 ? "warn" : "bad"));
+      if (bb.s1 > SOUTH_FENCE + 0.05)
+        items.push(chk("Ag line", "building crosses south fence", "bad"));
+
+      if (S.enCourt && F.court) {
+        const c = F.court;
+        const toE = EAST_FENCE - (c.e + c.w);
+        const toS = SOUTH_FENCE - (c.s + c.h);
+        const toN = c.s - bb.s1;
+        items.push(chk("Court → east fence", fmtFt(toE), toE >= 4 ? "ok" : toE >= 0 ? "warn" : "bad"));
+        items.push(chk("Court → south fence / ag", fmtFt(toS), toS >= 8 ? "ok" : toS >= 0 ? "warn" : "bad"));
+        items.push(chk("Court → building south", toN >= 0 ? fmtFt(toN) : `overlaps ${fmtFt(-toN)}`,
+          toN >= 10 ? "ok" : toN >= 0 ? "warn" : "bad"));
+        if (c.s + c.h > SOUTH_FENCE + 0.05)
+          items.push(chk("Court vs ag", "court crosses south fence", "bad"));
+      }
+
+      if (S.enCage && F.cage) {
+        const c = F.cage;
+        const longNS = (c.face === "N" || c.face === "S");
+        const envE0 = c.e - (longNS ? CAGE_SIDE : 0);
+        const envE1 = c.e + c.w + (longNS ? CAGE_SIDE : 0);
+        const toE = EAST_FENCE - envE1;
+        const toB = envE0 - bb.e1;
+        items.push(chk("Cage 2′ side → east fence", fmtFt(toE), toE >= 0 ? "ok" : "bad"));
+        items.push(chk("Cage 2′ side → building", toB >= 0 ? fmtFt(toB) : `clips ${fmtFt(-toB)}`,
+          toB >= 0 ? "ok" : "warn"));
+      }
+
+      if (S.enPatio && F.patio) {
+        const wall = westWall();
+        const onWall = Math.abs((F.patio.e + F.patio.w) - wall.e) < 0.15;
+        items.push(chk("Patio on west wall", onWall ? "snapped" : "off the wall", onWall ? "ok" : "warn"));
+        const run = F.patio.h;
+        const along = wall.s1 - wall.s0;
+        items.push(chk("Patio run vs west face", `${fmtFt(run)} on ${fmtFt(along)} wall`,
+          run <= along + 0.05 ? "ok" : "warn"));
+      }
+
+      const keys = enabledKeys();
+      const name = k => (F[k] && F[k].label) || k;
+      let overlaps = [];
+      for (let a = 0; a < keys.length; a++) {
+        for (let b = a + 1; b < keys.length; b++) {
+          const A = F[keys[a]], B = F[keys[b]];
+          if (!A || !B) continue;
+          if (keys[a] === "pool" || keys[b] === "pool") continue;
+          if (keys[a] === "patio" && SITE_MODS.includes(keys[b])) continue;
+          if (keys[b] === "patio" && SITE_MODS.includes(keys[a])) continue;
+          if (keys[a] === "court" || keys[b] === "court") continue;
+          if (keys[a] === "cage" || keys[b] === "cage") continue;
+          if ((keys[a] === "mirror" && keys[b] === "barre") || (keys[a] === "barre" && keys[b] === "mirror")) continue;
+          if (rectsOverlap(A, B)) overlaps.push(`${name(keys[a])}×${name(keys[b])}`);
+        }
+      }
+      if (S.enDining && F.dining) {
+        const seats = S.diningChairs * 2 + (S.diningEnds ? 2 : 0);
+        const per = S.diningLen * 12 / S.diningChairs;
+        items.push(chk("Dining seats", `${seats}  (${S.diningChairs}/side${S.diningEnds ? " + 2 ends" : ""})`, "ok"));
+        items.push(chk("Side chair width", `${per.toFixed(0)}"  · want ≥24`, per >= 24 ? "ok" : per >= 21 ? "warn" : "bad"));
+      }
+      if (S.enPtable && F.ptable) {
+        const f = F.ptable;
+        const clipped = f.e < z.liv.e0 - 0.05 || f.e + f.w > z.liv.e1 + 0.05
+          || f.s < z.liv.s0 - 0.05 || f.s + f.h > z.liv.s1 + 0.05;
+        items.push(chk("Pool-table clear fits living", clipped ? "clips wall — short cue" : `${fmtFt(f.w)}×${fmtFt(f.h)} envelope in living`,
+          clipped ? "warn" : "ok"));
+      }
+      if (S.enMirror && F.mirror) {
+        const wall = gymWallLen(F.mirror.face);
+        const barreWall = F.barre ? gymWallLen(F.barre.face) : wall;
+        items.push(chk("Mirror + barre",
+          `${fmtFt(S.mirrorLen)} ${F.mirror.face} · ${fmtFt(S.barreLen)} barre ${F.barre ? F.barre.face : "—"}`,
+          F.barre && F.barre.face === OPP_WALL[F.mirror.face] ? "ok" : "warn"));
+        items.push(chk("Mirror fits gym wall",
+          S.mirrorLen <= wall + 0.05 ? `${fmtFt(S.mirrorLen)} on ${fmtFt(wall)}` : `needs ${fmtFt(S.mirrorLen)} · wall ${fmtFt(wall)}`,
+          S.mirrorLen <= wall + 0.05 ? "ok" : "warn"));
+        items.push(chk("Barre fits gym wall",
+          S.barreLen <= barreWall + 0.05 ? `${fmtFt(S.barreLen)} on ${fmtFt(barreWall)}` : `needs ${fmtFt(S.barreLen)} · wall ${fmtFt(barreWall)}`,
+          S.barreLen <= barreWall + 0.05 ? "ok" : "warn"));
+      }
+      if (S.enSit && F.sit) {
+        const tag = S.sitCfg === "pair" ? "2 chairs" : S.sitCfg === "love" ? "loveseat + chair" : "sofa + chair";
+        items.push(chk("Sitting area", `${tag} · ${fmtFt(F.sit.w)}×${fmtFt(F.sit.h)}`, "ok"));
+      }
+
+      items.push(chk("Interior overlaps", overlaps.length ? overlaps.join(", ") : "none",
+        overlaps.length ? "bad" : "ok"));
+
+      el("checks").innerHTML = items.join("");
+    }
+
+    function paramsText() {
+      const z = zones();
+      const bb = bbox();
+      const o = (en, k) => {
+        if (!en || !F[k]) return "off";
+        const f = F[k];
+        return `(${f.w.toFixed(2)}, ${f.h.toFixed(2)}, ${f.e.toFixed(2)}, ${f.s.toFixed(2)}, "${f.face}")  # w,h,e,s,face`;
+      };
+      return `# site-studio params  (estate ft: e east, s south; house rear = 0)
+livingW   = ${S.livingW}
+livingD   = ${S.livingD}
+gymW      = ${S.gymW}
+gymD      = ${S.gymD}
+gymSide   = "${S.gymSide}"   # N = shop→gym→living · S = shop→living→gym
+garageW   = ${S.garageW}
+garageD   = ${S.garageD}
+shopFlush = "${S.shopFlush}"
+gymFlush  = "${S.gymFlush}"
+eastGap   = ${S.eastGap}     # living east → east fence
+bS0       = ${S.bS0}
+overall   = ${(bb.e1 - bb.e0).toFixed(2)} × ${(bb.s1 - bb.s0).toFixed(2)}${isL() ? "  # L" : ""}
+shop      = e ${z.shop.e0.toFixed(2)}…${z.shop.e1.toFixed(2)}  s ${z.shop.s0.toFixed(2)}…${z.shop.s1.toFixed(2)}
+gym       = e ${z.gym.e0.toFixed(2)}…${z.gym.e1.toFixed(2)}  s ${z.gym.s0.toFixed(2)}…${z.gym.s1.toFixed(2)}
+living    = e ${z.liv.e0.toFixed(2)}…${z.liv.e1.toFixed(2)}  s ${z.liv.s0.toFixed(2)}…${z.liv.s1.toFixed(2)}
+patioRun  = ${S.patioRun}
+patioDep  = ${S.patioDep}
+cageLen   = ${S.cageLen}
+cageWid   = ${S.cageWid}
+barLen    = ${S.barLen}
+bathAlong = ${S.bathAlong}
+bathInto  = ${S.bathInto}
+bunkLen   = ${S.bunkLen}
+mirrorLen = ${S.mirrorLen}
+barreLen  = ${S.barreLen}
+poolLen   = ${S.poolLen}
+diningW   = ${S.diningW}
+diningLen = ${S.diningLen}
+diningChairs = ${S.diningChairs}
+diningEnds = ${S.diningEnds}
+sitCfg    = "${S.sitCfg}"
+office    = ${o(S.enOffice, "office")}
+closet    = ${o(S.enCloset, "closet")}
+bath      = ${o(S.enBath, "bath")}
+bunk      = ${o(S.enBunk, "bunk")}
+media     = ${o(S.enMedia, "media")}
+weights   = ${o(S.enWeights, "weights")}
+table     = ${o(S.enTable, "table")}
+ptable    = ${o(S.enPtable, "ptable")}
+dining    = ${o(S.enDining, "dining")}
+sit       = ${o(S.enSit, "sit")}
+bar       = ${o(S.enBar, "bar")}
+patio     = ${o(S.enPatio, "patio")}
+cage      = ${o(S.enCage, "cage")}
+court     = ${o(S.enCourt, "court")}
+pool      = ${o(S.enPool, "pool")}
+fire      = ${o(S.enFire, "fire")}
+mirror    = ${o(S.enMirror, "mirror")}
+barre     = ${o(S.enMirror, "barre")}`;
+    }
+
+    function rememberBldg() {
+      return { e0: zones().liv.e0, s0: S.bS0 };
+    }
+    function afterBldgMove(prev) {
+      const z = zones();
+      shiftInteriors(z.liv.e0 - prev.e0, S.bS0 - prev.s0);
+      applyPatio();
+    }
+
+    function shiftSouthOf(sCut, ds) {
+      if (Math.abs(ds) < 1e-9) return;
+      for (const k of INTERIOR) {
+        if (F[k] && F[k].s + F[k].h / 2 >= sCut - 0.2) F[k].s += ds;
+      }
+      if (F.patio && F.patio.s >= sCut - 0.2) F.patio.s += ds;
+    }
+
+    function inBand(f, z) {
+      const mid = f.s + f.h / 2;
+      return mid >= z.s0 - 0.3 && mid <= z.s1 + 0.3;
+    }
+    function setGymSide(side) {
+      if (S.gymSide === side) return;
+      const z0 = zones();
+      S.gymSide = side;
+      const z1 = zones();
+      const dLiv = z1.liv.s0 - z0.liv.s0;
+      const dGym = z1.gym.s0 - z0.gym.s0;
+      for (const k of INTERIOR) {
+        if (!F[k]) continue;
+        if (inBand(F[k], z0.liv)) F[k].s += dLiv;
+        else if (inBand(F[k], z0.gym)) F[k].s += dGym;
+      }
+      applyPatio();
+    }
+
+    el("livingW").addEventListener("input", e => { S.livingW = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("gymW").addEventListener("input", e => { S.gymW = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("livingD").addEventListener("input", e => {
+      if (S.gymSide === "S") {
+        const cut = zones().liv.s1;
+        S.livingD = parseFloat(e.target.value);
+        shiftSouthOf(cut, zones().liv.s1 - cut);
+      } else {
+        S.livingD = parseFloat(e.target.value);
+      }
+      applyPatio(); draw();
+    });
+    el("gymD").addEventListener("input", e => {
+      if (S.gymSide === "N") {
+        const cut = zones().gym.s1;
+        S.gymD = parseFloat(e.target.value);
+        shiftSouthOf(cut, zones().gym.s1 - cut);
+      } else {
+        S.gymD = parseFloat(e.target.value);
+      }
+      applyPatio(); draw();
+    });
+    el("garageW").addEventListener("input", e => { S.garageW = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("garageD").addEventListener("input", e => {
+      const cut = zones().shop.s1;
+      S.garageD = parseFloat(e.target.value);
+      shiftSouthOf(cut, zones().shop.s1 - cut);
+      applyPatio(); draw();
+    });
+    el("eastGap").addEventListener("input", e => {
+      const prev = rememberBldg();
+      S.eastGap = parseFloat(e.target.value);
+      afterBldgMove(prev); draw();
+    });
+    el("bS0").addEventListener("input", e => {
+      const prev = rememberBldg();
+      S.bS0 = parseFloat(e.target.value);
+      afterBldgMove(prev); draw();
+    });
+    el("patioRun").addEventListener("input", e => { S.patioRun = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("patioDep").addEventListener("input", e => { S.patioDep = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("cageLen").addEventListener("input", e => { S.cageLen = parseFloat(e.target.value); applyCage(); draw(); });
+    el("cageWid").addEventListener("input", e => { S.cageWid = parseFloat(e.target.value); applyCage(); draw(); });
+    el("barLen").addEventListener("input", e => { S.barLen = parseFloat(e.target.value); applyBar(); draw(); });
+    el("bathAlong").addEventListener("input", e => { S.bathAlong = parseFloat(e.target.value); applyBath(); draw(); });
+    el("bathInto").addEventListener("input", e => { S.bathInto = parseFloat(e.target.value); applyBath(); draw(); });
+    el("bunkLen").addEventListener("input", e => { S.bunkLen = parseFloat(e.target.value); applyBunk(); draw(); });
+    el("mirrorLen").addEventListener("input", e => { S.mirrorLen = parseFloat(e.target.value); applyMirror(); applyBarre(); draw(); });
+    el("barreLen").addEventListener("input", e => { S.barreLen = parseFloat(e.target.value); applyBarre(); draw(); });
+    function canvasHost() { return el("svgHost"); }
+
+    function setZoom(z, origin) {
+      const host = canvasHost();
+      const prev = S.zoom;
+      const ox = origin ? origin.x : (host ? host.clientWidth / 2 : 0);
+      const oy = origin ? origin.y : (host ? host.clientHeight / 2 : 0);
+      const cx = host ? host.scrollLeft + ox : 0;
+      const cy = host ? host.scrollTop + oy : 0;
+      S.zoom = clamp(z, 0.45, 3.5);
+      draw();
+      if (host && prev > 0) {
+        const k = S.zoom / prev;
+        host.scrollLeft = cx * k - ox;
+        host.scrollTop = cy * k - oy;
+      }
+    }
+
+    function fitSite() {
+      const host = canvasHost();
+      const availW = host ? Math.max(320, host.clientWidth) : 800;
+      const availH = host ? Math.max(320, host.clientHeight) : 500;
+      const zx = (availW - 2 * M) / CAN_W;
+      const zy = (availH - 2 * M) / CAN_H;
+      S.zoom = clamp(Math.min(zx, zy) / BASE_PX, 0.45, 3.5);
+    }
+
+    function scrollToLiving() {
+      const host = canvasHost();
+      if (!host) return;
+      const z = zones();
+      const cx = fx(z.liv.e0 + S.livingW / 2);
+      const cy = fy(z.liv.s0 + S.livingD / 2);
+      host.scrollLeft = Math.max(0, cx - host.clientWidth / 2);
+      host.scrollTop = Math.max(0, cy - host.clientHeight / 2);
+    }
+
+    el("zoom").addEventListener("input", e => { setZoom(parseFloat(e.target.value)); });
+    el("zoomFit").addEventListener("click", () => {
+      fitSite();
+      draw();
+      const host = canvasHost();
+      if (host) { host.scrollLeft = 0; host.scrollTop = 0; }
+    });
+    el("zoomWork").addEventListener("click", () => { setZoom(1.6); scrollToLiving(); });
+    el("diningW").addEventListener("input", e => { S.diningW = parseFloat(e.target.value); applyDining(); draw(); });
+    el("diningLen").addEventListener("input", e => { S.diningLen = parseFloat(e.target.value); applyDining(); draw(); });
+    el("diningChairs").addEventListener("input", e => { S.diningChairs = parseInt(e.target.value, 10); applyDining(); draw(); });
+    el("diningEnds").addEventListener("change", e => { S.diningEnds = e.target.checked; applyDining(); draw(); });
+    document.querySelectorAll("[data-sit]").forEach(b => b.addEventListener("click", () => {
+      S.sitCfg = b.dataset.sit; applySit(); draw();
+    }));
+    document.querySelectorAll("[data-pt]").forEach(b => b.addEventListener("click", () => {
+      S.poolLen = parseInt(b.dataset.pt, 10); applyPtable(); draw();
+    }));
+
+    document.querySelectorAll("[data-shopflush]").forEach(b => b.addEventListener("click", () => {
+      S.shopFlush = b.dataset.shopflush;
+      applyPatio(); draw();
+    }));
+    document.querySelectorAll("[data-gymflush]").forEach(b => b.addEventListener("click", () => {
+      S.gymFlush = b.dataset.gymflush;
+      applyPatio(); draw();
+    }));
+    document.querySelectorAll("[data-gymside]").forEach(b => b.addEventListener("click", () => {
+      setGymSide(b.dataset.gymside);
+      draw();
+    }));
+    document.querySelectorAll("[data-mirrwall]").forEach(b => b.addEventListener("click", () => {
+      setMirrorWall(b.dataset.mirrwall);
+      draw();
+    }));
+    document.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => {
+      S.tool = b.dataset.tool;
+      if (S.tool !== "measure") Hover = null;
+      draw();
+    }));
+
+    [["enPatio", "enPatio"], ["enCage", "enCage"], ["enOffice", "enOffice"],
+    ["enCloset", "enCloset"], ["enBath", "enBath"], ["enBunk", "enBunk"],
+    ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enTable", "enTable"],
+    ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
+    ["enBar", "enBar"], ["enPool", "enPool"], ["enCourt", "enCourt"], ["enFire", "enFire"],
+    ["enMirror", "enMirror"]]
+      .forEach(([id, key]) => el(id).addEventListener("change", e => { S[key] = e.target.checked; draw(); }));
+
+    document.querySelectorAll("[data-rot]").forEach(b => b.addEventListener("click", () => rotate(b.dataset.rot)));
+
+    el("preset_c2").addEventListener("click", () => { schemeC2(); draw(); });
+    el("preset_l").addEventListener("click", () => { schemeL(); draw(); });
+    el("copyBtn").addEventListener("click", () => {
+      navigator.clipboard.writeText(paramsText());
+      el("copyBtn").textContent = "Copied ✓";
+      setTimeout(() => el("copyBtn").textContent = "Copy params", 1400);
+    });
+
+    const PRESET_KEY = "site-studio-presets-v1";
+    const clone = o => JSON.parse(JSON.stringify(o));
+    const loadStore = () => { try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch (_) { return {}; } };
+    const saveStore = s => localStorage.setItem(PRESET_KEY, JSON.stringify(s));
+    let presetMsgT = null;
+    function presetMsg(t) {
+      el("presetMsg").textContent = t;
+      clearTimeout(presetMsgT);
+      presetMsgT = setTimeout(() => { el("presetMsg").textContent = ""; }, 2200);
+    }
+    function refreshPresetSelect(sel) {
+      const store = loadStore();
+      const names = Object.keys(store).sort();
+      el("presetSel").innerHTML =
+        `<option value="">— saved presets —</option>` +
+        names.map(n => `<option value="${n.replace(/"/g, "&quot;")}"${n === sel ? " selected" : ""}>${n}</option>`).join("");
+    }
+    function savePreset() {
+      const name = (el("presetName").value || el("presetSel").value || "").trim();
+      if (!name) { presetMsg("name it first"); return; }
+      const store = loadStore();
+      const existed = !!store[name];
+      store[name] = { S: clone(S), F: clone(F) };
+      saveStore(store);
+      refreshPresetSelect(name);
+      presetMsg(existed ? `updated “${name}”` : `saved “${name}”`);
+    }
+    function loadPreset() {
+      const name = el("presetSel").value;
+      if (!name) { presetMsg("pick a preset"); return; }
+      const snap = loadStore()[name];
+      if (!snap) { presetMsg("not found"); return; }
+      Object.assign(S, clone(snap.S));
+      if (!S.shopFlush) S.shopFlush = S.flush || "E";
+      if (!S.gymFlush) S.gymFlush = S.flush || "E";
+      delete S.flush;
+      F = clone(snap.F);
+      el("presetName").value = name;
+      draw();
+      presetMsg(`loaded “${name}”`);
+    }
+    function deletePreset() {
+      const name = el("presetSel").value;
+      if (!name) { presetMsg("pick a preset"); return; }
+      const store = loadStore();
+      delete store[name];
+      saveStore(store);
+      refreshPresetSelect();
+      presetMsg(`deleted “${name}”`);
+    }
+    el("presetSave").addEventListener("click", savePreset);
+    el("presetLoad").addEventListener("click", loadPreset);
+    el("presetDelete").addEventListener("click", deletePreset);
+    el("presetSel").addEventListener("change", () => { if (el("presetSel").value) el("presetName").value = el("presetSel").value; });
+    refreshPresetSelect();
+
+    schemeC2();
+    fitSite();
+    draw();
+  </script>
+</body>
+
+</html>
