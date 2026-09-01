@@ -26,13 +26,17 @@
     html,
     body {
       margin: 0;
-      min-height: 100%;
+      height: 100%;
     }
 
     body {
       background: var(--bg);
       color: var(--ink);
       font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -50,13 +54,17 @@
       font-weight: 600;
     }
 
-    header .meta {
+    header #overallBox {
+      flex: 1;
+      min-width: 0;
       color: var(--sub);
       font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.45;
     }
 
-    header .spacer {
-      flex: 1;
+    header #overallBox b {
+      color: var(--accent);
     }
 
     header a.nav {
@@ -70,36 +78,78 @@
       color: var(--ink);
     }
 
-    .note {
-      margin: 12px 18px 0;
-      padding: 8px 12px;
-      font-size: 12px;
-      color: var(--sub);
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      background: #14170f;
-    }
-
-    .note b {
-      color: var(--ink);
-    }
-
     .page {
       max-width: 2100px;
       margin: 0 auto;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .wrap {
       display: grid;
       grid-template-columns: 320px minmax(0, 1fr);
-      gap: 18px;
-      padding: 18px;
-      align-items: start;
+      gap: 14px;
+      padding: 12px 18px 14px;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .navcol {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .navcol .panel {
+      margin-top: 0;
+    }
+
+    .panel-comps {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .comp-list {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .stagecol {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     @media (max-width: 980px) {
+      body {
+        height: auto;
+        overflow: auto;
+      }
+
+      .page {
+        height: auto;
+      }
+
       .wrap {
         grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .navcol {
+        height: auto;
+      }
+
+      .comp-list {
+        max-height: 46vh;
       }
     }
 
@@ -306,21 +356,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .overall {
-      font-variant-numeric: tabular-nums;
-      font-size: 13px;
-      color: var(--ink);
-      background: #0e110d;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin: 4px 0 8px;
-    }
-
-    .overall b {
-      color: var(--accent);
-    }
-
     .stage {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -328,12 +363,16 @@
       padding: 10px;
       overflow: hidden;
       min-width: 0;
+      min-height: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     #svgHost {
       overflow: auto;
-      height: calc(100vh - 200px);
-      min-height: 420px;
+      flex: 1;
+      min-height: 0;
     }
 
     svg {
@@ -364,23 +403,13 @@
   <div class="page">
     <header>
       <h1>Site Studio</h1>
-      <span class="meta">whole site · L envelope · drag modules · patio snaps west</span>
-      <span class="spacer"></span>
+      <span id="overallBox"></span>
     </header>
 
-    <div class="note">
-      Whole backyard in estate feet (e = east, s = south; house rear = 0).
-      West fence → house SW is <b>53′-10″ (53.8′)</b>; house SE → east fence is
-      <b>85′</b>. House, patio, drive, chicken run, garden, trees,
-      and pool sit on CAD. Deck, fire, court, and modules drag. <b>Edit</b> a row or
-      double-click a piece on the plan. Default is <b>C-2 NEW</b> at 220%. <b>Fit site</b> to see the lot.
-    </div>
-
     <div class="wrap">
-      <div>
+      <div class="navcol">
         <div class="panel">
           <h2>Siting</h2>
-          <div class="overall" id="overallBox"></div>
           <div class="row"><label>Tool</label>
             <div class="seg" style="flex:1.4">
               <button data-tool="hand" id="tool_hand">move</button>
@@ -396,51 +425,53 @@
           </div>
         </div>
 
-        <div class="panel">
+        <div class="panel panel-comps">
           <h2>Components</h2>
           <div class="hint">Double-click a component on plan to edit.</div>
-          <div class="comp-row" data-edit="living"><span class="ccheck"></span><span class="cname">Living</span><button
-              type="button" class="ebtn" data-edit="living">Edit</button></div>
-          <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Dance/Gym</span><button
-              type="button" class="ebtn" data-edit="gym">Edit</button></div>
-          <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><button
-              type="button" class="ebtn" data-edit="shop">Edit</button></div>
-          <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span
-              class="cname">Patio</span><button type="button" class="ebtn" data-edit="patio">Edit</button></div>
-          <div class="comp-row" data-edit="cage"><input type="checkbox" id="enCage"><span class="cname">Batting
-              cage</span><button type="button" class="ebtn" data-edit="cage">Edit</button></div>
-          <div class="comp-row" data-edit="deck"><input type="checkbox" id="enDeck"><span class="cname">Pool
-              deck</span><button type="button" class="ebtn" data-edit="deck">Edit</button></div>
-          <div class="comp-row" data-edit="pool"><input type="checkbox" id="enPool"><span
-              class="cname">Pool</span><button type="button" class="ebtn" data-edit="pool">Edit</button></div>
-          <div class="comp-row" data-edit="spa"><input type="checkbox" id="enSpa"><span class="cname">Hot
-              tub</span><button type="button" class="ebtn" data-edit="spa">Edit</button></div>
-          <div class="comp-row" data-edit="court"><input type="checkbox" id="enCourt"><span
-              class="cname">Pickleball</span><button type="button" class="ebtn" data-edit="court">Edit</button></div>
-          <div class="comp-row" data-edit="fire"><input type="checkbox" id="enFire"><span class="cname">Fire
-              pit</span><button type="button" class="ebtn" data-edit="fire">Edit</button></div>
-          <div class="comp-row" data-edit="office"><input type="checkbox" id="enOffice"><span
-              class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
-          <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool
-              closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
-          <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span
-              class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
-          <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span
-              class="cname">Bunk</span><button type="button" class="ebtn" data-edit="bunk">Edit</button></div>
-          <div class="comp-row" data-edit="media"><input type="checkbox" id="enMedia"><span
-              class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
-          <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span
-              class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
-          <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game
-              table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
-          <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool
-              table</span><button type="button" class="ebtn" data-edit="ptable">Edit</button></div>
-          <div class="comp-row" data-edit="dining"><input type="checkbox" id="enDining"><span
-              class="cname">Dining</span><button type="button" class="ebtn" data-edit="dining">Edit</button></div>
-          <div class="comp-row" data-edit="sit"><input type="checkbox" id="enSit"><span
-              class="cname">Sitting</span><button type="button" class="ebtn" data-edit="sit">Edit</button></div>
-          <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span class="cname">Bar</span><button
-              type="button" class="ebtn" data-edit="bar">Edit</button></div>
+          <div class="comp-list">
+            <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><button
+                type="button" class="ebtn" data-edit="shop">Edit</button></div>
+            <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span
+                class="cname">Dance/Gym</span><button type="button" class="ebtn" data-edit="gym">Edit</button></div>
+            <div class="comp-row" data-edit="living"><span class="ccheck"></span><span
+                class="cname">Living</span><button type="button" class="ebtn" data-edit="living">Edit</button></div>
+            <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span
+                class="cname">Patio</span><button type="button" class="ebtn" data-edit="patio">Edit</button></div>
+            <div class="comp-row" data-edit="cage"><input type="checkbox" id="enCage"><span class="cname">Batting
+                cage</span><button type="button" class="ebtn" data-edit="cage">Edit</button></div>
+            <div class="comp-row" data-edit="deck"><input type="checkbox" id="enDeck"><span class="cname">Pool
+                deck</span><button type="button" class="ebtn" data-edit="deck">Edit</button></div>
+            <div class="comp-row" data-edit="pool"><input type="checkbox" id="enPool"><span
+                class="cname">Pool</span><button type="button" class="ebtn" data-edit="pool">Edit</button></div>
+            <div class="comp-row" data-edit="spa"><input type="checkbox" id="enSpa"><span class="cname">Hot
+                tub</span><button type="button" class="ebtn" data-edit="spa">Edit</button></div>
+            <div class="comp-row" data-edit="court"><input type="checkbox" id="enCourt"><span
+                class="cname">Pickleball</span><button type="button" class="ebtn" data-edit="court">Edit</button></div>
+            <div class="comp-row" data-edit="fire"><input type="checkbox" id="enFire"><span class="cname">Fire
+                pit</span><button type="button" class="ebtn" data-edit="fire">Edit</button></div>
+            <div class="comp-row" data-edit="office"><input type="checkbox" id="enOffice"><span
+                class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
+            <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool
+                closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
+            <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span
+                class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
+            <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span
+                class="cname">Bunk</span><button type="button" class="ebtn" data-edit="bunk">Edit</button></div>
+            <div class="comp-row" data-edit="media"><input type="checkbox" id="enMedia"><span
+                class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
+            <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span
+                class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
+            <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game
+                table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
+            <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool
+                table</span><button type="button" class="ebtn" data-edit="ptable">Edit</button></div>
+            <div class="comp-row" data-edit="dining"><input type="checkbox" id="enDining"><span
+                class="cname">Dining</span><button type="button" class="ebtn" data-edit="dining">Edit</button></div>
+            <div class="comp-row" data-edit="sit"><input type="checkbox" id="enSit"><span
+                class="cname">Sitting</span><button type="button" class="ebtn" data-edit="sit">Edit</button></div>
+            <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span
+                class="cname">Bar</span><button type="button" class="ebtn" data-edit="bar">Edit</button></div>
+          </div>
         </div>
 
         <dialog id="editDlg">
@@ -676,34 +707,25 @@
 
         <div class="panel">
           <h2>Presets</h2>
-          <div class="seg">
-            <button id="preset_c2">C-2 NEW</button>
-            <button id="preset_l">L shop 44</button>
-          </div>
-          <div class="hint" style="margin-top:10px">Named presets stay in this browser.</div>
-          <div class="row">
+          <div class="row" style="margin:4px 0">
             <select id="presetSel"
-              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px">
-              <option value="">— saved presets —</option>
+              style="flex:1.2;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px">
+              <option value="">— named presets —</option>
             </select>
-          </div>
-          <div class="row">
-            <input id="presetName" type="text" placeholder="preset name"
-              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px">
+            <input id="presetName" type="text" placeholder="name"
+              style="flex:1;background:#0e110d;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:13px">
           </div>
           <div class="seg">
             <button id="presetSave">Save</button>
             <button id="presetLoad">Load</button>
             <button id="presetDelete">Delete</button>
-          </div>
-          <div class="seg" style="margin-top:6px">
             <button id="copyBtn">Copy params</button>
           </div>
-          <div class="hint" id="presetMsg" style="min-height:14px;margin-top:6px"></div>
+          <div class="hint" id="presetMsg"></div>
         </div>
       </div>
 
-      <div>
+      <div class="stagecol">
         <div class="stage">
           <div id="svgHost"></div>
           <div class="legend">
@@ -1474,10 +1496,10 @@
       const noAcSf = shopSf - officeSf;
       const patioSf = S.patioRun * S.patioDep;
       el("overallBox").innerHTML =
-        `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall<br>` +
-        `A/C · ${Math.round(acSf)} sqft (living + gym + office)<br>` +
-        `no A/C · ${Math.round(noAcSf)} sqft (shop − office)<br>` +
-        (S.enPatio ? `patio · ${Math.round(patioSf)} sqft` : `patio · off`);
+        `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall` +
+        ` · A/C · ${Math.round(acSf)} sqft (living + gym + office)` +
+        ` · no A/C · ${Math.round(noAcSf)} sqft (shop − office)` +
+        ` · ` + (S.enPatio ? `patio · ${Math.round(patioSf)} sqft` : `patio · off`);
 
       const faceName = { N: "N", S: "S", W: "W", E: "E" };
       const enKey = {
@@ -1585,7 +1607,7 @@
       };
       g += zoneLabel(fx((z.shop.e0 + z.shop.e1) / 2), fy((z.shop.s0 + z.shop.s1) / 2), "SHOP", S.garageW, S.garageD);
       g += zoneLabel(fx((z.gym.e0 + z.gym.e1) / 2), fy((z.gym.s0 + z.gym.s1) / 2), "DANCE/GYM", S.gymW, S.gymD);
-      g += zoneLabel(fx((z.liv.e0 + z.liv.e1) / 2), fy((z.liv.s0 + z.liv.s1) / 2), "LIVING", S.livingW, S.livingD);
+      g += zoneLabel(fx((z.liv.e0 + z.liv.e1) / 2 - 5), fy((z.liv.s0 + z.liv.s1) / 2 - 3.5), "LIVING", S.livingW, S.livingD);
       g += `</g>`;
 
       // overall dims
@@ -1723,8 +1745,8 @@
           body += `<circle cx="${fx(e + t.w / 2)}" cy="${fy(s + t.h / 2)}" r="${0.26 * PXFT}" fill="none" stroke="${t.ec}" stroke-width="0.8" ${pe}/>`;
         body += `<text x="${fx(e + t.w / 2)}" y="${fy(s + t.h / 2) + 3}" text-anchor="middle" font-size="7" fill="${t.tc}" font-weight="700" ${pe}>${t.label}</text>`;
       }
-      body += `<text x="${fx(f.e + 2.15)}" y="${fy(f.s + f.h) - 16}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>pool bath</text>`;
-      body += `<text x="${fx(f.e + 2.15)}" y="${fy(f.s + f.h) - 4}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 3.2)}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>pool bath</text>`;
+      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 3.2) + 12}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
       wrapMod(g, "bath", body, { skipLabel: true });
     }
 
@@ -2554,8 +2576,9 @@ barre     = ${o(S.enMirror, "barre")}`;
       });
     });
 
-    el("preset_c2").addEventListener("click", () => { schemeC2(); setZoom(2.2); scrollToLiving(); });
-    el("preset_l").addEventListener("click", () => { schemeL(); setZoom(2.2); scrollToLiving(); });
+    el("presetSel").addEventListener("change", () => {
+      if (el("presetSel").value) el("presetName").value = el("presetSel").value;
+    });
     el("copyBtn").addEventListener("click", () => {
       navigator.clipboard.writeText(paramsText());
       el("copyBtn").textContent = "Copied ✓";
@@ -2576,7 +2599,7 @@ barre     = ${o(S.enMirror, "barre")}`;
       const store = loadStore();
       const names = Object.keys(store).sort();
       el("presetSel").innerHTML =
-        `<option value="">— saved presets —</option>` +
+        `<option value="">— named presets —</option>` +
         names.map(n => `<option value="${n.replace(/"/g, "&quot;")}"${n === sel ? " selected" : ""}>${n}</option>`).join("");
     }
     function savePreset() {
@@ -2631,7 +2654,6 @@ barre     = ${o(S.enMirror, "barre")}`;
     el("presetSave").addEventListener("click", savePreset);
     el("presetLoad").addEventListener("click", loadPreset);
     el("presetDelete").addEventListener("click", deletePreset);
-    el("presetSel").addEventListener("change", () => { if (el("presetSel").value) el("presetName").value = el("presetSel").value; });
     refreshPresetSelect();
 
     schemeC2();
