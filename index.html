@@ -119,11 +119,96 @@
     }
 
     .area-meta {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--accent);
       font-variant-numeric: tabular-nums;
-      margin: 0 0 10px;
+      white-space: nowrap;
+    }
+
+    .comp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .comp-row:last-child {
+      border-bottom: 0;
+    }
+
+    .comp-row .ccheck {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    .comp-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      flex: none;
+      margin: 0;
+    }
+
+    .comp-row .cname {
+      flex: 1;
+      font-size: 13px;
+      min-width: 0;
+    }
+
+    .comp-row .ebtn {
+      background: #0e110d;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-size: 12px;
+      flex: none;
+    }
+
+    .comp-row .ebtn:hover {
+      border-color: var(--accent);
+    }
+
+    dialog#editDlg {
+      width: min(400px, 94vw);
+      max-height: 82vh;
+      overflow: auto;
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    dialog#editDlg::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .dlg-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dlg-head h2 {
+      flex: 1;
+      margin: 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--sub);
+    }
+
+    .edit-pane {
+      display: none;
+    }
+
+    .edit-pane.on {
+      display: block;
     }
 
     .panel+.panel {
@@ -338,9 +423,8 @@
       Whole backyard in estate feet (e = east, s = south; house rear = 0).
       West fence → house SW is <b>53′-10″ (53.8′)</b>; house SE → east fence is
       <b>85′</b>. House, patio, drive, chicken run, garden, trees,
-      and pool sit on CAD. Fire pit is a module — drag it. <b>Zoom</b> to work the living; <b>Fit site</b> to see the
-      lot.
-      <b>Drag</b> modules · patio slides on the west wall.
+      and pool sit on CAD. Deck, fire, court, and modules drag. <b>Edit</b> a row or
+      double-click a piece on the plan. Default is <b>C-2 NEW</b> at 220%. <b>Fit site</b> to see the lot.
     </div>
 
     <div class="wrap">
@@ -370,12 +454,40 @@
             <button id="zoomFit">Fit site</button>
             <button id="zoomWork">Work</button>
           </div>
-          <div class="hint">Fit frames the whole lot. Work is 160% — living and court stay readable.</div>
+          <div class="hint">Fit frames the whole lot. Work is 220% — living and court stay readable.</div>
         </div>
 
         <div class="panel">
-          <h2>Living</h2>
-          <div class="area-meta" id="living_sf"></div>
+          <h2>Components</h2>
+          <div class="hint">Show / hide · <b>Edit</b> for sizes and walls. Double-click a piece on the plan.</div>
+          <div class="comp-row" data-edit="living"><span class="ccheck"></span><span class="cname">Living</span><span class="area-meta" id="living_sf"></span><button type="button" class="ebtn" data-edit="living">Edit</button></div>
+          <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Dance/Gym</span><span class="area-meta" id="gym_sf"></span><button type="button" class="ebtn" data-edit="gym">Edit</button></div>
+          <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><span class="area-meta" id="shop_sf"></span><button type="button" class="ebtn" data-edit="shop">Edit</button></div>
+          <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span class="cname">Patio</span><span class="area-meta" id="patio_sf"></span><button type="button" class="ebtn" data-edit="patio">Edit</button></div>
+          <div class="comp-row" data-edit="cage"><input type="checkbox" id="enCage"><span class="cname">Batting cage</span><span class="area-meta" id="cage_sf"></span><button type="button" class="ebtn" data-edit="cage">Edit</button></div>
+          <div class="comp-row" data-edit="deck"><input type="checkbox" id="enDeck"><span class="cname">Pool deck</span><span class="area-meta" id="deck_sf"></span><button type="button" class="ebtn" data-edit="deck">Edit</button></div>
+          <div class="comp-row" data-edit="pool"><input type="checkbox" id="enPool"><span class="cname">Pool</span><span class="area-meta" id="pool_sf"></span><button type="button" class="ebtn" data-edit="pool">Edit</button></div>
+          <div class="comp-row" data-edit="court"><input type="checkbox" id="enCourt"><span class="cname">Pickleball</span><span class="area-meta" id="court_sf"></span><button type="button" class="ebtn" data-edit="court">Edit</button></div>
+          <div class="comp-row" data-edit="fire"><input type="checkbox" id="enFire"><span class="cname">Fire pit</span><span class="area-meta" id="fire_sf"></span><button type="button" class="ebtn" data-edit="fire">Edit</button></div>
+          <div class="comp-row" data-edit="office"><input type="checkbox" id="enOffice"><span class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
+          <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
+          <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
+          <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span class="cname">Bunk</span><button type="button" class="ebtn" data-edit="bunk">Edit</button></div>
+          <div class="comp-row" data-edit="media"><input type="checkbox" id="enMedia"><span class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
+          <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
+          <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
+          <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool table</span><button type="button" class="ebtn" data-edit="ptable">Edit</button></div>
+          <div class="comp-row" data-edit="dining"><input type="checkbox" id="enDining"><span class="cname">Dining</span><button type="button" class="ebtn" data-edit="dining">Edit</button></div>
+          <div class="comp-row" data-edit="sit"><input type="checkbox" id="enSit"><span class="cname">Sitting</span><button type="button" class="ebtn" data-edit="sit">Edit</button></div>
+          <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span class="cname">Bar</span><button type="button" class="ebtn" data-edit="bar">Edit</button></div>
+        </div>
+
+        <dialog id="editDlg">
+          <div class="dlg-head">
+            <h2 id="editTitle">Edit</h2>
+            <button type="button" class="ebtn" id="editClose">Done</button>
+          </div>
+          <div class="edit-pane" data-edit="living">
           <div class="row"><label>Width (E–W)</label>
             <input type="range" id="livingW" min="22" max="48" step="0.5"><span class="val" id="livingW_v"></span>
           </div>
@@ -384,11 +496,8 @@
           </div>
           <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. East edge is the
             siting slider.</div>
-        </div>
-
-        <div class="panel">
-          <h2>Dance/Gym</h2>
-          <div class="area-meta" id="gym_sf"></div>
+          </div>
+          <div class="edit-pane" data-edit="gym">
           <div class="row"><label>Width (E–W)</label>
             <input type="range" id="gymW" min="14" max="48" step="0.5"><span class="val" id="gymW_v"></span>
           </div>
@@ -428,9 +537,7 @@
           </div>
         </div>
 
-        <div class="panel">
-          <h2>Shop</h2>
-          <div class="area-meta" id="shop_sf"></div>
+          <div class="edit-pane" data-edit="shop">
           <div class="row"><label>Width (E–W)</label>
             <input type="range" id="garageW" min="28" max="56" step="0.5"><span class="val" id="garageW_v"></span>
           </div>
@@ -445,12 +552,9 @@
           </div>
           <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
             continuous (extra shop hangs east, toward the cage).</div>
-        </div>
-
-        <div class="panel">
-          <h2>Patio</h2>
-          <div class="area-meta" id="patio_sf"></div>
-          <div class="row"><label>On</label><input type="checkbox" id="enPatio">
+          </div>
+          <div class="edit-pane" data-edit="patio">
+          <div class="row"><label>Rotate</label>
             <button class="rbtn" data-rot="patio">↻ <span id="face_patio"></span></button>
           </div>
           <div class="row"><label>Length along wall (N–S)</label>
@@ -460,14 +564,10 @@
             <input type="range" id="patioDep" min="8" max="28" step="0.5"><span class="val" id="patioDep_v"></span>
           </div>
           <div class="hint">East edge is glued to the living west face (gym and shop join that wall when flush west).
-            Drag
-            slides it along that wall; it snaps to zone joints.</div>
-        </div>
-
-        <div class="panel">
-          <h2>Batting cage</h2>
-          <div class="area-meta" id="cage_sf"></div>
-          <div class="row"><label>On</label><input type="checkbox" id="enCage">
+            Drag slides it along that wall; it snaps to zone joints.</div>
+          </div>
+          <div class="edit-pane" data-edit="cage">
+          <div class="row"><label>Rotate</label>
             <button class="rbtn" data-rot="cage">↻ <span id="face_cage"></span></button>
           </div>
           <div class="row"><label>Length</label>
@@ -477,57 +577,49 @@
             <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
           </div>
           <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path).</div>
-        </div>
-
-        <div class="panel">
-          <h2>Modules</h2>
-          <div class="hint">Toggle · ↻ rotates 90° (face = open / building side).</div>
-          <div class="row"><label>Office</label><input type="checkbox" id="enOffice">
-            <button class="rbtn" data-rot="office">↻ <span id="face_office"></span></button>
           </div>
-          <div class="row"><label>Pool closet</label><input type="checkbox" id="enCloset">
-            <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
+          <div class="edit-pane" data-edit="deck">
+          <div class="row"><label>East edge</label>
+            <input type="range" id="deckE" min="-14" max="18" step="0.5"><span class="val" id="deckE_v"></span>
           </div>
-          <div class="row"><label>Bathroom</label><input type="checkbox" id="enBath">
-            <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
+          <div class="row"><label>North edge</label>
+            <input type="range" id="deckN" min="-14" max="18" step="0.5"><span class="val" id="deckN_v"></span>
           </div>
-          <div class="row"><label>Bunk room</label><input type="checkbox" id="enBunk">
-            <button class="rbtn" data-rot="bunk">↻ <span id="face_bunk"></span></button>
+          <div class="hint">Drag the deck to move it. East / north sliders push that face out (positive) or pull it
+            in toward the pool (negative). 0 is the CAD shape (east already pulled 5′-10″).</div>
           </div>
-          <div class="row"><label>Media</label><input type="checkbox" id="enMedia">
-            <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
-          </div>
-          <div class="row"><label>Weight rack</label><input type="checkbox" id="enWeights">
-            <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
-          </div>
-          <div class="row"><label>Game table + 4 chairs</label><input type="checkbox" id="enTable">
-            <button class="rbtn" data-rot="table">↻ <span id="face_table"></span></button>
-          </div>
-          <div class="row"><label>Pool table + clear</label><input type="checkbox" id="enPtable">
-            <button class="rbtn" data-rot="ptable">↻ <span id="face_ptable"></span></button>
-          </div>
-          <div class="row"><label>Dining (table + chairs + clear)</label><input type="checkbox" id="enDining">
-            <button class="rbtn" data-rot="dining">↻ <span id="face_dining"></span></button>
-          </div>
-          <div class="row"><label>Sitting area</label><input type="checkbox" id="enSit">
-            <button class="rbtn" data-rot="sit">↻ <span id="face_sit"></span></button>
-          </div>
-          <div class="row"><label>Bar</label><input type="checkbox" id="enBar">
-            <button class="rbtn" data-rot="bar">↻ <span id="face_bar"></span></button>
-          </div>
-          <div class="row"><label>Pool (lagoon)</label><input type="checkbox" id="enPool">
+          <div class="edit-pane" data-edit="pool">
+          <div class="row"><label>Rotate</label>
             <button class="rbtn" data-rot="pool">↻ <span id="face_pool"></span></button>
           </div>
-          <div class="row"><label>Pickleball 60×30</label><input type="checkbox" id="enCourt">
+          <div class="hint">Drag the lagoon. Rotate swaps the bounding box; the kidney stays the CAD shape.</div>
+          </div>
+          <div class="edit-pane" data-edit="court">
+          <div class="row"><label>Rotate</label>
             <button class="rbtn" data-rot="court">↻ <span id="face_court"></span></button>
           </div>
-          <div class="row"><label>Fire pit</label><input type="checkbox" id="enFire">
+          <div class="hint">60×30 pickleball. Drag freely. ↻ swaps the long axis.</div>
+          </div>
+          <div class="edit-pane" data-edit="fire">
+          <div class="row"><label>Rotate</label>
             <button class="rbtn" data-rot="fire" disabled>↻ <span id="face_fire"></span></button>
           </div>
-        </div>
-
-        <div class="panel">
-          <h2>Bathroom</h2>
+          <div class="hint">16′ circle. Drag to place. Rotate stays off — it’s a square.</div>
+          </div>
+          <div class="edit-pane" data-edit="office">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="office">↻ <span id="face_office"></span></button>
+          </div>
+          </div>
+          <div class="edit-pane" data-edit="closet">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
+          </div>
+          </div>
+          <div class="edit-pane" data-edit="bath">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
+          </div>
           <div class="row"><label>Along face</label>
             <input type="range" id="bathAlong" min="5" max="14" step="0.5"><span class="val" id="bathAlong_v"></span>
           </div>
@@ -535,25 +627,35 @@
             <input type="range" id="bathInto" min="6" max="16" step="0.5"><span class="val" id="bathInto_v"></span>
           </div>
           <div class="hint">C-2 is 7′-6″ along the west wall × 10′-6″ into the gym.</div>
-        </div>
-
-        <div class="panel">
-          <h2>Bunk</h2>
+          </div>
+          <div class="edit-pane" data-edit="bunk">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="bunk">↻ <span id="face_bunk"></span></button>
+          </div>
           <div class="row"><label>Length</label>
             <input type="range" id="bunkLen" min="10" max="22" step="0.5"><span class="val" id="bunkLen_v"></span>
           </div>
           <div class="hint">Along the face. Width stays 13′ (east column). C-2 is 14′.</div>
-        </div>
-
-        <div class="panel">
-          <h2>Bar</h2>
-          <div class="row"><label>Bar length</label>
-            <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
           </div>
-        </div>
-
-        <div class="panel">
-          <h2>Pool table</h2>
+          <div class="edit-pane" data-edit="media">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
+          </div>
+          </div>
+          <div class="edit-pane" data-edit="weights">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
+          </div>
+          </div>
+          <div class="edit-pane" data-edit="table">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="table">↻ <span id="face_table"></span></button>
+          </div>
+          </div>
+          <div class="edit-pane" data-edit="ptable">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="ptable">↻ <span id="face_ptable"></span></button>
+          </div>
           <div class="row"><label>Table length</label>
             <div class="seg" style="flex:1.4">
               <button data-pt="7" id="pt_7">7'</button>
@@ -561,12 +663,12 @@
               <button data-pt="9" id="pt_9">9'</button>
             </div>
           </div>
-          <div class="hint">Dashed envelope is cue clearance: 13×18 for 8′ (7′ → 12×17, 9′ → 14×19). Face = long axis.
+          <div class="hint">Dashed envelope is cue clearance: 13×18 for 8′ (7′ → 12×17, 9′ → 14×19). Face = long axis.</div>
           </div>
-        </div>
-
-        <div class="panel">
-          <h2>Dining</h2>
+          <div class="edit-pane" data-edit="dining">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="dining">↻ <span id="face_dining"></span></button>
+          </div>
           <div class="row"><label>Table width</label>
             <input type="range" id="diningW" min="3" max="5" step="0.25"><span class="val" id="diningW_v"></span>
           </div>
@@ -577,12 +679,12 @@
             <input type="range" id="diningChairs" min="1" max="6" step="1"><span class="val" id="diningChairs_v"></span>
           </div>
           <div class="row"><label>End chairs (head/foot)</label><input type="checkbox" id="diningEnds"></div>
-          <div class="hint">Dashed envelope = table + chair + <b>36″</b> pull-out/walk each seated side (24″ at ends).
-            Seat count = 2×side + ends.</div>
-        </div>
-
-        <div class="panel">
-          <h2>Sitting area</h2>
+          <div class="hint">Dashed envelope = table + chair + <b>36″</b> pull-out/walk each seated side (24″ at ends).</div>
+          </div>
+          <div class="edit-pane" data-edit="sit">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="sit">↻ <span id="face_sit"></span></button>
+          </div>
           <div class="row"><label>Layout</label>
             <div class="seg" style="flex:1.4">
               <button data-sit="pair" id="sit_pair">2 chairs</button>
@@ -590,14 +692,22 @@
               <button data-sit="lounge" id="sit_lounge">sofa + 1</button>
             </div>
           </div>
-          <div class="hint">Three footprints: 8×8 pair · 10×9 loveseat + chair · 12×10 sofa + chair. Circles are chairs;
-            rects are seat + coffee. Face = open side.</div>
-        </div>
+          <div class="hint">8×8 pair · 10×9 loveseat + chair · 12×10 sofa + chair. Face = open side.</div>
+          </div>
+          <div class="edit-pane" data-edit="bar">
+          <div class="row"><label>Rotate</label>
+            <button class="rbtn" data-rot="bar">↻ <span id="face_bar"></span></button>
+          </div>
+          <div class="row"><label>Bar length</label>
+            <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
+          </div>
+          </div>
+        </dialog>
 
         <div class="panel">
           <h2>Presets</h2>
           <div class="seg">
-            <button id="preset_c2">C-2 now</button>
+            <button id="preset_c2">C-2 NEW</button>
             <button id="preset_l">L shop 44</button>
           </div>
           <div class="hint" style="margin-top:10px">Named presets stay in this browser.</div>
@@ -695,7 +805,7 @@
       [86.1, 68], [92.1, 58], [86.1, 50], [79.1, 45],
     ];
     const SPA_C = [107.1, 41];
-    const DECK_E_PULL = 5 + 10 / 12;   // east deck pulled west (owner 2026-08-29)
+    const DECK_E_PULL = 5 + 10 / 12;   // east deck pulled west (owner 2026-08-29) — baked into DECK_PTS
     const DECK_PTS = [
       [74.1, 18], [100.1, 18], [119.8, 18], [134.8 - DECK_E_PULL, 24],
       [134.8 - DECK_E_PULL, 40], [134.8 - DECK_E_PULL, 60], [134.8 - DECK_E_PULL, 90],
@@ -706,6 +816,12 @@
       [70.6, 58.5], [69.6, 57], [68.6, 55], [67.6, 52.5], [66.6, 49],
       [65.6, 44], [65.1, 38], [65.6, 32], [67.1, 27], [70.1, 22],
     ];
+    const DECK_CAD_E0 = Math.min(...DECK_PTS.map(p => p[0]));
+    const DECK_CAD_S0 = Math.min(...DECK_PTS.map(p => p[1]));
+    const DECK_CAD_E1 = Math.max(...DECK_PTS.map(p => p[0]));
+    const DECK_CAD_S1 = Math.max(...DECK_PTS.map(p => p[1]));
+    const DECK_CAD_W = DECK_CAD_E1 - DECK_CAD_E0;
+    const DECK_CAD_H = DECK_CAD_S1 - DECK_CAD_S0;
     const CAN_E0 = WEST_FENCE;
     const CAN_S0 = DRIVE_TURN_S0;    // north enough for the turnaround
     const CAN_E1 = EAST_FENCE;
@@ -732,15 +848,16 @@
       bathAlong: 7.5, bathInto: 10.5,
       bunkLen: 14,
       mirrorLen: 14, barreLen: 10,
+      deckE: 0, deckN: 0,
       poolLen: 8,
       diningW: 3.5, diningLen: 11, diningChairs: 5, diningEnds: true,
       sitCfg: "love",
       enPatio: true, enCage: true, enOffice: true, enCloset: true,
       enBath: true, enBunk: true, enMedia: true, enWeights: true,
       enTable: true, enPtable: true, enDining: false, enSit: false,
-      enBar: true, enPool: true, enCourt: true, enFire: true, enMirror: true,
+      enBar: true, enPool: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
       tool: "hand",
-      zoom: 1,
+      zoom: 2.2,
     };
 
     // Dining clearance (ft): CD = chair depth ~1'-8". sideC/endC are beyond the chair back.
@@ -981,6 +1098,24 @@
       F.pool.s = cs - F.pool.h / 2;
     }
 
+    function deckPts() {
+      if (!F.deck) return DECK_PTS;
+      const de = F.deck.e - DECK_CAD_E0, ds = F.deck.s - DECK_CAD_S0;
+      return DECK_PTS.map(([e, s]) => {
+        const ee = e + de + (e >= DECK_CAD_E1 - 0.6 ? S.deckE : 0);
+        const ss = s + ds - (s <= DECK_CAD_S0 + 0.6 ? S.deckN : 0);
+        return [ee, ss];
+      });
+    }
+
+    function applyDeck() {
+      if (!F.deck) return;
+      const pts = deckPts();
+      const es = pts.map(p => p[0]), ss = pts.map(p => p[1]);
+      F.deck.w = Math.max(...es) - Math.min(...es);
+      F.deck.h = Math.max(...ss) - Math.min(...ss);
+    }
+
     function applyPatio() {
       if (!F.patio) return;
       const wall = westWall();
@@ -1104,13 +1239,15 @@
       S.bathAlong = 7.5; S.bathInto = 10.5;
       S.bunkLen = 14;
       S.mirrorLen = 14; S.barreLen = 10;
+      S.deckE = 0; S.deckN = 0;
       S.poolLen = 8;
+      S.zoom = 2.2;
       S.diningW = 3.5; S.diningLen = 11; S.diningChairs = 5; S.diningEnds = true;
       S.sitCfg = "love";
       S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true;
       S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true;
       S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
-      S.enBar = true; S.enPool = true; S.enCourt = true; S.enFire = true; S.enMirror = true;
+      S.enBar = true; S.enPool = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
       const z = zones();
       seedModule("office", {
         label: "office", e: z.shop.e1 - 12, s: z.shop.s1 - 10, w: 12, h: 10, face: "W",
@@ -1172,6 +1309,10 @@
         label: "pool", e: POOL_CAD_E0, s: POOL_CAD_S0, w: POOL_CAD_W, h: POOL_CAD_H, face: "N",
         c: "#7eb6c9", ec: "#2f6f82", tc: "#123844"
       });
+      seedModule("deck", {
+        label: "deck", e: DECK_CAD_E0, s: DECK_CAD_S0, w: DECK_CAD_W, h: DECK_CAD_H, face: "N",
+        c: "#cbb896", ec: "#8a744a", tc: "#5a3f1a"
+      });
       seedModule("fire", {
         label: "fire", e: FIRE.e - FIRE.r, s: FIRE.s - FIRE.r, w: FIRE.r * 2, h: FIRE.r * 2, face: "N",
         c: "#d8c8a8", ec: "#8a6a3a", tc: "#5a3f1a"
@@ -1198,12 +1339,12 @@
     function applySized() {
       applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyTable();
       applyPtable(); applyDining(); applySit();
-      applyCage(); applyCourt(); applyPool(); applyPatio();
+      applyCage(); applyCourt(); applyPool(); applyPatio(); applyDeck();
       applyMirror(); applyBarre();
     }
 
     const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
-    const SITE_MODS = ["patio", "cage", "court", "pool", "fire"];
+    const SITE_MODS = ["patio", "cage", "court", "pool", "fire", "deck"];
 
     function enabledKeys() {
       const map = {
@@ -1211,7 +1352,7 @@
         media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
-        mirror: "enMirror", barre: "enMirror",
+        mirror: "enMirror", barre: "enMirror", deck: "enDeck",
       };
       return Object.keys(map).filter(k => S[map[k]] && F[k]);
     }
@@ -1227,6 +1368,7 @@
       return pts.map(p => `${fx(p[0]).toFixed(1)},${fy(p[1]).toFixed(1)}`).join(" ");
     }
 
+    let dimBuf = "";
     function dimLine(e1, s1, e2, s2, label, side) {
       const pe = 'style="pointer-events:none"';
       const x1 = fx(e1), y1 = fy(s1), x2 = fx(e2), y2 = fy(s2);
@@ -1244,10 +1386,12 @@
       const rot = Math.abs(e1 - e2) < 0.01 ? `transform="rotate(-90 ${mx} ${my})"` : "";
       const dy = side === "below" ? 12 : side === "above" ? -6 : 4;
       g += `<text x="${mx}" y="${my + dy}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}" ${rot} ${pe} style="paint-order:stroke;stroke:#f4f0e6;stroke-width:3px">${label}</text>`;
-      return g;
+      dimBuf += g;
+      return "";
     }
 
     function draw() {
+      dimBuf = "";
       el("livingW_v").textContent = fmtFt(S.livingW);
       el("livingD_v").textContent = fmtFt(S.livingD);
       el("gymW_v").textContent = fmtFt(S.gymW);
@@ -1266,6 +1410,8 @@
       el("bunkLen_v").textContent = fmtFt(S.bunkLen);
       el("mirrorLen_v").textContent = fmtFt(S.mirrorLen);
       el("barreLen_v").textContent = fmtFt(S.barreLen);
+      el("deckE_v").textContent = (S.deckE >= 0 ? "+" : "") + fmtFt(S.deckE);
+      el("deckN_v").textContent = (S.deckN >= 0 ? "+" : "") + fmtFt(S.deckN);
       el("diningW_v").textContent = fmtFt(S.diningW);
       el("diningLen_v").textContent = fmtFt(S.diningLen);
       el("diningChairs_v").textContent = String(S.diningChairs);
@@ -1279,6 +1425,7 @@
         ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkLen", "bunkLen"],
         ["mirrorLen", "mirrorLen"], ["barreLen", "barreLen"],
+        ["deckE", "deckE"], ["deckN", "deckN"],
         ["diningW", "diningW"], ["diningLen", "diningLen"], ["diningChairs", "diningChairs"],
         ["zoom", "zoom"],
       ]) el(id).value = S[key];
@@ -1300,6 +1447,7 @@
       el("enCourt").checked = S.enCourt;
       el("enFire").checked = S.enFire;
       el("enMirror").checked = S.enMirror;
+      el("enDeck").checked = S.enDeck;
       el("diningEnds").checked = S.diningEnds;
       el("pt_7").classList.toggle("on", S.poolLen === 7);
       el("pt_8").classList.toggle("on", S.poolLen === 8);
@@ -1336,6 +1484,10 @@
       el("shop_sf").textContent = areaLine(S.garageW, S.garageD);
       el("patio_sf").textContent = S.enPatio ? areaLine(S.patioRun, S.patioDep) : "off";
       el("cage_sf").textContent = S.enCage ? areaLine(S.cageLen, S.cageWid) : "off";
+      el("deck_sf").textContent = S.enDeck && F.deck ? areaLine(F.deck.w, F.deck.h) : "off";
+      el("pool_sf").textContent = S.enPool && F.pool ? areaLine(F.pool.w, F.pool.h) : "off";
+      el("court_sf").textContent = S.enCourt && F.court ? areaLine(F.court.w, F.court.h) : "off";
+      el("fire_sf").textContent = S.enFire ? "16′ ⌀" : "off";
       const stack = S.gymSide === "S" ? "shop → living → gym" : "shop → gym → living";
       const shape = isL()
         ? `L · shop ${fmtFt(S.garageW)} × ${fmtFt(S.garageD)} · gym ${fmtFt(S.gymW)} × ${fmtFt(S.gymD)} · living ${fmtFt(S.livingW)} × ${fmtFt(S.livingD)} · ${stack}`
@@ -1350,7 +1502,7 @@
         media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", fire: "enFire",
-        mirror: "enMirror", barre: "enMirror",
+        mirror: "enMirror", barre: "enMirror", deck: "enDeck",
       };
       for (const k of Object.keys(F)) {
         const s = el("face_" + k);
@@ -1414,9 +1566,6 @@
       g += `<circle cx="${fx(GARDEN_TABLE[0])}" cy="${fy(GARDEN_TABLE[1])}" r="${1.4 * PXFT}" fill="#efe7d8" stroke="#8a744a" stroke-width="0.8" ${pe}/>`;
       g += `<text x="${fx((GARDEN.e0 + GARDEN.e1) / 2)}" y="${fy(GARDEN.s0 + 2.2)}" text-anchor="middle" font-size="9" fill="#3a4a28" font-weight="700" ${pe}>GARDEN</text>`;
 
-      // Pool deck (CAD DECK_PTS) — under the pool module
-      g += `<polygon points="${polyPts(DECK_PTS)}" fill="#cbb896" fill-opacity="0.55" stroke="#8a744a" stroke-width="1" ${pe}/>`;
-
       // Trees (CAD). Fire pit is a movable module.
       for (const [te, ts] of TREES) {
         g += `<circle cx="${fx(te)}" cy="${fy(ts)}" r="${4.5 * PXFT}" fill="#7a9a5a" fill-opacity="0.45" stroke="#4a6a38" stroke-width="1" ${pe}/>`;
@@ -1472,6 +1621,7 @@
       const acc = { s: g };
 
       if (S.enPatio) drawPatio(acc);
+      if (S.enDeck) drawDeck(acc);
       if (S.enPool) drawPool(acc);
       if (S.enCage) drawCage(acc);
       if (S.enCourt) drawCourt(acc);
@@ -1524,6 +1674,8 @@
         acc.s += `</g>`;
         acc.s += `<g id="measureLive">${liveMeasureMarkup()}</g>`;
       }
+
+      acc.s += `<g id="dimLayer">${dimBuf}</g>`;
 
       const svgCursor = S.tool === "measure" ? "crosshair" : "default";
       el("svgHost").innerHTML =
@@ -1906,6 +2058,20 @@
       g.s += `</g>`;
     }
 
+    function drawDeck(g) {
+      if (!F.deck) return;
+      const pts = deckPts();
+      const es = pts.map(p => p[0]), ss = pts.map(p => p[1]);
+      const be = Math.min(...es), bs = Math.min(...ss);
+      const bw = Math.max(...es) - be, bh = Math.max(...ss) - bs;
+      const pe = 'style="pointer-events:none"';
+      g.s += `<g data-fx="deck" style="cursor:grab">`;
+      g.s += `<rect x="${fx(be)}" y="${fy(bs)}" width="${bw * PXFT}" height="${bh * PXFT}" fill="transparent"/>`;
+      g.s += `<polygon points="${polyPts(pts)}" fill="#cbb896" fill-opacity="0.55" stroke="#8a744a" stroke-width="1.2"/>`;
+      g.s += `<text x="${fx(be + bw / 2)}" y="${fy(bs + bh / 2) + 4}" text-anchor="middle" font-size="10" fill="#5a3f1a" font-weight="700" ${pe}>DECK</text>`;
+      g.s += `</g>`;
+    }
+
     function drawPool(g) {
       const f = F.pool;
       const pe = 'style="pointer-events:none"';
@@ -1989,6 +2155,12 @@
           }
           e.preventDefault(); e.stopPropagation();
         });
+        gEl.addEventListener("dblclick", e => {
+          const k = gEl.getAttribute("data-fx");
+          const p = ptFt(e) || { e: 0, s: 0 };
+          openEdit(editIdFromFx(k, p));
+          e.preventDefault(); e.stopPropagation();
+        });
       });
     }
 
@@ -2063,7 +2235,7 @@
       else if (k === "patio") applyPatio();
       else if (k === "mirror") { setMirrorWall(nextFace[f.face]); draw(); return; }
       else if (k === "barre") { setMirrorWall(OPP_WALL[nextFace[f.face]] || f.face); draw(); return; }
-      else if (k === "fire") { /* square — keep w/h */ }
+      else if (k === "fire" || k === "deck") { /* keep w/h */ }
       else {
         const nw = f.h, nh = f.w;
         f.w = nw; f.h = nh;
@@ -2154,6 +2326,7 @@
           if (keys[b] === "patio" && SITE_MODS.includes(keys[a])) continue;
           if (keys[a] === "court" || keys[b] === "court") continue;
           if (keys[a] === "cage" || keys[b] === "cage") continue;
+          if (keys[a] === "deck" || keys[b] === "deck") continue;
           if ((keys[a] === "mirror" && keys[b] === "barre") || (keys[a] === "barre" && keys[b] === "mirror")) continue;
           if (rectsOverlap(A, B)) overlaps.push(`${name(keys[a])}×${name(keys[b])}`);
         }
@@ -2229,6 +2402,8 @@ bathInto  = ${S.bathInto}
 bunkLen   = ${S.bunkLen}
 mirrorLen = ${S.mirrorLen}
 barreLen  = ${S.barreLen}
+deckE     = ${S.deckE}
+deckN     = ${S.deckN}
 poolLen   = ${S.poolLen}
 diningW   = ${S.diningW}
 diningLen = ${S.diningLen}
@@ -2250,6 +2425,7 @@ patio     = ${o(S.enPatio, "patio")}
 cage      = ${o(S.enCage, "cage")}
 court     = ${o(S.enCourt, "court")}
 pool      = ${o(S.enPool, "pool")}
+deck      = ${o(S.enDeck, "deck")}
 fire      = ${o(S.enFire, "fire")}
 mirror    = ${o(S.enMirror, "mirror")}
 barre     = ${o(S.enMirror, "barre")}`;
@@ -2340,6 +2516,8 @@ barre     = ${o(S.enMirror, "barre")}`;
     el("bunkLen").addEventListener("input", e => { S.bunkLen = parseFloat(e.target.value); applyBunk(); draw(); });
     el("mirrorLen").addEventListener("input", e => { S.mirrorLen = parseFloat(e.target.value); applyMirror(); applyBarre(); draw(); });
     el("barreLen").addEventListener("input", e => { S.barreLen = parseFloat(e.target.value); applyBarre(); draw(); });
+    el("deckE").addEventListener("input", e => { S.deckE = parseFloat(e.target.value); applyDeck(); draw(); });
+    el("deckN").addEventListener("input", e => { S.deckN = parseFloat(e.target.value); applyDeck(); draw(); });
     function canvasHost() { return el("svgHost"); }
 
     function setZoom(z, origin) {
@@ -2384,7 +2562,7 @@ barre     = ${o(S.enMirror, "barre")}`;
       const host = canvasHost();
       if (host) { host.scrollLeft = 0; host.scrollTop = 0; }
     });
-    el("zoomWork").addEventListener("click", () => { setZoom(1.6); scrollToLiving(); });
+    el("zoomWork").addEventListener("click", () => { setZoom(2.2); scrollToLiving(); });
     el("diningW").addEventListener("input", e => { S.diningW = parseFloat(e.target.value); applyDining(); draw(); });
     el("diningLen").addEventListener("input", e => { S.diningLen = parseFloat(e.target.value); applyDining(); draw(); });
     el("diningChairs").addEventListener("input", e => { S.diningChairs = parseInt(e.target.value, 10); applyDining(); draw(); });
@@ -2423,13 +2601,51 @@ barre     = ${o(S.enMirror, "barre")}`;
     ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enTable", "enTable"],
     ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
     ["enBar", "enBar"], ["enPool", "enPool"], ["enCourt", "enCourt"], ["enFire", "enFire"],
-    ["enMirror", "enMirror"]]
+    ["enMirror", "enMirror"], ["enDeck", "enDeck"]]
       .forEach(([id, key]) => el(id).addEventListener("change", e => { S[key] = e.target.checked; draw(); }));
 
     document.querySelectorAll("[data-rot]").forEach(b => b.addEventListener("click", () => rotate(b.dataset.rot)));
 
-    el("preset_c2").addEventListener("click", () => { schemeC2(); draw(); });
-    el("preset_l").addEventListener("click", () => { schemeL(); draw(); });
+    const EDIT_TITLES = {
+      living: "Living", gym: "Dance/Gym", shop: "Shop", patio: "Patio", cage: "Batting cage",
+      deck: "Pool deck", pool: "Pool", court: "Pickleball", fire: "Fire pit",
+      office: "Office", closet: "Pool closet", bath: "Bathroom", bunk: "Bunk",
+      media: "Media", weights: "Weights", table: "Game table", ptable: "Pool table",
+      dining: "Dining", sit: "Sitting", bar: "Bar",
+    };
+
+    function editIdFromFx(k, p) {
+      if (k === "mirror" || k === "barre") return "gym";
+      if (k === "building") {
+        const z = zones();
+        if (p.e >= z.shop.e0 && p.e <= z.shop.e1 && p.s >= z.shop.s0 && p.s <= z.shop.s1) return "shop";
+        if (p.e >= z.gym.e0 && p.e <= z.gym.e1 && p.s >= z.gym.s0 && p.s <= z.gym.s1) return "gym";
+        return "living";
+      }
+      return k;
+    }
+
+    function openEdit(id) {
+      if (!id || !EDIT_TITLES[id]) return;
+      document.querySelectorAll(".edit-pane").forEach(p => p.classList.toggle("on", p.dataset.edit === id));
+      el("editTitle").textContent = EDIT_TITLES[id];
+      const dlg = el("editDlg");
+      if (!dlg.open) dlg.showModal();
+    }
+
+    el("editClose").addEventListener("click", () => el("editDlg").close());
+    el("editDlg").addEventListener("click", e => {
+      if (e.target === el("editDlg")) el("editDlg").close();
+    });
+    document.querySelectorAll(".comp-row[data-edit]").forEach(row => {
+      row.addEventListener("click", e => {
+        if (e.target.closest("input")) return;
+        openEdit(row.dataset.edit);
+      });
+    });
+
+    el("preset_c2").addEventListener("click", () => { schemeC2(); setZoom(2.2); scrollToLiving(); });
+    el("preset_l").addEventListener("click", () => { schemeL(); setZoom(2.2); scrollToLiving(); });
     el("copyBtn").addEventListener("click", () => {
       navigator.clipboard.writeText(paramsText());
       el("copyBtn").textContent = "Copied ✓";
@@ -2471,8 +2687,17 @@ barre     = ${o(S.enMirror, "barre")}`;
       Object.assign(S, clone(snap.S));
       if (!S.shopFlush) S.shopFlush = S.flush || "E";
       if (!S.gymFlush) S.gymFlush = S.flush || "E";
+      if (S.deckE == null) S.deckE = 0;
+      if (S.deckN == null) S.deckN = 0;
+      if (S.enDeck == null) S.enDeck = true;
       delete S.flush;
       F = clone(snap.F);
+      if (!F.deck) {
+        seedModule("deck", {
+          label: "deck", e: DECK_CAD_E0, s: DECK_CAD_S0, w: DECK_CAD_W, h: DECK_CAD_H, face: "N",
+          c: "#cbb896", ec: "#8a744a", tc: "#5a3f1a"
+        });
+      }
       el("presetName").value = name;
       draw();
       presetMsg(`loaded “${name}”`);
@@ -2493,8 +2718,19 @@ barre     = ${o(S.enMirror, "barre")}`;
     refreshPresetSelect();
 
     schemeC2();
-    fitSite();
-    draw();
+    {
+      const store = loadStore();
+      if (!store["C-2 NEW"]) store["C-2 NEW"] = { S: clone(S), F: clone(F) };
+      if (!store["L shop 44"]) {
+        schemeL();
+        store["L shop 44"] = { S: clone(S), F: clone(F) };
+        schemeC2();
+      }
+      saveStore(store);
+      refreshPresetSelect("C-2 NEW");
+    }
+    setZoom(2.2);
+    scrollToLiving();
   </script>
 </body>
 
