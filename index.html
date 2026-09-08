@@ -67,6 +67,29 @@
       color: var(--accent);
     }
 
+    header .spend-chip {
+      flex: none;
+      margin-left: auto;
+      border: 1px solid var(--line);
+      background: #22271f;
+      color: var(--accent);
+      font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+      border-radius: 999px;
+      padding: 5px 12px;
+      cursor: pointer;
+    }
+
+    header .spend-chip:hover {
+      border-color: var(--accent);
+    }
+
+    header .spend-chip.warn {
+      color: var(--warn);
+      border-color: #6a5420;
+    }
+
     header a.nav {
       color: var(--sub);
       text-decoration: none;
@@ -222,7 +245,9 @@
       border-color: var(--accent);
     }
 
-    dialog#editDlg {
+    dialog#editDlg,
+    dialog#spendDlg,
+    dialog#pasteDlg {
       width: min(400px, 94vw);
       max-height: 82vh;
       overflow: auto;
@@ -233,8 +258,94 @@
       padding: 14px 16px;
     }
 
-    dialog#editDlg::backdrop {
+    dialog#spendDlg {
+      width: min(520px, 94vw);
+    }
+
+    dialog#pasteDlg {
+      width: min(520px, 94vw);
+    }
+
+    dialog#editDlg::backdrop,
+    dialog#spendDlg::backdrop,
+    dialog#pasteDlg::backdrop {
       background: rgba(0, 0, 0, 0.5);
+    }
+
+    .spend-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .spend-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--sub);
+      padding: 0 6px 8px;
+    }
+
+    .spend-table th.num,
+    .spend-table td.num {
+      text-align: right;
+    }
+
+    .spend-table td {
+      padding: 7px 6px;
+      border-top: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    .spend-table .off td {
+      opacity: 0.45;
+    }
+
+    .spend-table .name {
+      font-weight: 600;
+    }
+
+    .spend-table .sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--sub);
+    }
+
+    .spend-table input {
+      width: 72px;
+      background: #141812;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 4px 6px;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .spend-table input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .spend-table tfoot td {
+      border-top: 1px solid var(--accent);
+      font-weight: 700;
+      padding-top: 10px;
+    }
+
+    .spend-table .total {
+      color: var(--accent);
+    }
+
+    .spend-note {
+      margin: 10px 0 0;
+      font-size: 11px;
+      color: var(--sub);
     }
 
     .dlg-head {
@@ -273,24 +384,15 @@
       min-width: 0;
     }
 
-    .preset-row select,
-    .preset-row input {
+    .preset-row select {
       min-width: 0;
-      width: 0;
+      flex: 1;
       background: #0e110d;
       color: var(--ink);
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 5px 8px;
       font-size: 13px;
-    }
-
-    .preset-row select {
-      flex: 1.2;
-    }
-
-    .preset-row input {
-      flex: 1;
     }
 
     .row label {
@@ -351,6 +453,84 @@
       font-weight: 600;
     }
 
+    .seg button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .iconbtn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .iconbtn.flash-ok,
+    .rbtn.flash-ok {
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-color: var(--accent);
+    }
+
+    .iconbtn.flash-err,
+    .rbtn.flash-err {
+      background: var(--bad);
+      color: #fff;
+      border-color: var(--bad);
+    }
+
+    .iconbtn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .iconbtn svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #pasteBox {
+      width: 100%;
+      min-height: 240px;
+      margin: 8px 0 12px;
+      font: 11px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: #0e110d;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      resize: vertical;
+    }
+
+    #presetNameRow {
+      display: none;
+      margin: 4px 0;
+    }
+
+    #presetNameRow.is-open {
+      display: flex;
+    }
+
+    #presetName {
+      width: 100%;
+      min-width: 0;
+      flex: 1;
+      font: 13px/1.4 system-ui, sans-serif;
+      background: #0e110d;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px 8px;
+    }
+
     .rbtn {
       background: #0e110d;
       color: var(--ink);
@@ -361,6 +541,7 @@
       font-size: 13px;
       min-width: 58px;
       flex: none;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
     }
 
     .rbtn:hover {
@@ -430,6 +611,7 @@
     <header>
       <h1>Site Studio</h1>
       <span id="overallBox"></span>
+      <button type="button" class="spend-chip" id="spendBtn" title="Spend estimate">$0</button>
     </header>
 
     <div class="wrap">
@@ -457,8 +639,8 @@
           <div class="comp-list">
             <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><button
                 type="button" class="ebtn" data-edit="shop">Edit</button></div>
-            <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span
-                class="cname">Dance/Gym</span><button type="button" class="ebtn" data-edit="gym">Edit</button></div>
+            <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Gym</span><button
+                type="button" class="ebtn" data-edit="gym">Edit</button></div>
             <div class="comp-row" data-edit="living"><span class="ccheck"></span><span
                 class="cname">Living</span><button type="button" class="ebtn" data-edit="living">Edit</button></div>
             <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span
@@ -487,6 +669,8 @@
                 class="cname">Media</span><button type="button" class="ebtn" data-edit="media">Edit</button></div>
             <div class="comp-row" data-edit="weights"><input type="checkbox" id="enWeights"><span
                 class="cname">Weights</span><button type="button" class="ebtn" data-edit="weights">Edit</button></div>
+            <div class="comp-row" data-edit="dance"><input type="checkbox" id="enDance"><span class="cname">Dance
+                floor</span><button type="button" class="ebtn" data-edit="dance">Edit</button></div>
             <div class="comp-row" data-edit="table"><input type="checkbox" id="enTable"><span class="cname">Game
                 table</span><button type="button" class="ebtn" data-edit="table">Edit</button></div>
             <div class="comp-row" data-edit="ptable"><input type="checkbox" id="enPtable"><span class="cname">Pool
@@ -512,8 +696,8 @@
             <div class="row"><label>Depth (N–S)</label>
               <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
             </div>
-            <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. East edge is the
-              siting slider.</div>
+            <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. Drag the building
+              west up to the house SE; a wider west-flush shop hangs east and still travels with it.</div>
           </div>
           <div class="edit-pane" data-edit="gym">
             <div class="row"><label>Width (E–W)</label>
@@ -535,7 +719,7 @@
               </div>
             </div>
             <div class="hint">East = share living’s east face (narrow gym insets west). West = share living’s west face
-              (narrow gym insets east). C-2 is gym <b>north</b>, both 36′.</div>
+              (narrow gym insets east). C-2 is gym <b>north</b>, both 36′, flush <b>west</b>.</div>
             <div class="row"><label>Mirror + barre</label><input type="checkbox" id="enMirror"></div>
             <div class="row"><label>Mirror wall</label>
               <div class="seg" style="flex:1.4">
@@ -659,17 +843,52 @@
             <div class="row"><label>Length</label>
               <input type="range" id="bunkLen" min="10" max="22" step="0.5"><span class="val" id="bunkLen_v"></span>
             </div>
-            <div class="hint">Along the face. Width stays 13′ (east column). C-2 is 14′.</div>
+            <div class="row"><label>Door at</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-bunkdoor="N" id="bunkDoor_N">N</button>
+                <button type="button" data-bunkdoor="S" id="bunkDoor_S">S</button>
+                <button type="button" data-bunkdoor="E" id="bunkDoor_E">E</button>
+                <button type="button" data-bunkdoor="W" id="bunkDoor_W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Opens</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-bunkswing="closet" id="bunkSwing_closet">into closet</button>
+                <button type="button" data-bunkswing="room" id="bunkSwing_room">into room</button>
+              </div>
+            </div>
+            <div class="hint">Closet stays opposite the bunks. Door at = which wall. The closet leaves a nook at that
+              door so the leaf can swing in. Opens = hinge hand only.</div>
           </div>
           <div class="edit-pane" data-edit="media">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="media">↻ <span id="face_media"></span></button>
+            </div>
+            <div class="row"><label>Layout</label>
+              <div class="seg" style="flex:1.4">
+                <button data-mediacfg="dualL" id="media_dualL">2 L's</button>
+                <button data-mediacfg="converse" id="media_converse">L + 2</button>
+              </div>
+            </div>
+            <div class="row"><label>Chairs on</label>
+              <div class="seg" style="flex:1.4">
+                <button data-mediachair="left" id="mediaChair_left">left</button>
+                <button data-mediachair="right" id="mediaChair_right">right</button>
+              </div>
+            </div>
+            <div class="hint" id="mediaHint">Two 7′-6″ L-sectionals (Eddy 90″ class) + 3′ center aisle. ~8–10 seats.
             </div>
           </div>
           <div class="edit-pane" data-edit="weights">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="weights">↻ <span id="face_weights"></span></button>
             </div>
+          </div>
+          <div class="edit-pane" data-edit="dance">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="dance">↻ <span id="face_dance"></span></button>
+            </div>
+            <div class="hint">30′ × 10′ dance floor. Drag to place. ↻ swaps the long axis.</div>
           </div>
           <div class="edit-pane" data-edit="table">
             <div class="row"><label>Rotate</label>
@@ -728,24 +947,137 @@
             <div class="row"><label>Bar length</label>
               <input type="range" id="barLen" min="8" max="18" step="0.5"><span class="val" id="barLen_v"></span>
             </div>
+            <div class="hint">Pinned to the south wall — shortening opens a bunk-door gap at the NW corner. Default
+              10′-6″ / 4 stools.</div>
           </div>
+        </dialog>
+
+        <dialog id="pasteDlg">
+          <div class="dlg-head">
+            <h2>Import params</h2>
+            <button type="button" class="ebtn" id="pasteCancel">Cancel</button>
+          </div>
+          <textarea id="pasteBox" spellcheck="false" placeholder="Paste a site-studio params block"></textarea>
+          <button type="button" class="rbtn" id="pasteApply">Import</button>
+        </dialog>
+
+        <dialog id="spendDlg">
+          <div class="dlg-head">
+            <h2>Spend estimate</h2>
+            <button type="button" class="ebtn" id="spendClose">Done</button>
+          </div>
+          <table class="spend-table">
+            <thead>
+              <tr>
+                <th>Line</th>
+                <th class="num">SF</th>
+                <th class="num">Rate</th>
+                <th class="num">Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-spend="living">
+                <td><span class="name">Living</span><span class="sub">fully conditioned · + bunk in shop</span></td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_living" type="number" min="0" step="1"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="ac">
+                <td><span class="name">Non-living A/C</span><span class="sub">gym + office in shop · mini-split</span>
+                </td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_ac" type="number" min="0" step="1"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="noAc">
+                <td><span class="name">No A/C</span><span class="sub">shop − office/bunk in shop · vented</span></td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_noAc" type="number" min="0" step="1"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="patio">
+                <td><span class="name">Covered patio</span><span class="sub">slab + cover + lighting</span></td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_patio" type="number" min="0" step="1"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="court">
+                <td><span class="name">Sport court</span><span class="sub">$25k on a 60×30 · coat, lines, hoop,
+                    fence</span></td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_court" type="number" min="0" step="0.01"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="cage">
+                <td><span class="name">Cage pad</span><span class="sub">concrete + turf only · you add the cage</span>
+                </td>
+                <td class="num" data-sf></td>
+                <td class="num"><input id="spend_cage" type="number" min="0" step="1"> /sf</td>
+                <td class="num" data-cost></td>
+              </tr>
+              <tr data-spend="pool">
+                <td><span class="name">Pool</span><span class="sub">lump · not by the square foot</span></td>
+                <td class="num" data-sf>—</td>
+                <td class="num">$ <input id="spend_pool" type="number" min="0" step="1000"></td>
+                <td class="num" data-cost></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td class="num total" id="spendTotal"></td>
+              </tr>
+            </tfoot>
+          </table>
+          <p class="spend-note">Planning guesses, not a bid — same living / gym / shop rates as
+            budget.html.
+            Patio is slab + a lit cover (~$10 slab + ~$50 structure). Court default is
+            $25,000 ÷ 1,800 sf. Cage is the net pad (no 2′ sides).
+          </p>
         </dialog>
 
         <div class="panel">
           <h2>Presets</h2>
           <div class="row preset-row" style="margin:4px 0">
             <select id="presetSel">
-              <option value="">— named presets —</option>
+              <option value="__new__">New preset</option>
             </select>
-            <input id="presetName" type="text" placeholder="name">
+          </div>
+          <div class="row preset-row" id="presetNameRow">
+            <input id="presetName" type="text" maxlength="80" placeholder="Name this preset" autocomplete="off">
           </div>
           <div class="seg">
-            <button id="presetSave">Save</button>
-            <button id="presetLoad">Load</button>
-            <button id="presetDelete">Delete</button>
-            <button id="copyBtn">Copy params</button>
+            <button type="button" id="presetSave" class="iconbtn" title="Save preset" aria-label="Save preset">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 3h11l5 5v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                <path d="M7 21v-8h10v8" />
+                <path d="M7 3v5h8" />
+              </svg>
+            </button>
+            <button type="button" id="presetDelete" class="iconbtn" title="Delete preset" aria-label="Delete preset">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h16" />
+                <path d="M9 7V5h6v2" />
+                <path d="M6 7l1 14h10l1-14" />
+              </svg>
+            </button>
+            <button type="button" id="copyBtn" class="iconbtn" title="Copy params" aria-label="Copy params">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+            </button>
+            <button type="button" id="pasteBtn" class="iconbtn" title="Import params" aria-label="Import params">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12" />
+                <path d="M8 11l4 4 4-4" />
+                <path d="M5 21h14" />
+              </svg>
+            </button>
           </div>
-          <div class="hint" id="presetMsg"></div>
+          <div class="hint">New preset keeps this layout. Name it, then Save. Import pastes a block.</div>
         </div>
       </div>
 
@@ -761,7 +1093,7 @@
             <span><b style="color:#3a6fa8">court</b> 60×30</span>
             <span><b style="color:#2f6f82">pool</b></span>
             <span><b style="color:#2a6a78">hot tub</b></span>
-            <span><b style="color:#2f6f4a">pool tbl</b></span>
+            <span><b style="color:#6a8a72">pool tbl</b></span>
             <span><b style="color:#a8894f">dining</b></span>
             <span><b style="color:#6b5a8a">sitting</b></span>
             <span><b style="color:#5c7a3c">run / garden</b></span>
@@ -859,27 +1191,53 @@
     let PXFT = BASE_PX;
     const CAGE_SIDE = 2.0;           // dotted min each long side
     const PATIO_SNAP = 1.25;
+    const SPEND_KEY = "site-studio-spend-v2";
+    const SPEND_CAP = 600000;        // owner's 2026-08-29 all-in headline
+    const SPEND_DEFAULTS = {
+      living: 175,
+      ac: 90,
+      noAc: 70,
+      patio: 60,                     // ~$10 slab + ~$50 cover & lighting
+      court: Math.round((25000 / 1800) * 100) / 100, // $25k / 60×30
+      cage: 16,                      // ~$10 slab + ~$6 turf; no cage
+      pool: 180000,
+    };
+    const loadSpend = () => {
+      try {
+        return { ...SPEND_DEFAULTS, ...(JSON.parse(localStorage.getItem(SPEND_KEY)) || {}) };
+      } catch (_) {
+        return { ...SPEND_DEFAULTS };
+      }
+    };
+    const Spend = loadSpend();
+    const saveSpend = () => localStorage.setItem(SPEND_KEY, JSON.stringify(Spend));
+    const usd = n => "$" + Math.round(n).toLocaleString("en-US");
+    const usdK = n => "$" + Math.round(n / 1000).toLocaleString("en-US") + "k";
 
     const S = {
       livingW: 36, livingD: 32, gymW: 36, gymD: 18,
       garageW: 36, garageD: 30,
       gymSide: "N",
-      shopFlush: "E",
-      gymFlush: "E",
+      shopFlush: "W",
+      gymFlush: "W",
       eastGap: 28,                   // living east → east fence
       bS0: -10,                      // barndo north (pushed up from −20)
       patioRun: 39.5, patioDep: 15,
       cageLen: 70, cageWid: 14,
-      barLen: 14,
+      barLen: 10.5, stools: 4,
       bathAlong: 7.5, bathInto: 10.5,
       bunkLen: 14,
+      bunkDoorAt: "W",
+      bunkDoorSwing: "closet",
       mirrorLen: 14, barreLen: 10,
       deckW: 62.5, deckL: 76.5,
       poolLen: 8,
       diningW: 3.5, diningLen: 11, diningChairs: 5, diningEnds: true,
       sitCfg: "love",
+      mediaCfg: "dualL",
+      mediaChairSide: "left",
       enPatio: true, enCage: true, enOffice: true, enCloset: true,
-      enBath: true, enBunk: true, enMedia: true, enWeights: true,
+      enBath: true, enBunk: true, enMedia: true, enWeights: true, enDance: true,
       enTable: true, enPtable: true, enDining: false, enSit: false,
       enBar: true, enPool: true, enSpa: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
       tool: "hand",
@@ -908,6 +1266,72 @@
     };
     const fmtNum = ft => (Math.abs(ft - Math.round(ft)) < 0.01 ? String(Math.round(ft)) : String(Math.round(ft * 10) / 10));
     const areaLine = (w, d) => `${fmtNum(w)}x${fmtNum(d)} (${Math.round(w * d)} sqft)`;
+
+    function overlapSf(box, zone) {
+      if (!box || !zone) return 0;
+      const e0 = Math.max(box.e, zone.e0);
+      const s0 = Math.max(box.s, zone.s0);
+      const e1 = Math.min(box.e + box.w, zone.e1);
+      const s1 = Math.min(box.s + box.h, zone.s1);
+      return Math.max(0, e1 - e0) * Math.max(0, s1 - s0);
+    }
+
+    // Conditioned rooms are only extra A/C when they sit in the shop. Inside
+    // living/gym they are already in that band — adding the rectangle would
+    // double-count. Office → gym-rate; bunk → living-rate.
+    function inShopSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return overlapSf(F[key], zones().shop);
+    }
+    const officeInShopSf = () => inShopSf("office", "enOffice");
+    const bunkInShopSf = () => inShopSf("bunk", "enBunk");
+
+    function spendTakeoff() {
+      const shopSf = S.garageW * S.garageD;
+      const officeSf = officeInShopSf();
+      const bunkSf = bunkInShopSf();
+      const courtSf = (S.enCourt && F.court) ? F.court.w * F.court.h : 0;
+      return {
+        living: { on: true, sf: S.livingW * S.livingD + bunkSf },
+        ac: { on: true, sf: S.gymW * S.gymD + officeSf },
+        noAc: { on: true, sf: Math.max(0, shopSf - officeSf - bunkSf) },
+        patio: { on: !!S.enPatio, sf: S.enPatio ? S.patioRun * S.patioDep : 0 },
+        court: { on: !!S.enCourt, sf: courtSf },
+        cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
+        pool: { on: !!S.enPool, sf: 0 },
+      };
+    }
+
+    function spendCost(key, row) {
+      if (!row.on) return 0;
+      return key === "pool" ? Spend.pool : row.sf * Spend[key];
+    }
+
+    function spendSum() {
+      const t = spendTakeoff();
+      return Object.keys(t).reduce((n, k) => n + spendCost(k, t[k]), 0);
+    }
+
+    function renderSpend() {
+      const t = spendTakeoff();
+      const total = spendSum();
+      const btn = el("spendBtn");
+      btn.textContent = usdK(total);
+      btn.classList.toggle("warn", total > SPEND_CAP);
+      for (const key of Object.keys(t)) {
+        const tr = document.querySelector(`tr[data-spend="${key}"]`);
+        if (!tr) continue;
+        const row = t[key];
+        tr.classList.toggle("off", !row.on);
+        const sfEl = tr.querySelector("[data-sf]");
+        const costEl = tr.querySelector("[data-cost]");
+        if (key !== "pool") sfEl.textContent = row.on ? Math.round(row.sf).toLocaleString("en-US") : "off";
+        costEl.textContent = usd(spendCost(key, row));
+        const inp = el("spend_" + key);
+        if (inp && document.activeElement !== inp) inp.value = Spend[key];
+      }
+      el("spendTotal").textContent = usd(total);
+    }
 
     function fx(e) { return M + (e - CAN_E0) * PXFT; }
     function fy(s) { return M + (s - CAN_S0) * PXFT; }
@@ -942,6 +1366,37 @@
     function flushToLiving(width, flush, livE0, livE1) {
       if (flush === "W") return { e0: livE0, e1: livE0 + width };
       return { e0: livE1 - width, e1: livE1 };
+    }
+
+    // eastGap is living-east → east fence. A west-flush shop/gym wider than
+    // living hangs EAST of that edge, so a fixed 28′ max (the old 36′ bar)
+    // stopped the whole L short of the house. Bounds come from the envelope:
+    // westernmost face can meet house SE; easternmost stays 2′ off the fence.
+    const EAST_SETBACK = 2;
+    const WEST_STOP = HOUSE_E1;
+
+    function hangPastLiving() {
+      const east = Math.max(
+        S.shopFlush === "W" ? S.garageW - S.livingW : 0,
+        S.gymFlush === "W" ? S.gymW - S.livingW : 0,
+        0);
+      const west = Math.max(
+        S.shopFlush === "E" ? S.garageW - S.livingW : 0,
+        S.gymFlush === "E" ? S.gymW - S.livingW : 0,
+        0);
+      return { east, west };
+    }
+
+    function eastGapLimits() {
+      const { east, west } = hangPastLiving();
+      const minG = EAST_SETBACK + east;
+      const maxG = EAST_FENCE - S.livingW - west - WEST_STOP;
+      return [minG, Math.max(minG, maxG)];
+    }
+
+    function clampEastGap() {
+      const [lo, hi] = eastGapLimits();
+      S.eastGap = clamp(S.eastGap, lo, hi);
     }
 
     function bbox() {
@@ -1018,11 +1473,18 @@
     function applyBar() {
       if (!F.bar) return;
       const len = S.barLen, d = 9.5;
-      const ce = F.bar.e + F.bar.w / 2, cs = F.bar.s + F.bar.h / 2;
-      if (F.bar.face === "W" || F.bar.face === "E") { F.bar.w = d; F.bar.h = len; }
-      else { F.bar.w = len; F.bar.h = d; }
-      F.bar.e = ce - F.bar.w / 2;
-      F.bar.s = cs - F.bar.h / 2;
+      const ce = F.bar.e + F.bar.w / 2;
+      const south = F.bar.s + F.bar.h;
+      const cs = F.bar.s + F.bar.h / 2;
+      if (F.bar.face === "W" || F.bar.face === "E") {
+        F.bar.w = d; F.bar.h = len;
+        F.bar.e = ce - F.bar.w / 2;
+        F.bar.s = south - F.bar.h;
+      } else {
+        F.bar.w = len; F.bar.h = d;
+        F.bar.e = ce - F.bar.w / 2;
+        F.bar.s = cs - F.bar.h / 2;
+      }
     }
 
     function applyMedia() {
@@ -1045,10 +1507,33 @@
       F.weights.s = cs - F.weights.h / 2;
     }
 
+    function applyDance() {
+      if (!F.dance) return;
+      const ce = F.dance.e + F.dance.w / 2, cs = F.dance.s + F.dance.h / 2;
+      if (F.dance.face === "N" || F.dance.face === "S") { F.dance.w = 30; F.dance.h = 10; }
+      else { F.dance.w = 10; F.dance.h = 30; }
+      F.dance.e = ce - F.dance.w / 2;
+      F.dance.s = cs - F.dance.h / 2;
+    }
+
+    function seedDance() {
+      const z = zones();
+      const gw = z.gym.e1 - z.gym.e0, gh = z.gym.s1 - z.gym.s0;
+      const alongEW = gw >= 30 || gw >= gh;
+      const w = alongEW ? 30 : 10, h = alongEW ? 10 : 30;
+      seedModule("dance", {
+        label: "dance",
+        e: z.gym.e0 + Math.max(0, (gw - w) / 2),
+        s: z.gym.s0 + Math.max(0, (gh - h) / 2),
+        w, h, face: alongEW ? "N" : "E",
+        c: "#d5e4ec", ec: "#2f6f82", tc: "#1a3a48"
+      });
+    }
+
     function applyTable() {
       if (!F.table) return;
-      // 36" square + 2' min clear each seated side (1-1-1-1) → 7×7 drag footprint
-      const along = 7, across = 7;
+      // 36" square + chair (1.67') + 1' past each back → 8.34' drag / exclusion
+      const along = 3 + 2 * (1.67 + 1), across = 3 + 2 * (1.67 + 1);
       const ce = F.table.e + F.table.w / 2, cs = F.table.s + F.table.h / 2;
       if (F.table.face === "N" || F.table.face === "S") { F.table.w = along; F.table.h = across; }
       else { F.table.w = across; F.table.h = along; }
@@ -1262,23 +1747,27 @@
       S.livingW = 36; S.livingD = 32; S.gymW = 36; S.gymD = 18;
       S.garageW = 36; S.garageD = 30;
       S.gymSide = "N";
-      S.shopFlush = "E";
-      S.gymFlush = "E";
+      S.shopFlush = "W";
+      S.gymFlush = "W";
       S.eastGap = 28;
       S.bS0 = -10;
       S.patioRun = 39.5; S.patioDep = 15;
       S.cageLen = 70; S.cageWid = 14;
-      S.barLen = 14;
+      S.barLen = 10.5; S.stools = 4;
       S.bathAlong = 7.5; S.bathInto = 10.5;
       S.bunkLen = 14;
+      S.bunkDoorAt = "W";
+      S.bunkDoorSwing = "closet";
       S.mirrorLen = 14; S.barreLen = 10;
       S.deckW = 62.5; S.deckL = 76.5;
       S.poolLen = 8;
       S.zoom = 2.2;
       S.diningW = 3.5; S.diningLen = 11; S.diningChairs = 5; S.diningEnds = true;
       S.sitCfg = "love";
+      S.mediaCfg = "dualL";
+      S.mediaChairSide = "left";
       S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true;
-      S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true;
+      S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true; S.enDance = true;
       S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
       S.enBar = true; S.enPool = true; S.enSpa = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
       const z = zones();
@@ -1306,8 +1795,9 @@
         label: "weights", e: z.gym.e0 + 0.31, s: z.gym.s0 + 0.16, w: 8, h: 7.5, face: "W",
         c: "#e4eadc", ec: "#6a7f4a", tc: "#3a4a28"
       });
+      seedDance();
       seedModule("table", {
-        label: "", e: z.liv.e0 + 1.1, s: z.liv.s0 + 1.01, w: 7, h: 7, face: "N",
+        label: "", e: z.liv.e0 + 1.1, s: z.liv.s0 + 1.01, w: 8.34, h: 8.34, face: "N",
         c: "#e9e2d0", ec: "#8f7a45", tc: "#5a4a20"
       });
       seedModule("ptable", {
@@ -1323,7 +1813,7 @@
         c: "#e0dceb", ec: "#6b5a8a", tc: "#3f2a5a"
       });
       seedModule("bar", {
-        label: "bar", e: z.liv.e0 + 12.97, s: z.liv.s1 - 14, w: 9.5, h: 14, face: "W",
+        label: "bar", e: z.liv.e0 + 12.97, s: z.liv.s1 - 10.5, w: 9.5, h: 10.5, face: "W",
         c: "#e8dccf", ec: "#8a6b4a", tc: "#5a3f2a"
       });
       seedModule("patio", {
@@ -1368,25 +1858,25 @@
     function schemeL() {
       schemeC2();
       S.garageW = 44;
-      S.shopFlush = "E";
-      S.gymFlush = "E";
+      S.shopFlush = "W";
+      S.gymFlush = "W";
       applyPatio();
     }
 
     function applySized() {
-      applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyTable();
+      applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyDance(); applyTable();
       applyPtable(); applyDining(); applySit();
       applyCage(); applyCourt(); applyPool(); applySpa(); applyPatio(); applyDeck();
       applyMirror(); applyBarre();
     }
 
-    const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
+    const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "dance", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
     const SITE_MODS = ["patio", "cage", "court", "pool", "spa", "fire", "deck"];
 
     function enabledKeys() {
       const map = {
         office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
-        media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
+        media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
@@ -1406,7 +1896,7 @@
     }
 
     let dimBuf = "";
-    function dimLine(e1, s1, e2, s2, label, side) {
+    function dimLine(e1, s1, e2, s2, label, side, at) {
       const pe = 'style="pointer-events:none"';
       const x1 = fx(e1), y1 = fy(s1), x2 = fx(e2), y2 = fy(s2);
       const col = "#c0392b";
@@ -1419,7 +1909,11 @@
         g += `<line x1="${x1}" y1="${y1 - tick}" x2="${x1}" y2="${y1 + tick}" stroke="${col}" stroke-width="1" ${pe}/>`;
         g += `<line x1="${x2}" y1="${y2 - tick}" x2="${x2}" y2="${y2 + tick}" stroke="${col}" stroke-width="1" ${pe}/>`;
       }
-      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      let mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      if (at) {
+        if (at.e != null) mx = fx(at.e);
+        if (at.s != null) my = fy(at.s);
+      }
       const rot = Math.abs(e1 - e2) < 0.01 ? `transform="rotate(-90 ${mx} ${my})"` : "";
       const dy = side === "below" ? 12 : side === "above" ? -6 : 4;
       g += `<text x="${mx}" y="${my + dy}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}" ${rot} ${pe} style="paint-order:stroke;stroke:#f4f0e6;stroke-width:3px">${label}</text>`;
@@ -1473,6 +1967,7 @@
       el("enBunk").checked = S.enBunk;
       el("enMedia").checked = S.enMedia;
       el("enWeights").checked = S.enWeights;
+      el("enDance").checked = S.enDance;
       el("enTable").checked = S.enTable;
       el("enPtable").checked = S.enPtable;
       el("enDining").checked = S.enDining;
@@ -1491,6 +1986,21 @@
       el("sit_pair").classList.toggle("on", S.sitCfg === "pair");
       el("sit_love").classList.toggle("on", S.sitCfg === "love");
       el("sit_lounge").classList.toggle("on", S.sitCfg === "lounge");
+      el("media_dualL").classList.toggle("on", S.mediaCfg === "dualL");
+      el("media_converse").classList.toggle("on", S.mediaCfg === "converse");
+      el("mediaChair_left").classList.toggle("on", S.mediaChairSide === "left");
+      el("mediaChair_right").classList.toggle("on", S.mediaChairSide === "right");
+      {
+        const sides = mediaChairCompass();
+        el("mediaChair_left").textContent = sides.left;
+        el("mediaChair_right").textContent = sides.right;
+        const converse = S.mediaCfg === "converse";
+        el("mediaChair_left").disabled = !converse;
+        el("mediaChair_right").disabled = !converse;
+        el("mediaHint").textContent = converse
+          ? "Crate & Barrel Retreat 4-piece L (160″ × 124″) + two swivel chairs. ~5 on the TV run, chaise on the return. Chairs on = that wall."
+          : "Two 7′-6″ L-sectionals (Eddy 90″ class) + 3′ center aisle. ~8–10 seats.";
+      }
       el("tool_hand").classList.toggle("on", S.tool === "hand");
       el("tool_measure").classList.toggle("on", S.tool === "measure");
       el("shopFlush_E").classList.toggle("on", S.shopFlush === "E");
@@ -1499,6 +2009,15 @@
       el("gymFlush_W").classList.toggle("on", S.gymFlush === "W");
       el("gymside_N").classList.toggle("on", S.gymSide === "N");
       el("gymside_S").classList.toggle("on", S.gymSide === "S");
+      {
+        const door = bunkDoorNorm();
+        for (const w of ["N", "S", "E", "W"]) {
+          el("bunkDoor_" + w).classList.toggle("on", door.at === w);
+          el("bunkDoor_" + w).disabled = false;
+        }
+        el("bunkSwing_closet").classList.toggle("on", door.swing === "closet");
+        el("bunkSwing_room").classList.toggle("on", door.swing === "room");
+      }
       const mirrFace = (F.mirror && F.mirror.face) || "N";
       for (const w of ["N", "S", "E", "W"]) {
         el("mirrwall_" + w).classList.toggle("on", mirrFace === w);
@@ -1515,20 +2034,22 @@
       const shopSf = S.garageW * S.garageD;
       const gymSf = S.gymW * S.gymD;
       const livSf = S.livingW * S.livingD;
-      const officeSf = (S.enOffice && F.office) ? F.office.w * F.office.h : 0;
-      const acSf = gymSf + livSf + officeSf;
-      const noAcSf = shopSf - officeSf;
+      const officeSf = officeInShopSf();
+      const bunkSf = bunkInShopSf();
+      const acSf = gymSf + livSf + officeSf + bunkSf;
+      const noAcSf = shopSf - officeSf - bunkSf;
       const patioSf = S.patioRun * S.patioDep;
       el("overallBox").innerHTML =
         `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall` +
-        ` · A/C · ${Math.round(acSf)} sqft (living + gym + office)` +
-        ` · no A/C · ${Math.round(noAcSf)} sqft (shop − office)` +
+        ` · A/C · ${Math.round(acSf)} sqft (living + gym + office/bunk in shop)` +
+        ` · no A/C · ${Math.round(noAcSf)} sqft (shop − office/bunk in shop)` +
         ` · ` + (S.enPatio ? `patio · ${Math.round(patioSf)} sqft` : `patio · off`);
+      renderSpend();
 
       const faceName = { N: "N", S: "S", W: "W", E: "E" };
       const enKey = {
         office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
-        media: "enMedia", weights: "enWeights", table: "enTable", ptable: "enPtable",
+        media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
@@ -1602,9 +2123,8 @@
         g += `<circle cx="${fx(te)}" cy="${fy(ts)}" r="${4.5 * PXFT}" fill="#7a9a5a" fill-opacity="0.45" stroke="#4a6a38" stroke-width="1" ${pe}/>`;
       }
 
-      // House SW → west fence + house SE → east fence
+      // House SW → west fence
       g += dimLine(WEST_FENCE, -2.4, HOUSE_E0, -2.4, `${fmtFt(HOUSE_E0)} house SW → W fence`, "above");
-      g += dimLine(HOUSE_E1, -2.4, EAST_FENCE, -2.4, `${fmtFt(EAST_FENCE - HOUSE_E1)} house SE → E fence`, "above");
       g += dimLine(HOUSE_E1, DRIVE_S1 - 2.2, DRIVE_E, DRIVE_S1 - 2.2, `${fmtFt(DRIVE_E - HOUSE_E1)} house → drive E`, "above");
 
       // fences
@@ -1624,34 +2144,40 @@
       g += `<rect x="${fx(z.shop.e0)}" y="${fy(z.shop.s0)}" width="${S.garageW * PXFT}" height="${S.garageD * PXFT}" fill="#d8dcd0" stroke="#3a4036" stroke-width="2"/>`;
       g += `<rect x="${fx(z.gym.e0)}" y="${fy(z.gym.s0)}" width="${S.gymW * PXFT}" height="${S.gymD * PXFT}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
       g += `<rect x="${fx(z.liv.e0)}" y="${fy(z.liv.s0)}" width="${S.livingW * PXFT}" height="${S.livingD * PXFT}" fill="#f4efe4" stroke="#3a4036" stroke-width="2"/>`;
-      const zoneLabel = (cx, cy, title, w, d) => {
-        let t = `<text x="${cx}" y="${cy - 7}" text-anchor="middle" font-size="12" fill="#4a5346" font-weight="700" ${pe}>${title}</text>`;
-        t += `<text x="${cx}" y="${cy + 8}" text-anchor="middle" font-size="10" fill="#4a5346" ${pe}>${areaLine(w, d)}</text>`;
-        return t;
-      };
-      g += zoneLabel(fx((z.shop.e0 + z.shop.e1) / 2), fy((z.shop.s0 + z.shop.s1) / 2), "SHOP", S.garageW, S.garageD);
-      g += zoneLabel(fx((z.gym.e0 + z.gym.e1) / 2), fy((z.gym.s0 + z.gym.s1) / 2), "DANCE/GYM", S.gymW, S.gymD);
-      g += zoneLabel(fx((z.liv.e0 + z.liv.e1) / 2 - 5), fy((z.liv.s0 + z.liv.s1) / 2 - 3.5), "LIVING", S.livingW, S.livingD);
       g += `</g>`;
 
       // overall dims
       g += dimLine(bb.e0, bb.s0 - 3.2, bb.e1, bb.s0 - 3.2, `${fmtFt(overallW)} overall`, "above");
-      g += dimLine(bb.e0 - 3.4, bb.s0, bb.e0 - 3.4, bb.s1, `${fmtFt(overallD)} N–S`, "above");
-      if (isL()) {
-        g += dimLine(z.shop.e0, z.shop.s0 - 6.2, z.shop.e1, z.shop.s0 - 6.2, `shop ${fmtFt(S.garageW)}`, "above");
-        g += dimLine(z.liv.e0, z.liv.s1 + 3.2, z.liv.e1, z.liv.s1 + 3.2, `living ${fmtFt(S.livingW)}`, "below");
-        if (Math.abs(S.gymW - S.livingW) > 0.05) {
-          const gy = S.gymSide === "S" ? z.gym.s1 + 3.2 : z.gym.s0 - 9.2;
-          const side = S.gymSide === "S" ? "below" : "above";
-          g += dimLine(z.gym.e0, gy, z.gym.e1, gy, `gym ${fmtFt(S.gymW)}`, side);
-        }
-      }
+      g += dimLine(bb.e1 + 3.4, bb.s0, bb.e1 + 3.4, bb.s1, `${fmtFt(overallD)} N–S`, "above");
       g += dimLine(bb.e1, (bb.s0 + bb.s1) / 2, EAST_FENCE, (bb.s0 + bb.s1) / 2, `${fmtFt(EAST_FENCE - bb.e1)} → E fence`);
       {
         const xe = Math.min(DRIVE_E, z.shop.e0);
         g += dimLine(xe, DRIVE_S1, xe, z.shop.s0, `${fmtFt(Math.abs(z.shop.s0 - DRIVE_S1))} barndo → drive`);
       }
       g += dimLine((bb.e0 + bb.e1) / 2, bb.s1, (bb.e0 + bb.e1) / 2, SOUTH_FENCE, `${fmtFt(SOUTH_FENCE - bb.s1)} → S fence / ag`);
+
+      // Parking depth: N shop wall → first thing on each of 3 bay centerlines.
+      // Labels sit on the west bay's midpoint so the three read as one north row.
+      {
+        const blockers = enabledKeys().filter(k =>
+          INTERIOR.includes(k) && k !== "mirror" && k !== "barre" && k !== "dance" && overlapSf(F[k], z.shop) > 0.05
+        ).map(k => F[k]);
+        const bayW = S.garageW / 3;
+        const hits = [];
+        for (let i = 0; i < 3; i++) {
+          const e = z.shop.e0 + (i + 0.5) * bayW;
+          let hitS = z.shop.s1;
+          for (const m of blockers) {
+            if (e < m.e - 0.01 || e > m.e + m.w + 0.01) continue;
+            if (m.s > z.shop.s0 + 0.05 && m.s < hitS) hitS = m.s;
+          }
+          hits.push({ e, hitS, depth: hitS - z.shop.s0 });
+        }
+        const labelS = (z.shop.s0 + hits[0].hitS) / 2;
+        for (const h of hits) {
+          dimLine(h.e, z.shop.s0, h.e, h.hitS, fmtFt(h.depth), null, { s: labelS });
+        }
+      }
 
       const acc = { s: g };
 
@@ -1666,6 +2192,7 @@
       if (S.enBath) drawBath(acc);
       if (S.enBunk) drawBunk(acc);
       if (S.enMedia) drawMedia(acc);
+      if (S.enDance) drawDanceFloor(acc);
       if (S.enWeights) drawWeights(acc);
       if (S.enMirror) {
         drawDanceStrip(acc, "mirror", `mirror ${fmtFt(S.mirrorLen)}`);
@@ -1683,6 +2210,26 @@
         acc.s += dimLine(c.e + c.w, c.s + c.h / 2, EAST_FENCE, c.s + c.h / 2, `${fmtFt(EAST_FENCE - (c.e + c.w))} court → E`);
         acc.s += dimLine(c.e + c.w / 2, c.s + c.h, c.e + c.w / 2, SOUTH_FENCE, `${fmtFt(SOUTH_FENCE - (c.s + c.h))} court → S`);
       }
+
+      acc.s += `<g id="dimLayer">${dimBuf}</g>`;
+      // Ghost chips back in-zone — high z, low opacity so furniture still reads.
+      const zoneChip = (band, title, w, d) => {
+        const line2 = areaLine(w, d);
+        const tw = Math.max(title.length, line2.length) * 6.2 + 16;
+        const th = 30;
+        const cx = fx((band.e0 + band.e1) / 2);
+        const cy = fy((band.s0 + band.s1) / 2);
+        return `<g pointer-events="none">` +
+          `<rect x="${cx - tw / 2}" y="${cy - th / 2}" width="${tw}" height="${th}" rx="6" fill="#fffef8" fill-opacity="0.53" stroke="#3a4036" stroke-opacity="0.44" stroke-width="1"/>` +
+          `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4036" fill-opacity="0.90">${title}</text>` +
+          `<text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="8" fill="#5a6356" fill-opacity="0.88">${line2}</text>` +
+          `</g>`;
+      };
+      acc.s += `<g id="zoneLabels">`;
+      acc.s += zoneChip(z.shop, "SHOP", S.garageW, S.garageD);
+      acc.s += zoneChip(z.gym, "GYM", S.gymW, S.gymD);
+      acc.s += zoneChip(z.liv, "LIVING", S.livingW, S.livingD);
+      acc.s += `</g>`;
 
       if (S.tool === "measure") {
         MP.e = clamp(MP.e, CAN_E0, CAN_E1);
@@ -1710,8 +2257,6 @@
         acc.s += `</g>`;
         acc.s += `<g id="measureLive">${liveMeasureMarkup()}</g>`;
       }
-
-      acc.s += `<g id="dimLayer">${dimBuf}</g>`;
 
       const svgCursor = S.tool === "measure" ? "crosshair" : "default";
       el("svgHost").style.cursor = svgCursor;
@@ -1775,6 +2320,75 @@
       wrapMod(g, "bath", body, { skipLabel: true });
     }
 
+    function bunkClosetWall(f) {
+      return { W: "S", N: "W", E: "N", S: "E" }[(f && f.face) || "E"] || "N";
+    }
+
+    function bunkNookEnd(closet, at) {
+      if (closet === "N" || closet === "S") return (at === "W" || at === "E") ? at : "W";
+      return (at === "N" || at === "S") ? at : "N";
+    }
+
+    function bunkDoorNorm() {
+      const closet = bunkClosetWall(F.bunk);
+      const sides = ["N", "S", "E", "W"];
+      let at = (S.bunkDoorAt || "W").toUpperCase();
+      if (!sides.includes(at)) at = "W";
+      const swing = S.bunkDoorSwing === "room" ? "room" : "closet";
+      const nook = bunkNookEnd(closet, at);
+      S.bunkDoorAt = at;
+      S.bunkDoorSwing = swing;
+      return { closet, at, swing, sides, nook };
+    }
+
+    function bunkDoorGeom(f) {
+      const { closet, at, swing, nook } = bunkDoorNorm();
+      const door = 3.0, inset = 0.35;
+      const e0 = f.e, s0 = f.s, e1 = f.e + f.w, s1 = f.s + f.h;
+      const into = { W: [door, 0], E: [-door, 0], N: [0, door], S: [0, -door] }[at];
+      if (at === "W" || at === "E") {
+        const x = at === "W" ? e0 : e1;
+        const alongN = (closet === "N" || closet === "S") ? closet === "N" : nook === "N";
+        const jambNook = alongN ? s0 + inset : s1 - inset;
+        const jambAway = jambNook + (alongN ? door : -door);
+        if (swing === "closet") {
+          return { wall: at, door, hinge: [x, jambNook], closedEnd: [x, jambAway], openEnd: [x + into[0], jambNook] };
+        }
+        return { wall: at, door, hinge: [x, jambAway], closedEnd: [x, jambNook], openEnd: [x + into[0], jambAway] };
+      }
+      const y = at === "N" ? s0 : s1;
+      const alongW = (closet === "W" || closet === "E") ? closet === "W" : nook === "W";
+      const jambNook = alongW ? e0 + inset : e1 - inset;
+      const jambAway = jambNook + (alongW ? door : -door);
+      if (swing === "closet") {
+        return { wall: at, door, hinge: [jambNook, y], closedEnd: [jambAway, y], openEnd: [jambNook, y + into[1]] };
+      }
+      return { wall: at, door, hinge: [jambAway, y], closedEnd: [jambNook, y], openEnd: [jambAway, y + into[1]] };
+    }
+
+    function bunkClosetRect(f, closet, gapEnd, nook, clD) {
+      const e0 = f.e, s0 = f.s, w = f.w, h = f.h;
+      const pad = 0.25, end = 0.4;
+      if (closet === "N") {
+        return gapEnd === "W"
+          ? { e: e0 + nook, s: s0 + pad, w: w - nook - end, h: clD }
+          : { e: e0 + end, s: s0 + pad, w: w - nook - end, h: clD };
+      }
+      if (closet === "S") {
+        return gapEnd === "W"
+          ? { e: e0 + nook, s: s0 + h - pad - clD, w: w - nook - end, h: clD }
+          : { e: e0 + end, s: s0 + h - pad - clD, w: w - nook - end, h: clD };
+      }
+      if (closet === "W") {
+        return gapEnd === "N"
+          ? { e: e0 + pad, s: s0 + nook, w: clD, h: h - nook - end }
+          : { e: e0 + pad, s: s0 + end, w: clD, h: h - nook - end };
+      }
+      return gapEnd === "N"
+        ? { e: e0 + w - pad - clD, s: s0 + nook, w: clD, h: h - nook - end }
+        : { e: e0 + w - pad - clD, s: s0 + end, w: clD, h: h - nook - end };
+    }
+
     function drawBunk(g) {
       const f = F.bunk;
       const pe = 'style="pointer-events:none"';
@@ -1798,59 +2412,177 @@
           inner += `<line x1="${fx(stairE + 0.15)}" y1="${fy(ty)}" x2="${fx(stairE + stairW - 0.15)}" y2="${fy(ty)}" stroke="${f.ec}" stroke-width="0.6"/>`;
         }
       }
+      const doorSpec = bunkDoorNorm();
+      const geom = bunkDoorGeom(f);
+      const nook = 4.6, clD = 1.8;
+      const cl = bunkClosetRect(f, doorSpec.closet, doorSpec.nook, nook, clD);
+      let extras = "";
+      extras += `<rect x="${fx(cl.e)}" y="${fy(cl.s)}" width="${cl.w * PXFT}" height="${cl.h * PXFT}" fill="#e0d3b0" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
+      extras += `<text x="${fx(cl.e + cl.w / 2)}" y="${fy(cl.s + cl.h / 2) + 3}" text-anchor="middle" font-size="7" fill="${f.tc}" ${pe}>closet</text>`;
+      const [hx, hy] = geom.hinge;
+      const [cx0, cy0] = geom.closedEnd;
+      const [ox, oy] = geom.openEnd;
+      const r = geom.door * PXFT;
+      const ax = fx(cx0) - fx(hx), ay = fy(cy0) - fy(hy);
+      const bx = fx(ox) - fx(hx), by = fy(oy) - fy(hy);
+      const sweep = (ax * by - ay * bx) > 0 ? 1 : 0;
+      extras += `<line x1="${fx(hx)}" y1="${fy(hy)}" x2="${fx(ox)}" y2="${fy(oy)}" stroke="${f.ec}" stroke-width="1.6" ${pe}/>`;
+      extras += `<path d="M ${fx(cx0)} ${fy(cy0)} A ${r} ${r} 0 0 ${sweep} ${fx(ox)} ${fy(oy)}" fill="none" stroke="${f.ec}" stroke-width="1" ${pe}/>`;
+      const egWall = geom.wall === "E" ? "S" : "E";
+      if (egWall === "E") {
+        extras += `<rect x="${fx(f.e + f.w - 0.1)}" y="${fy(f.s + 2.0)}" width="${0.2 * PXFT}" height="${4 * PXFT}" fill="#7fa6ad" stroke="#2f6f82" stroke-width="0.8" ${pe}/>`;
+      } else {
+        extras += `<rect x="${fx(f.e + 2.0)}" y="${fy(f.s + f.h - 0.1)}" width="${4 * PXFT}" height="${0.2 * PXFT}" fill="#7fa6ad" stroke="#2f6f82" stroke-width="0.8" ${pe}/>`;
+      }
       const body =
         `<g transform="rotate(${step * 90} ${fx(ce)} ${fy(cs)})" ${pe}>${inner}</g>` +
+        extras +
         `<text x="${fx(ce)}" y="${fy(cs) + 12}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
       wrapMod(g, "bunk", body);
+    }
+
+    function mediaChairCompass() {
+      const face = (F.media && F.media.face) || "E";
+      if (face === "E") return { left: "N", right: "S" };
+      if (face === "W") return { left: "S", right: "N" };
+      if (face === "S") return { left: "E", right: "W" };
+      return { left: "W", right: "E" };
+    }
+
+    function mediaLocal(f, u, v) {
+      if (f.face === "E") return [f.e + f.w - v, f.s + u];
+      if (f.face === "W") return [f.e + v, f.s + f.h - u];
+      if (f.face === "S") return [f.e + f.w - u, f.s + f.h - v];
+      return [f.e + u, f.s + v];
+    }
+
+    function mediaUVBox(f, u0, v0, du, dv) {
+      const pts = [
+        mediaLocal(f, u0, v0), mediaLocal(f, u0 + du, v0),
+        mediaLocal(f, u0, v0 + dv), mediaLocal(f, u0 + du, v0 + dv),
+      ];
+      const e0 = Math.min(pts[0][0], pts[1][0], pts[2][0], pts[3][0]);
+      const s0 = Math.min(pts[0][1], pts[1][1], pts[2][1], pts[3][1]);
+      const e1 = Math.max(pts[0][0], pts[1][0], pts[2][0], pts[3][0]);
+      const s1 = Math.max(pts[0][1], pts[1][1], pts[2][1], pts[3][1]);
+      return [e0, s0, e1 - e0, s1 - s0];
     }
 
     function drawMedia(g) {
       const f = F.media;
       const pe = 'style="pointer-events:none"';
-      const sofaD = 3.25, chairR = 1.35;
+      const sofaD = 3.25, run = 7.5, chaise = 5.5, aisle = 3.0, inset = 0.75;
+      const tvW = 7.25;
+      const fill = "#cfd8c0", tick = "#6f8a4a";
+      const sofaRect = (e, s, w, h) =>
+        `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" fill="${fill}" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+      const ticks = (e, s, w, h, alongNS) => {
+        const n = Math.max(1, Math.round((alongNS ? h : w) / 2.5));
+        let out = "";
+        for (let i = 1; i < n; i++) {
+          if (alongNS) {
+            const yy = s + (h * i) / n;
+            out += `<line x1="${fx(e + 0.1)}" y1="${fy(yy)}" x2="${fx(e + w - 0.1)}" y2="${fy(yy)}" stroke="${tick}" stroke-width="0.6" ${pe}/>`;
+          } else {
+            const xx = e + (w * i) / n;
+            out += `<line x1="${fx(xx)}" y1="${fy(s + 0.1)}" x2="${fx(xx)}" y2="${fy(s + h - 0.1)}" stroke="${tick}" stroke-width="0.6" ${pe}/>`;
+          }
+        }
+        return out;
+      };
+      const ott = (ce, cs) =>
+        `<circle cx="${fx(ce)}" cy="${fy(cs)}" r="${0.95 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.6" ${pe}/>`;
       let body = "";
-      if (f.face === "S") {
-        body += `<rect x="${fx(f.e + f.w / 2 - 3.5)}" y="${fy(f.s + f.h - 0.45)}" width="${7 * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
-        const seatFront = f.s + 0.75 + sofaD;
-        const baseW = 11.5, baseE = f.e + 1.0;
-        body += `<rect x="${fx(baseE)}" y="${fy(f.s + 0.75)}" width="${baseW * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<rect x="${fx(baseE)}" y="${fy(seatFront)}" width="${sofaD * PXFT}" height="${4.5 * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(baseE + 6)}" cy="${fy(seatFront + 2.2)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + 2.0)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + 5.5)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-      } else if (f.face === "N") {
-        body += `<rect x="${fx(f.e + f.w / 2 - 3.5)}" y="${fy(f.s)}" width="${7 * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
-        const seatBack = f.s + f.h - 0.75 - sofaD;
-        const baseW = 11.5, baseE = f.e + 1.0;
-        body += `<rect x="${fx(baseE)}" y="${fy(seatBack)}" width="${baseW * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<rect x="${fx(baseE)}" y="${fy(seatBack - 4.5)}" width="${sofaD * PXFT}" height="${4.5 * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(baseE + 6)}" cy="${fy(seatBack - 2.2)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + f.h - 2.0)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 2.2)}" cy="${fy(f.s + f.h - 5.5)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+      const tv = () => {
+        if (f.face === "E")
+          return `<rect x="${fx(f.e + f.w - 0.45)}" y="${fy(f.s + f.h / 2 - tvW / 2)}" width="${0.4 * PXFT}" height="${tvW * PXFT}" fill="#2b3542" ${pe}/>`;
+        if (f.face === "W")
+          return `<rect x="${fx(f.e)}" y="${fy(f.s + f.h / 2 - tvW / 2)}" width="${0.4 * PXFT}" height="${tvW * PXFT}" fill="#2b3542" ${pe}/>`;
+        if (f.face === "S")
+          return `<rect x="${fx(f.e + f.w / 2 - tvW / 2)}" y="${fy(f.s + f.h - 0.45)}" width="${tvW * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
+        return `<rect x="${fx(f.e + f.w / 2 - tvW / 2)}" y="${fy(f.s)}" width="${tvW * PXFT}" height="${0.4 * PXFT}" fill="#2b3542" ${pe}/>`;
+      };
+      body += tv();
+
+      if (S.mediaCfg === "converse") {
+        const along = (f.face === "N" || f.face === "S") ? f.w : f.h;
+        const into = (f.face === "N" || f.face === "S") ? f.h : f.w;
+        // Crate & Barrel Retreat 4-pc L + chaise (SKU 199626 / 199642):
+        // 160" W × 124" D overall; sofa pieces 44" D (RA sofa 81", armless 72", corner 44").
+        const run = 160 / 12, chaise = 124 / 12, sofaDeep = 44 / 12;
+        const inset = 0.4, chairR = 1.3, gap = 1.25;
+        const chairsLeft = S.mediaChairSide !== "right";
+        const alongNS = (f.face === "E" || f.face === "W");
+        const box = (u0, v0b, du, dv) => {
+          const [e, s, w, h] = mediaUVBox(f, u0, v0b, du, dv);
+          return sofaRect(e, s, w, h) + ticks(e, s, w, h, alongNS ? du > dv : dv > du);
+        };
+        const vBack = into - sofaDeep - inset;
+        const uLong = chairsLeft ? along - run - inset : inset;
+        const uChaise = chairsLeft ? along - sofaDeep - inset : inset;
+        const vChaise = into - chaise - inset;
+        body += box(uLong, vBack, run, sofaDeep);
+        body += box(uChaise, vChaise, sofaDeep, chaise);
+        const chairU = chairsLeft ? inset + chairR : along - inset - chairR;
+        const pair = 4 * chairR + gap;
+        const v1 = (into - pair) / 2 + chairR;
+        const v2 = v1 + 2 * chairR + gap;
+        const swivel = (u, v) => {
+          const [e, s] = mediaLocal(f, u, v);
+          return `<circle cx="${fx(e)}" cy="${fy(s)}" r="${chairR * PXFT}" fill="${fill}" stroke="${f.ec}" stroke-width="0.8" ${pe}/>` +
+            `<circle cx="${fx(e)}" cy="${fy(s)}" r="${0.42 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.55" ${pe}/>`;
+        };
+        body += swivel(chairU, v1) + swivel(chairU, v2);
       } else if (f.face === "E") {
-        body += `<rect x="${fx(f.e + f.w - 0.45)}" y="${fy(f.s + f.h / 2 - 3.5)}" width="${0.4 * PXFT}" height="${7 * PXFT}" fill="#2b3542" ${pe}/>`;
-        const seatFront = f.e + 0.75 + sofaD;
-        const baseH = 11.5, baseS = f.s + 1.0;
-        body += `<rect x="${fx(f.e + 0.75)}" y="${fy(baseS)}" width="${sofaD * PXFT}" height="${baseH * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<rect x="${fx(seatFront)}" y="${fy(baseS)}" width="${4.5 * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(seatFront + 2.2)}" cy="${fy(baseS + 6)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + 2.0)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + 5.5)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        const we = f.e + inset, nS = f.s, sS = f.s + run + aisle;
+        body += sofaRect(we, nS, sofaD, run) + ticks(we, nS, sofaD, run, true);
+        body += sofaRect(we + sofaD, nS, chaise, sofaD) + ticks(we + sofaD, nS, chaise, sofaD, false);
+        body += ott(we + sofaD + 1.8, nS + sofaD + 1.6);
+        body += sofaRect(we, sS, sofaD, run) + ticks(we, sS, sofaD, run, true);
+        body += sofaRect(we + sofaD, sS + run - sofaD, chaise, sofaD) + ticks(we + sofaD, sS + run - sofaD, chaise, sofaD, false);
+        body += ott(we + sofaD + 1.8, sS + run - sofaD - 1.6);
+      } else if (f.face === "W") {
+        const we = f.e + f.w - inset - sofaD, nS = f.s, sS = f.s + run + aisle;
+        body += sofaRect(we, nS, sofaD, run) + ticks(we, nS, sofaD, run, true);
+        body += sofaRect(we - chaise, nS, chaise, sofaD) + ticks(we - chaise, nS, chaise, sofaD, false);
+        body += ott(we - 1.8, nS + sofaD + 1.6);
+        body += sofaRect(we, sS, sofaD, run) + ticks(we, sS, sofaD, run, true);
+        body += sofaRect(we - chaise, sS + run - sofaD, chaise, sofaD) + ticks(we - chaise, sS + run - sofaD, chaise, sofaD, false);
+        body += ott(we - 1.8, sS + run - sofaD - 1.6);
+      } else if (f.face === "S") {
+        const ws = f.s + inset, wE = f.e, eE = f.e + run + aisle;
+        body += sofaRect(wE, ws, run, sofaD) + ticks(wE, ws, run, sofaD, false);
+        body += sofaRect(wE, ws + sofaD, sofaD, chaise) + ticks(wE, ws + sofaD, sofaD, chaise, true);
+        body += ott(wE + sofaD + 1.6, ws + sofaD + 1.8);
+        body += sofaRect(eE, ws, run, sofaD) + ticks(eE, ws, run, sofaD, false);
+        body += sofaRect(eE + run - sofaD, ws + sofaD, sofaD, chaise) + ticks(eE + run - sofaD, ws + sofaD, sofaD, chaise, true);
+        body += ott(eE + run - sofaD - 1.6, ws + sofaD + 1.8);
       } else {
-        body += `<rect x="${fx(f.e)}" y="${fy(f.s + f.h / 2 - 3.5)}" width="${0.4 * PXFT}" height="${7 * PXFT}" fill="#2b3542" ${pe}/>`;
-        const seatBack = f.e + f.w - 0.75 - sofaD;
-        const baseH = 11.5, baseS = f.s + 1.0;
-        body += `<rect x="${fx(seatBack)}" y="${fy(baseS)}" width="${sofaD * PXFT}" height="${baseH * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<rect x="${fx(seatBack - 4.5)}" y="${fy(baseS)}" width="${4.5 * PXFT}" height="${sofaD * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(seatBack - 2.2)}" cy="${fy(baseS + 6)}" r="${1.2 * PXFT}" fill="#e8efd8" stroke="${f.ec}" stroke-width="0.7" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 2.0)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
-        body += `<circle cx="${fx(f.e + f.w - 5.5)}" cy="${fy(f.s + f.h - 2.2)}" r="${chairR * PXFT}" fill="#cfd8c0" stroke="${f.ec}" stroke-width="0.9" ${pe}/>`;
+        const ws = f.s + f.h - inset - sofaD, wE = f.e, eE = f.e + run + aisle;
+        body += sofaRect(wE, ws, run, sofaD) + ticks(wE, ws, run, sofaD, false);
+        body += sofaRect(wE, ws - chaise, sofaD, chaise) + ticks(wE, ws - chaise, sofaD, chaise, true);
+        body += ott(wE + sofaD + 1.6, ws - 1.8);
+        body += sofaRect(eE, ws, run, sofaD) + ticks(eE, ws, run, sofaD, false);
+        body += sofaRect(eE + run - sofaD, ws - chaise, sofaD, chaise) + ticks(eE + run - sofaD, ws - chaise, sofaD, chaise, true);
+        body += ott(eE + run - sofaD - 1.6, ws - 1.8);
       }
       wrapMod(g, "media", body, { skipLabel: true });
     }
 
     function drawWeights(g) {
       wrapMod(g, "weights", "");
+    }
+
+    function drawDanceFloor(g) {
+      const f = F.dance;
+      if (!f) return;
+      const pe = 'style="pointer-events:none"';
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      const dash = Math.max(5, 0.85 * PXFT);
+      g.s += `<g data-fx="dance" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.18" stroke="${f.ec}" stroke-width="2.2" stroke-dasharray="${dash} ${dash * 0.65}"/>`;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 3}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>dance ${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      g.s += `</g>`;
     }
 
     function drawDanceStrip(g, key, title) {
@@ -1877,7 +2609,7 @@
       const f = F.bar;
       const pe = 'style="pointer-events:none"';
       const backT = 2.08, island = 2.25, stoolD = 1.75;
-      const stools = 5;
+      const stools = S.stools || 4;
       let body = "";
       if (f.face === "W") {
         body += `<rect x="${fx(f.e + f.w - backT)}" y="${fy(f.s)}" width="${backT * PXFT}" height="${f.h * PXFT}" fill="#3a2f22" ${pe}/>`;
@@ -1918,28 +2650,26 @@
       const tl = 3, tw = 3;
       const twd = longX ? tl : tw, thd = longX ? tw : tl;
       const te = f.e + (f.w - twd) / 2, ts = f.s + (f.h - thd) / 2;
-      const ideal = 3;
-      const iw = twd + 2 * ideal, ih = thd + 2 * ideal;
+      const CD = 1.67, CW = 1.5, beyond = 1;
+      const iw = twd + 2 * (CD + beyond), ih = thd + 2 * (CD + beyond);
       const ie = te + twd / 2 - iw / 2, is_ = ts + thd / 2 - ih / 2;
       g.s += `<g data-fx="table" style="cursor:grab">`;
-      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" fill-opacity="0.22" stroke="none"/>`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" fill-opacity="0.18" stroke="none"/>`;
       g.s += `<rect x="${fx(ie)}" y="${fy(is_)}" width="${iw * PXFT}" height="${ih * PXFT}" rx="2" fill="none" stroke="${f.ec}" stroke-width="1.2" stroke-dasharray="5 3" ${pe}/>`;
-      const CD = 1.67, CW = 1.4;
       const chair = (e, s, w, h) =>
-        `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" rx="2" fill="#e8dcc4" stroke="#7a6338" stroke-width="0.6" ${pe}/>`;
+        `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" rx="2.5" fill="#e8dcc4" stroke="#7a6338" stroke-width="0.7" ${pe}/>`;
       if (longX) {
-        chair(te + tl / 2 - CW / 2, ts - CD, CW, CD);
-        chair(te + tl / 2 - CW / 2, ts + thd, CW, CD);
-        chair(te - CD, ts + tw / 2 - CW / 2, CD, CW);
-        chair(te + twd, ts + tw / 2 - CW / 2, CD, CW);
+        g.s += chair(te + tl / 2 - CW / 2, ts - CD, CW, CD);
+        g.s += chair(te + tl / 2 - CW / 2, ts + thd, CW, CD);
+        g.s += chair(te - CD, ts + tw / 2 - CW / 2, CD, CW);
+        g.s += chair(te + twd, ts + tw / 2 - CW / 2, CD, CW);
       } else {
-        chair(te - CD, ts + tl / 2 - CW / 2, CD, CW);
-        chair(te + twd, ts + tl / 2 - CW / 2, CD, CW);
-        chair(te + tw / 2 - CW / 2, ts - CD, CW, CD);
-        chair(te + tw / 2 - CW / 2, ts + thd, CW, CD);
+        g.s += chair(te - CD, ts + tl / 2 - CW / 2, CD, CW);
+        g.s += chair(te + twd, ts + tl / 2 - CW / 2, CD, CW);
+        g.s += chair(te + tw / 2 - CW / 2, ts - CD, CW, CD);
+        g.s += chair(te + tw / 2 - CW / 2, ts + thd, CW, CD);
       }
       g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${twd * PXFT}" height="${thd * PXFT}" rx="2" fill="#cbb890" stroke="#7a6338" stroke-width="1" ${pe}/>`;
-      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 3}" text-anchor="middle" font-size="9" fill="${f.tc}" font-weight="700" ${pe}>36×36 · 4</text>`;
       g.s += `</g>`;
     }
 
@@ -1953,14 +2683,12 @@
       const longX = (f.face === "N" || f.face === "S");
       const tw = longX ? tLen : tW, th = longX ? tW : tLen;
       const te = f.e + (f.w - tw) / 2, ts = f.s + (f.h - th) / 2;
-      g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${tw * PXFT}" height="${th * PXFT}" fill="#2f6f4a" stroke="#204d34" stroke-width="1.2" ${pe}/>`;
+      g.s += `<rect x="${fx(te)}" y="${fy(ts)}" width="${tw * PXFT}" height="${th * PXFT}" rx="2" fill="#6a8a72" stroke="#4a6a52" stroke-width="1" ${pe}/>`;
       for (const [px, py] of [[0, 0], [0.5, 0], [1, 0], [0, 1], [0.5, 1], [1, 1]]) {
-        g.s += `<circle cx="${fx(te + tw * px)}" cy="${fy(ts + th * py)}" r="4" fill="#141414" ${pe}/>`;
+        g.s += `<circle cx="${fx(te + tw * px)}" cy="${fy(ts + th * py)}" r="3" fill="#3a4a3e" ${pe}/>`;
       }
       const fe = faceEdge(f);
       g.s += `<line x1="${fx(fe[0])}" y1="${fy(fe[1])}" x2="${fx(fe[2])}" y2="${fy(fe[3])}" stroke="${f.ec}" stroke-width="3.5" stroke-linecap="round" ${pe}/>`;
-      g.s += `<text x="${fx(te + tw / 2)}" y="${fy(ts + th / 2) - 2}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700" ${pe}>pool</text>`;
-      g.s += `<text x="${fx(te + tw / 2)}" y="${fy(ts + th / 2) + 10}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700" ${pe}>table</text>`;
       g.s += `</g>`;
     }
 
@@ -2269,8 +2997,10 @@
         const z0 = zones();
         const de = p.e - drag.pe;
         const ds = p.s - drag.ps;
-        // eastGap shrinks when the building moves east
-        S.eastGap = clamp(Math.round((drag.oe - de) * 4) / 4, 2, 28);
+        // eastGap shrinks when the building moves east. Limits follow the
+        // full envelope (wider west-flush shop hangs toward the fence).
+        const [lo, hi] = eastGapLimits();
+        S.eastGap = clamp(Math.round((drag.oe - de) * 4) / 4, lo, hi);
         S.bS0 = clamp(Math.round((drag.os + ds) * 2) / 2, -30, 10);
         const z1 = zones();
         shiftInteriors(z1.liv.e0 - z0.liv.e0, z1.shop.s0 - z0.shop.s0);
@@ -2313,6 +3043,7 @@
       else if (k === "bunk") applyBunk();
       else if (k === "media") applyMedia();
       else if (k === "weights") applyWeights();
+      else if (k === "dance") applyDance();
       else if (k === "table") applyTable();
       else if (k === "ptable") applyPtable();
       else if (k === "dining") applyDining();
@@ -2343,7 +3074,10 @@
         const f = F[k];
         return `(${f.w.toFixed(2)}, ${f.h.toFixed(2)}, ${f.e.toFixed(2)}, ${f.s.toFixed(2)}, "${f.face}")  # w,h,e,s,face`;
       };
+      const sel = el("presetSel").value;
+      const presetName = (sel && sel !== NEW_PRESET) ? sel.trim() : "";
       return `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = ${JSON.stringify(presetName)}
 livingW   = ${S.livingW}
 livingD   = ${S.livingD}
 gymW      = ${S.gymW}
@@ -2364,9 +3098,12 @@ patioDep  = ${S.patioDep}
 cageLen   = ${S.cageLen}
 cageWid   = ${S.cageWid}
 barLen    = ${S.barLen}
+stools    = ${S.stools || 4}
 bathAlong = ${S.bathAlong}
 bathInto  = ${S.bathInto}
 bunkLen   = ${S.bunkLen}
+bunkDoorAt = "${S.bunkDoorAt || "W"}"
+bunkDoorSwing = "${S.bunkDoorSwing || "closet"}"
 mirrorLen = ${S.mirrorLen}
 barreLen  = ${S.barreLen}
 deckW     = ${S.deckW}
@@ -2377,12 +3114,15 @@ diningLen = ${S.diningLen}
 diningChairs = ${S.diningChairs}
 diningEnds = ${S.diningEnds}
 sitCfg    = "${S.sitCfg}"
+mediaCfg  = "${S.mediaCfg}"
+mediaChairSide = "${S.mediaChairSide}"
 office    = ${o(S.enOffice, "office")}
 closet    = ${o(S.enCloset, "closet")}
 bath      = ${o(S.enBath, "bath")}
 bunk      = ${o(S.enBunk, "bunk")}
 media     = ${o(S.enMedia, "media")}
 weights   = ${o(S.enWeights, "weights")}
+dance     = ${o(S.enDance, "dance")}
 table     = ${o(S.enTable, "table")}
 ptable    = ${o(S.enPtable, "ptable")}
 dining    = ${o(S.enDining, "dining")}
@@ -2396,7 +3136,97 @@ spa       = ${o(S.enSpa, "spa")}
 deck      = ${o(S.enDeck, "deck")}
 fire      = ${o(S.enFire, "fire")}
 mirror    = ${o(S.enMirror, "mirror")}
-barre     = ${o(S.enMirror, "barre")}`;
+barre     = ${o(S.enMirror, "barre")}
+spend     = living ${Spend.living}/sf · ac ${Spend.ac}/sf · noAc ${Spend.noAc}/sf · patio ${Spend.patio}/sf · court ${Spend.court}/sf · cage ${Spend.cage}/sf · pool ${Spend.pool}
+spendTot  = ${Math.round(spendSum())}`;
+    }
+
+    const PARAM_MOD = {
+      office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+      media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
+      dining: "enDining", sit: "enSit", bar: "enBar",
+      patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
+      mirror: "enMirror", barre: "enMirror", deck: "enDeck",
+    };
+    const PARAM_SKIP = { overall: 1, shop: 1, gym: 1, living: 1, spendTot: 1 };
+    const PARAM_INT = { poolLen: 1, stools: 1, diningChairs: 1 };
+    const PARAM_STR = { gymSide: 1, shopFlush: 1, gymFlush: 1, sitCfg: 1, mediaCfg: 1, mediaChairSide: 1, bunkDoorAt: 1, bunkDoorSwing: 1 };
+
+    function looksLikeParams(text) {
+      return /(?:^|\n)\s*(?:#\s*site-studio params|livingW\s*=|garageW\s*=)/.test(text);
+    }
+
+    function applyParamsText(text) {
+      if (!looksLikeParams(text)) return null;
+      const tuple = /^\(\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.-]+),\s*"([NSEW])"\s*\)/;
+      let pastedName = "";
+      const stripComment = raw => {
+        let q = false, out = "";
+        for (const ch of raw) {
+          if (ch === '"') q = !q;
+          if (ch === "#" && !q) break;
+          out += ch;
+        }
+        return out.trim();
+      };
+      for (const raw of text.split(/\n/)) {
+        const line = stripComment(raw.replace(/\r$/, ""));
+        if (!line) continue;
+        const m = line.match(/^(\w+)\s*=\s*(.*)$/);
+        if (!m) continue;
+        const key = m[1], val = m[2].trim();
+        if (key === "name") {
+          try { pastedName = JSON.parse(val); } catch (_) { pastedName = val.replace(/^"|"$/g, ""); }
+          pastedName = (pastedName || "").trim();
+          continue;
+        }
+        if (PARAM_SKIP[key]) continue;
+        if (key === "spend") {
+          const re = /(living|ac|noAc|patio|court|cage|pool)\s+([\d.]+)/g;
+          let hit;
+          while ((hit = re.exec(val))) Spend[hit[1]] = parseFloat(hit[2]);
+          saveSpend();
+          continue;
+        }
+        if (PARAM_MOD[key]) {
+          if (val === "off") {
+            S[PARAM_MOD[key]] = false;
+            continue;
+          }
+          const t = val.match(tuple);
+          if (!t || !F[key]) continue;
+          S[PARAM_MOD[key]] = true;
+          F[key].w = parseFloat(t[1]);
+          F[key].h = parseFloat(t[2]);
+          F[key].e = parseFloat(t[3]);
+          F[key].s = parseFloat(t[4]);
+          F[key].face = t[5];
+          continue;
+        }
+        if (key === "bunkDoorHinge") {
+          const h = val.replace(/^"|"$/g, "").toUpperCase();
+          if ("NSEW".includes(h)) S.bunkDoorAt = h;
+          continue;
+        }
+        if (key === "bunkDoorCorner") continue;
+        if (!(key in S)) continue;
+        if (val === "true" || val === "false") S[key] = val === "true";
+        else if (PARAM_STR[key]) S[key] = val.replace(/^"|"$/g, "");
+        else if (PARAM_INT[key]) S[key] = parseInt(val, 10);
+        else {
+          const n = parseFloat(val);
+          if (!Number.isNaN(n)) S[key] = n;
+        }
+      }
+      clampEastGap();
+      draw();
+      return { name: pastedName };
+    }
+
+    function openPasteDlg(prefill) {
+      el("pasteBox").value = prefill || "";
+      el("pasteDlg").showModal();
+      el("pasteBox").focus();
     }
 
     function rememberBldg() {
@@ -2435,8 +3265,8 @@ barre     = ${o(S.enMirror, "barre")}`;
       applyPatio();
     }
 
-    el("livingW").addEventListener("input", e => { S.livingW = parseFloat(e.target.value); applyPatio(); draw(); });
-    el("gymW").addEventListener("input", e => { S.gymW = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("livingW").addEventListener("input", e => { S.livingW = parseFloat(e.target.value); clampEastGap(); applyPatio(); draw(); });
+    el("gymW").addEventListener("input", e => { S.gymW = parseFloat(e.target.value); clampEastGap(); applyPatio(); draw(); });
     el("livingD").addEventListener("input", e => {
       if (S.gymSide === "S") {
         const cut = zones().liv.s1;
@@ -2457,7 +3287,7 @@ barre     = ${o(S.enMirror, "barre")}`;
       }
       applyPatio(); draw();
     });
-    el("garageW").addEventListener("input", e => { S.garageW = parseFloat(e.target.value); applyPatio(); draw(); });
+    el("garageW").addEventListener("input", e => { S.garageW = parseFloat(e.target.value); clampEastGap(); applyPatio(); draw(); });
     el("garageD").addEventListener("input", e => {
       const cut = zones().shop.s1;
       S.garageD = parseFloat(e.target.value);
@@ -2472,6 +3302,17 @@ barre     = ${o(S.enMirror, "barre")}`;
     el("bathAlong").addEventListener("input", e => { S.bathAlong = parseFloat(e.target.value); applyBath(); draw(); });
     el("bathInto").addEventListener("input", e => { S.bathInto = parseFloat(e.target.value); applyBath(); draw(); });
     el("bunkLen").addEventListener("input", e => { S.bunkLen = parseFloat(e.target.value); applyBunk(); draw(); });
+    document.querySelectorAll("[data-bunkdoor]").forEach(b => b.addEventListener("click", () => {
+      if (b.disabled) return;
+      S.bunkDoorAt = b.dataset.bunkdoor;
+      bunkDoorNorm();
+      draw();
+    }));
+    document.querySelectorAll("[data-bunkswing]").forEach(b => b.addEventListener("click", () => {
+      S.bunkDoorSwing = b.dataset.bunkswing;
+      bunkDoorNorm();
+      draw();
+    }));
     el("mirrorLen").addEventListener("input", e => { S.mirrorLen = parseFloat(e.target.value); applyMirror(); applyBarre(); draw(); });
     el("barreLen").addEventListener("input", e => { S.barreLen = parseFloat(e.target.value); applyBarre(); draw(); });
     el("deckW").addEventListener("input", e => { S.deckW = parseFloat(e.target.value); applyDeck(); draw(); });
@@ -2528,17 +3369,23 @@ barre     = ${o(S.enMirror, "barre")}`;
     document.querySelectorAll("[data-sit]").forEach(b => b.addEventListener("click", () => {
       S.sitCfg = b.dataset.sit; applySit(); draw();
     }));
+    document.querySelectorAll("[data-mediacfg]").forEach(b => b.addEventListener("click", () => {
+      S.mediaCfg = b.dataset.mediacfg; applyMedia(); draw();
+    }));
+    document.querySelectorAll("[data-mediachair]").forEach(b => b.addEventListener("click", () => {
+      S.mediaChairSide = b.dataset.mediachair; applyMedia(); draw();
+    }));
     document.querySelectorAll("[data-pt]").forEach(b => b.addEventListener("click", () => {
       S.poolLen = parseInt(b.dataset.pt, 10); applyPtable(); draw();
     }));
 
     document.querySelectorAll("[data-shopflush]").forEach(b => b.addEventListener("click", () => {
       S.shopFlush = b.dataset.shopflush;
-      applyPatio(); draw();
+      clampEastGap(); applyPatio(); draw();
     }));
     document.querySelectorAll("[data-gymflush]").forEach(b => b.addEventListener("click", () => {
       S.gymFlush = b.dataset.gymflush;
-      applyPatio(); draw();
+      clampEastGap(); applyPatio(); draw();
     }));
     document.querySelectorAll("[data-gymside]").forEach(b => b.addEventListener("click", () => {
       setGymSide(b.dataset.gymside);
@@ -2556,7 +3403,7 @@ barre     = ${o(S.enMirror, "barre")}`;
 
     [["enPatio", "enPatio"], ["enCage", "enCage"], ["enOffice", "enOffice"],
     ["enCloset", "enCloset"], ["enBath", "enBath"], ["enBunk", "enBunk"],
-    ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enTable", "enTable"],
+    ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enDance", "enDance"], ["enTable", "enTable"],
     ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
     ["enBar", "enBar"], ["enPool", "enPool"], ["enSpa", "enSpa"], ["enCourt", "enCourt"], ["enFire", "enFire"],
     ["enMirror", "enMirror"], ["enDeck", "enDeck"]]
@@ -2565,10 +3412,10 @@ barre     = ${o(S.enMirror, "barre")}`;
     document.querySelectorAll("[data-rot]").forEach(b => b.addEventListener("click", () => rotate(b.dataset.rot)));
 
     const EDIT_TITLES = {
-      living: "Living", gym: "Dance/Gym", shop: "Shop", patio: "Patio", cage: "Batting cage",
+      living: "Living", gym: "Gym", shop: "Shop", patio: "Patio", cage: "Batting cage",
       deck: "Pool deck", pool: "Pool", spa: "Hot tub", court: "Pickleball", fire: "Fire pit",
       office: "Office", closet: "Pool closet", bath: "Bathroom", bunk: "Bunk",
-      media: "Media", weights: "Weights", table: "Game table", ptable: "Pool table",
+      media: "Media", weights: "Weights", dance: "Dance floor", table: "Game table", ptable: "Pool table",
       dining: "Dining", sit: "Sitting", bar: "Bar",
     };
 
@@ -2595,6 +3442,22 @@ barre     = ${o(S.enMirror, "barre")}`;
     el("editDlg").addEventListener("click", e => {
       if (e.target === el("editDlg")) el("editDlg").close();
     });
+    el("spendBtn").addEventListener("click", () => {
+      renderSpend();
+      const dlg = el("spendDlg");
+      if (!dlg.open) dlg.showModal();
+    });
+    el("spendClose").addEventListener("click", () => el("spendDlg").close());
+    el("spendDlg").addEventListener("click", e => {
+      if (e.target === el("spendDlg")) el("spendDlg").close();
+    });
+    ["living", "ac", "noAc", "patio", "court", "cage", "pool"].forEach(key => {
+      el("spend_" + key).addEventListener("input", e => {
+        Spend[key] = parseFloat(e.target.value) || 0;
+        saveSpend();
+        renderSpend();
+      });
+    });
     document.querySelectorAll(".comp-row[data-edit]").forEach(row => {
       row.addEventListener("click", e => {
         if (e.target.closest("input")) return;
@@ -2603,53 +3466,329 @@ barre     = ${o(S.enMirror, "barre")}`;
     });
 
     el("presetSel").addEventListener("change", () => {
-      if (el("presetSel").value) el("presetName").value = el("presetSel").value;
+      if (isNamedPreset(el("presetSel").value)) {
+        pendingName = "";
+        loadPreset();
+      } else {
+        pendingName = "";
+        el("presetName").value = "";
+        el("presetName").focus();
+      }
+      syncPresetNameRow();
+      syncDeleteBtn();
     });
-    el("copyBtn").addEventListener("click", () => {
-      navigator.clipboard.writeText(paramsText());
-      el("copyBtn").textContent = "Copied ✓";
-      setTimeout(() => el("copyBtn").textContent = "Copy params", 1400);
+    el("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(paramsText());
+        flashBtn(el("copyBtn"));
+      } catch (_) {
+        openPasteDlg(paramsText());
+        flashBtn(el("copyBtn"), "err");
+      }
     });
+    el("pasteBtn").addEventListener("click", () => openPasteDlg(""));
+    el("pasteApply").addEventListener("click", () => {
+      const text = el("pasteBox").value;
+      if (!looksLikeParams(text)) { flashBtn(el("pasteApply"), "err"); return; }
+      el("pasteDlg").close();
+      finishPaste(text);
+    });
+    el("pasteCancel").addEventListener("click", () => el("pasteDlg").close());
 
     const PRESET_KEY = "site-studio-presets-v1";
+    const NEW_PRESET = "__new__";
+    const DEFAULT_PRESET = "Gym entry from patio";
+    const BUILTIN_ORDER = [
+      "Gym entry from patio",
+      "N/S Gym @ South End",
+      "Media Nook + Middle Gym",
+    ];
+    const BUILTIN_PRESETS = [
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "Gym entry from patio"
+livingW   = 23
+livingD   = 52
+gymW      = 39
+gymD      = 15
+gymSide   = "S"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 39
+garageD   = 30
+shopFlush = "W"
+gymFlush  = "E"
+eastGap   = 43.25     # living east → east fence
+bS0       = -10
+overall   = 55.00 × 97.00  # L
+shop      = e 140.85…179.85  s -10.00…20.00
+gym       = e 124.85…163.85  s 72.00…87.00
+living    = e 140.85…163.85  s 20.00…72.00
+patioRun  = 35
+patioDep  = 15
+cageLen   = 70
+cageWid   = 14
+barLen    = 12.5
+stools    = 4
+bathAlong = 13
+bathInto  = 9.5
+bunkLen   = 13
+bunkDoorAt = "N"
+bunkDoorSwing = "closet"
+mirrorLen = 18
+barreLen  = 12
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "converse"
+mediaChairSide = "left"
+office    = (12.00, 10.00, 140.94, 9.92, "W")  # w,h,e,s,face
+closet    = off
+bath      = (9.50, 13.00, 141.03, 58.85, "W")  # w,h,e,s,face
+bunk      = (13.00, 13.00, 150.59, 58.95, "E")  # w,h,e,s,face
+media     = (18.00, 13.50, 143.05, 20.01, "N")  # w,h,e,s,face
+weights   = (7.50, 8.00, 155.61, 78.89, "S")  # w,h,e,s,face
+dance     = (30.00, 10.00, 125.02, 73.14, "N")  # w,h,e,s,face
+table     = (8.34, 8.34, 154.60, 35.02, "N")  # w,h,e,s,face
+ptable    = (13.00, 18.00, 141.09, 40.03, "W")  # w,h,e,s,face
+dining    = off
+sit       = off
+bar       = (9.50, 12.50, 154.15, 45.35, "W")  # w,h,e,s,face
+patio     = (15.00, 35.00, 125.85, 37.00, "E")  # w,h,e,s,face
+cage      = (14.00, 70.00, 165.92, 20.17, "N")  # w,h,e,s,face
+court     = (60.00, 30.00, 121.78, 98.21, "N")  # w,h,e,s,face
+pool      = (40.00, 46.00, 75.61, 27.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 99.79, 25.66, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 62.27, 14.88, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 75.85, 86.10, "N")  # w,h,e,s,face
+mirror    = (18.00, 0.80, 131.06, 86.20, "S")  # w,h,e,s,face
+barre     = (12.00, 0.90, 136.83, 72.00, "N")  # w,h,e,s,face
+spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
+spendTot  = 604412`,
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "N/S Gym @ South End"
+livingW   = 25.5
+livingD   = 42
+gymW      = 18
+gymD      = 30
+gymSide   = "S"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 42
+garageD   = 30
+shopFlush = "W"
+gymFlush  = "W"
+eastGap   = 41.75     # living east → east fence
+bS0       = -10
+overall   = 42.00 × 102.00  # L
+shop      = e 139.85…181.85  s -10.00…20.00
+gym       = e 139.85…157.85  s 62.00…92.00
+living    = e 139.85…165.35  s 20.00…62.00
+patioRun  = 35
+patioDep  = 15
+cageLen   = 70
+cageWid   = 14
+barLen    = 11
+stools    = 4
+bathAlong = 8
+bathInto  = 12
+bunkLen   = 13.5
+bunkDoorAt = "W"
+bunkDoorSwing = "closet"
+mirrorLen = 14
+barreLen  = 10
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "dualL"
+mediaChairSide = "left"
+office    = (12.00, 10.00, 139.96, 9.94, "W")  # w,h,e,s,face
+closet    = off
+bath      = (12.00, 8.00, 139.94, 20.00, "W")  # w,h,e,s,face
+bunk      = (13.00, 13.50, 152.16, 14.50, "W")  # w,h,e,s,face
+media     = (18.00, 13.50, 143.50, 48.47, "S")  # w,h,e,s,face
+weights   = (8.00, 7.50, 149.81, 62.23, "E")  # w,h,e,s,face
+dance     = (10.00, 30.00, 143.85, 62.00, "E")  # w,h,e,s,face
+table     = (8.34, 8.34, 157.21, 27.57, "N")  # w,h,e,s,face
+ptable    = (13.00, 18.00, 141.00, 30.47, "W")  # w,h,e,s,face
+dining    = off
+sit       = off
+bar       = (9.50, 11.00, 155.83, 36.65, "W")  # w,h,e,s,face
+patio     = (15.00, 35.00, 124.85, 20.00, "E")  # w,h,e,s,face
+cage      = (14.00, 70.00, 167.85, 20.17, "N")  # w,h,e,s,face
+court     = (60.00, 30.00, 121.78, 98.21, "N")  # w,h,e,s,face
+pool      = (40.00, 46.00, 75.61, 27.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 99.79, 25.66, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 62.27, 14.88, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 75.85, 86.10, "N")  # w,h,e,s,face
+mirror    = (0.80, 14.00, 139.85, 74.76, "W")  # w,h,e,s,face
+barre     = (0.90, 10.00, 156.95, 78.99, "E")  # w,h,e,s,face
+spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
+spendTot  = 592027`,
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "Media Nook + Middle Gym"
+livingW   = 36
+livingD   = 32
+gymW      = 36
+gymD      = 18
+gymSide   = "N"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 36
+garageD   = 30
+shopFlush = "W"
+gymFlush  = "W"
+eastGap   = 28     # living east → east fence
+bS0       = -10
+overall   = 36.00 × 80.00
+shop      = e 143.10…179.10  s -10.00…20.00
+gym       = e 143.10…179.10  s 20.00…38.00
+living    = e 143.10…179.10  s 38.00…70.00
+patioRun  = 39.5
+patioDep  = 15
+cageLen   = 70
+cageWid   = 14
+barLen    = 10.5
+stools    = 4
+bathAlong = 7.5
+bathInto  = 10.5
+bunkLen   = 14
+bunkDoorAt = "W"
+bunkDoorSwing = "closet"
+mirrorLen = 14
+barreLen  = 10
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "dualL"
+mediaChairSide = "left"
+office    = (12.00, 10.00, 167.10, 10.00, "W")  # w,h,e,s,face
+closet    = (6.00, 8.00, 143.10, 12.00, "W")  # w,h,e,s,face
+bath      = (10.50, 7.50, 143.10, 30.50, "W")  # w,h,e,s,face
+bunk      = (13.00, 14.00, 165.60, 56.00, "E")  # w,h,e,s,face
+media     = (13.50, 18.00, 165.60, 38.00, "E")  # w,h,e,s,face
+weights   = (8.00, 7.50, 143.41, 20.16, "W")  # w,h,e,s,face
+dance     = (30.00, 10.00, 148.93, 23.62, "N")  # w,h,e,s,face
+table     = (8.34, 8.34, 144.20, 39.01, "N")  # w,h,e,s,face
+ptable    = (13.00, 18.00, 143.10, 52.00, "E")  # w,h,e,s,face
+dining    = off
+sit       = off
+bar       = (9.50, 10.50, 156.07, 59.50, "W")  # w,h,e,s,face
+patio     = (15.00, 39.50, 128.10, 30.50, "E")  # w,h,e,s,face
+cage      = (14.00, 70.00, 181.23, 0.01, "N")  # w,h,e,s,face
+court     = (60.00, 30.00, 128.17, 79.28, "N")  # w,h,e,s,face
+pool      = (40.00, 46.00, 79.06, 32.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 102.56, 30.82, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 65.46, 14.95, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 72.67, 94.78, "N")  # w,h,e,s,face
+mirror    = (14.00, 0.80, 162.19, 20.00, "N")  # w,h,e,s,face
+barre     = (10.00, 0.90, 166.68, 37.10, "S")  # w,h,e,s,face
+spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
+spendTot  = 599912`,
+    ];
     const clone = o => JSON.parse(JSON.stringify(o));
     const loadStore = () => { try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch (_) { return {}; } };
     const saveStore = s => localStorage.setItem(PRESET_KEY, JSON.stringify(s));
-    let presetMsgT = null;
-    function presetMsg(t) {
-      el("presetMsg").textContent = t;
-      clearTimeout(presetMsgT);
-      presetMsgT = setTimeout(() => { el("presetMsg").textContent = ""; }, 2200);
+    function isNamedPreset(v) { return !!(v && v !== NEW_PRESET); }
+    function isBuiltinPreset(v) { return BUILTIN_ORDER.includes(v); }
+    function syncDeleteBtn() {
+      const name = el("presetSel").value;
+      const pinned = isBuiltinPreset(name);
+      el("presetDelete").disabled = pinned || !isNamedPreset(name);
+      el("presetDelete").title = pinned ? "Pinned default — stays on reload" : "Delete preset";
+    }
+    const flashT = new WeakMap();
+    function flashBtn(node, kind) {
+      if (!node) return;
+      node.classList.remove("flash-ok", "flash-err");
+      void node.offsetWidth;
+      node.classList.add(kind === "err" ? "flash-err" : "flash-ok");
+      clearTimeout(flashT.get(node));
+      const t = setTimeout(() => node.classList.remove("flash-ok", "flash-err"), 700);
+      flashT.set(node, t);
     }
     function refreshPresetSelect(sel) {
       const store = loadStore();
-      const names = Object.keys(store).sort();
+      const builtin = BUILTIN_ORDER.filter(n => store[n]);
+      const custom = Object.keys(store).filter(n => !BUILTIN_ORDER.includes(n)).sort();
+      const names = builtin.concat(custom);
+      const pick = sel || NEW_PRESET;
       el("presetSel").innerHTML =
-        `<option value="">— named presets —</option>` +
-        names.map(n => `<option value="${n.replace(/"/g, "&quot;")}"${n === sel ? " selected" : ""}>${n}</option>`).join("");
+        `<option value="${NEW_PRESET}"${pick === NEW_PRESET ? " selected" : ""}>New preset</option>` +
+        names.map(n => `<option value="${n.replace(/"/g, "&quot;")}"${n === pick ? " selected" : ""}>${n}</option>`).join("");
+      syncDeleteBtn();
     }
-    function savePreset() {
-      const name = (el("presetName").value || el("presetSel").value || "").trim();
-      if (!name) { presetMsg("name it first"); return; }
+    function writePreset(name) {
       const store = loadStore();
       const existed = !!store[name];
       store[name] = { S: clone(S), F: clone(F) };
       saveStore(store);
       refreshPresetSelect(name);
-      presetMsg(existed ? `updated “${name}”` : `saved “${name}”`);
+      syncPresetNameRow();
+      return existed;
+    }
+    function syncPresetNameRow() {
+      const isNew = !isNamedPreset(el("presetSel").value);
+      el("presetNameRow").classList.toggle("is-open", isNew);
+      if (isNew && pendingName && !el("presetName").value) el("presetName").value = pendingName;
+    }
+    let pendingName = "";
+    function savePreset() {
+      const selected = el("presetSel").value;
+      if (isNamedPreset(selected)) {
+        writePreset(selected);
+        flashBtn(el("presetSave"));
+        return;
+      }
+      const name = el("presetName").value.trim();
+      if (!name) {
+        syncPresetNameRow();
+        el("presetName").focus();
+        flashBtn(el("presetSave"), "err");
+        return;
+      }
+      pendingName = "";
+      writePreset(name);
+      flashBtn(el("presetSave"));
+    }
+    function finishPaste(text) {
+      const got = applyParamsText(text);
+      if (!got) return false;
+      pendingName = got.name || "";
+      refreshPresetSelect(NEW_PRESET);
+      el("presetName").value = pendingName;
+      syncPresetNameRow();
+      flashBtn(el("pasteBtn"));
+      return true;
     }
     function loadPreset() {
       const name = el("presetSel").value;
-      if (!name) { presetMsg("pick a preset"); return; }
+      if (!isNamedPreset(name)) return;
       const snap = loadStore()[name];
-      if (!snap) { presetMsg("not found"); return; }
+      if (!snap) return;
       Object.assign(S, clone(snap.S));
+      if (S.stools == null) S.stools = 4;
+      if (!S.mediaCfg) S.mediaCfg = "dualL";
+      if (!S.mediaChairSide) S.mediaChairSide = "left";
       if (!S.shopFlush) S.shopFlush = S.flush || "E";
       if (!S.gymFlush) S.gymFlush = S.flush || "E";
       if (S.deckW == null) S.deckW = DECK_CAD_W + (S.deckE || 0);
       if (S.deckL == null) S.deckL = DECK_CAD_H + (S.deckN || 0);
       if (S.enDeck == null) S.enDeck = true;
       if (S.enSpa == null) S.enSpa = true;
+      if (snap.S.enDance == null) S.enDance = true;
+      if (snap.S.bunkDoorAt == null) {
+        S.bunkDoorAt = (snap.S.bunkDoorHinge && "NSEW".includes(snap.S.bunkDoorHinge)) ? snap.S.bunkDoorHinge : "W";
+      }
+      if (snap.S.bunkDoorSwing == null) S.bunkDoorSwing = "closet";
       delete S.flush;
       F = clone(snap.F);
       if (!F.deck) {
@@ -2664,36 +3803,43 @@ barre     = ${o(S.enMirror, "barre")}`;
           c: "#9fd0dc", ec: "#2a6a78", tc: "#123844"
         });
       }
-      el("presetName").value = name;
+      if (!F.dance) seedDance();
+      bunkDoorNorm();
       draw();
-      presetMsg(`loaded “${name}”`);
     }
     function deletePreset() {
       const name = el("presetSel").value;
-      if (!name) { presetMsg("pick a preset"); return; }
+      if (!isNamedPreset(name) || isBuiltinPreset(name)) { flashBtn(el("presetDelete"), "err"); return; }
       const store = loadStore();
       delete store[name];
       saveStore(store);
+      pendingName = "";
+      el("presetName").value = "";
       refreshPresetSelect();
-      presetMsg(`deleted “${name}”`);
+      syncPresetNameRow();
+      flashBtn(el("presetDelete"));
     }
     el("presetSave").addEventListener("click", savePreset);
-    el("presetLoad").addEventListener("click", loadPreset);
     el("presetDelete").addEventListener("click", deletePreset);
-    refreshPresetSelect();
+    el("presetName").addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); savePreset(); }
+    });
 
-    schemeC2();
-    {
+    function installBuiltinPresets() {
       const store = loadStore();
-      store["C-2 NEW"] = { S: clone(S), F: clone(F) };
-      if (!store["L shop 44"]) {
-        schemeL();
-        store["L shop 44"] = { S: clone(S), F: clone(F) };
+      delete store["C-2 NEW"];
+      delete store["L shop 44"];
+      for (const text of BUILTIN_PRESETS) {
         schemeC2();
+        const got = applyParamsText(text);
+        if (got && got.name) store[got.name] = { S: clone(S), F: clone(F) };
       }
       saveStore(store);
-      refreshPresetSelect("C-2 NEW");
     }
+    installBuiltinPresets();
+    refreshPresetSelect(DEFAULT_PRESET);
+    loadPreset();
+    syncPresetNameRow();
     setZoom(2.2);
     scrollToLiving();
   </script>
