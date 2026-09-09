@@ -395,6 +395,12 @@
       font-size: 13px;
     }
 
+    .preset-row select optgroup {
+      color: var(--sub);
+      font-style: normal;
+      font-weight: 600;
+    }
+
     .row label {
       flex: 1;
       font-size: 13px;
@@ -1321,7 +1327,7 @@
               </svg>
             </button>
           </div>
-          <div class="hint">New preset keeps this layout. Name it, then Save. Import pastes a block.</div>
+          <div class="hint">Masters are shared baselines. Save on a master makes a copy. Re-select to reset.</div>
         </div>
       </div>
 
@@ -4240,7 +4246,7 @@ spendTot  = ${Math.round(spendSum())}`;
         el("presetName").focus();
       }
       syncPresetNameRow();
-      syncDeleteBtn();
+      syncPresetBtns();
     });
     el("copyBtn").addEventListener("click", async () => {
       try {
@@ -4268,7 +4274,7 @@ spendTot  = ${Math.round(spendSum())}`;
       "N/S Gym @ South End",
       "Media Nook + Middle Gym",
     ];
-    const BUILTIN_REV = 3;
+    const BUILTIN_REV = 4;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
 name      = "Gym entry from patio"
@@ -4316,9 +4322,9 @@ sitCfg    = "love"
 mediaCfg  = "converse"
 mediaChairSide = "left"
 livEntryKind = "door"
-opens     = {"gymEntry":{"host":"gym","leaf":"double","face":"N","t":0.1,"swing":"in","w":6,"hinge":"start"},"gymCage":{"host":"gym","leaf":"single","face":"E","t":0.27,"swing":"in","w":3,"hinge":"start"},"livEntry":{"host":"liv","leaf":"single","face":"W","t":0.3254744393140217,"swing":"in","w":3,"hinge":"start"},"livWin":{"host":"liv","leaf":"window","face":"W","t":0.5254744393140217,"w":17},"offA":{"host":"office","leaf":"single","face":"S","t":0.1442222689925264,"swing":"in","w":3,"hinge":"start"},"offB":{"host":"office","leaf":"single","face":"W","t":0.18014946259354775,"swing":"in","w":3,"on":true,"hinge":"start"},"bunkEg":{"host":"bunk","leaf":"window","face":"E","t":0.3006800939727867,"w":3},"bathA":{"host":"bath","leaf":"single","face":"E","t":0.35,"swing":"in","w":2.67,"hinge":"start"},"bathB":{"host":"bath","leaf":"single","face":"N","t":0.7944103778204558,"swing":"in","w":2.67,"hinge":"start"},"bathC":{"host":"bath","leaf":"single","face":"W","t":0.5,"swing":"out","w":3,"ext":true,"hinge":"start"},"gymWin":{"host":"gym","leaf":"window","face":"W","t":0.5,"w":10},"offWin":{"host":"office","leaf":"window","face":"W","t":0.5907853266682862,"w":4}}
-bathFix   = {"wd":{"lx":0.28,"ly":10.22,"rot":180},"vanity":{"lx":6.7,"ly":6.82,"rot":270},"toilet":{"lx":3.5,"ly":9.85,"rot":270},"shower":{"lx":0.2,"ly":0.07,"rot":0,"w":5,"h":3.5}}
-office    = (12.00, 10.00, 140.93, 9.83, "W")  # w,h,e,s,face
+opens     = {"gymEntry":{"host":"gym","leaf":"double","face":"N","t":0.1,"swing":"in","w":6,"hinge":"start"},"gymCage":{"host":"gym","leaf":"single","face":"E","t":0.27,"swing":"in","w":3,"hinge":"start"},"livEntry":{"host":"liv","leaf":"single","face":"W","t":0.3254744393140217,"swing":"in","w":3,"hinge":"start"},"livWin":{"host":"liv","leaf":"window","face":"W","t":0.5254744393140217,"w":17},"offA":{"host":"office","leaf":"single","face":"S","t":0.1442222689925264,"swing":"in","w":3,"hinge":"start"},"offB":{"host":"office","leaf":"single","face":"W","t":0.17382403669689045,"swing":"in","w":3,"on":true,"hinge":"start"},"bunkEg":{"host":"bunk","leaf":"window","face":"E","t":0.3006800939727867,"w":3},"bathA":{"host":"bath","leaf":"single","face":"E","t":0.35,"swing":"in","w":2.67,"hinge":"start"},"bathB":{"host":"bath","leaf":"single","face":"N","t":0.7944103778204558,"swing":"in","w":2.67,"hinge":"start"},"bathC":{"host":"bath","leaf":"single","face":"W","t":0.5,"swing":"in","w":3,"ext":true,"hinge":"start"},"gymWin":{"host":"gym","leaf":"window","face":"W","t":0.5,"w":10},"offWin":{"host":"office","leaf":"window","face":"W","t":0.4989324660164522,"w":4}}
+bathFix   = {"wd":{"lx":0.15,"ly":4.83,"rot":180},"vanity":{"lx":6.68,"ly":4.9,"rot":270},"toilet":{"lx":3.33,"ly":4.5,"rot":270},"shower":{"lx":0.2,"ly":0.07,"rot":0,"w":5,"h":3.5}}
+office    = (12.00, 10.00, 140.90, 9.89, "W")  # w,h,e,s,face
 closet    = off
 bath      = (8.50, 13.00, 140.88, 58.99, "W")  # w,h,e,s,face
 bunk      = (14.50, 13.00, 149.44, 59.02, "E")  # w,h,e,s,face
@@ -4489,11 +4495,30 @@ spendTot  = 599912`,
     const saveStore = s => localStorage.setItem(PRESET_KEY, JSON.stringify(s));
     function isNamedPreset(v) { return !!(v && v !== NEW_PRESET); }
     function isBuiltinPreset(v) { return BUILTIN_ORDER.includes(v); }
-    function syncDeleteBtn() {
+    function builtinText(name) {
+      return BUILTIN_PRESETS.find(t => {
+        const named = t.match(/name\s*=\s*"([^"]+)"/);
+        return named && named[1] === name;
+      });
+    }
+    function uniqueCustomName(base) {
+      const store = loadStore();
+      const taken = n => isBuiltinPreset(n) || !!store[n];
+      if (!taken(base)) return base;
+      let i = 2;
+      while (taken(`${base} ${i}`)) i++;
+      return `${base} ${i}`;
+    }
+    function escapeOpt(n) {
+      return String(n).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+    function syncPresetBtns() {
       const name = el("presetSel").value;
-      const pinned = isBuiltinPreset(name);
-      el("presetDelete").disabled = pinned || !isNamedPreset(name);
-      el("presetDelete").title = pinned ? "Pinned default — cannot delete" : "Delete preset";
+      const master = isBuiltinPreset(name);
+      el("presetDelete").disabled = master || !isNamedPreset(name);
+      el("presetDelete").title = master ? "Masters can't be deleted" : "Delete preset";
+      el("presetSave").title = master ? "Save a copy of this master" : "Save preset";
+      el("presetSave").setAttribute("aria-label", el("presetSave").title);
     }
     const flashT = new WeakMap();
     function flashBtn(node, kind) {
@@ -4507,16 +4532,18 @@ spendTot  = 599912`,
     }
     function refreshPresetSelect(sel) {
       const store = loadStore();
-      const builtin = BUILTIN_ORDER.filter(n => store[n]);
       const custom = Object.keys(store).filter(n => !BUILTIN_ORDER.includes(n) && !n.startsWith("__")).sort();
-      const names = builtin.concat(custom);
       const pick = sel || NEW_PRESET;
+      const opt = n => `<option value="${escapeOpt(n)}"${n === pick ? " selected" : ""}>${escapeOpt(n)}</option>`;
+      const yours = custom.length ? `<optgroup label="Yours">${custom.map(opt).join("")}</optgroup>` : "";
       el("presetSel").innerHTML =
         `<option value="${NEW_PRESET}"${pick === NEW_PRESET ? " selected" : ""}>New preset</option>` +
-        names.map(n => `<option value="${n.replace(/"/g, "&quot;")}"${n === pick ? " selected" : ""}>${n}</option>`).join("");
-      syncDeleteBtn();
+        `<optgroup label="Masters">${BUILTIN_ORDER.map(opt).join("")}</optgroup>` +
+        yours;
+      syncPresetBtns();
     }
     function writePreset(name) {
+      if (isBuiltinPreset(name)) return false;
       const store = loadStore();
       const existed = !!store[name];
       store[name] = { S: clone(S), F: clone(F) };
@@ -4533,6 +4560,11 @@ spendTot  = 599912`,
     let pendingName = "";
     function savePreset() {
       const selected = el("presetSel").value;
+      if (isBuiltinPreset(selected)) {
+        writePreset(uniqueCustomName(`${selected} copy`));
+        flashBtn(el("presetSave"));
+        return;
+      }
       if (isNamedPreset(selected)) {
         writePreset(selected);
         flashBtn(el("presetSave"));
@@ -4546,7 +4578,7 @@ spendTot  = 599912`,
         return;
       }
       pendingName = "";
-      writePreset(name);
+      writePreset(isBuiltinPreset(name) ? uniqueCustomName(`${name} copy`) : name);
       flashBtn(el("presetSave"));
     }
     function finishPaste(text) {
@@ -4562,6 +4594,13 @@ spendTot  = 599912`,
     function loadPreset() {
       const name = el("presetSel").value;
       if (!isNamedPreset(name)) return;
+      if (isBuiltinPreset(name)) {
+        const text = builtinText(name);
+        if (!text) return;
+        schemeC2();
+        applyParamsText(text);
+        return;
+      }
       const snap = loadStore()[name];
       if (!snap) return;
       Object.assign(S, clone(snap.S));
@@ -4638,14 +4677,7 @@ spendTot  = 599912`,
       const store = loadStore();
       delete store["C-2 NEW"];
       delete store["L shop 44"];
-      const stale = store.__builtinRev !== BUILTIN_REV;
-      for (const text of BUILTIN_PRESETS) {
-        const named = text.match(/name\s*=\s*"([^"]+)"/);
-        if (named && store[named[1]] && !stale) continue;
-        schemeC2();
-        const got = applyParamsText(text);
-        if (got && got.name) store[got.name] = { S: clone(S), F: clone(F) };
-      }
+      for (const n of BUILTIN_ORDER) delete store[n];
       store.__builtinRev = BUILTIN_REV;
       saveStore(store);
     }
