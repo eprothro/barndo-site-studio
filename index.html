@@ -1392,7 +1392,10 @@
     const GARDEN_BEDS = [[3, 4], [13, 4], [3, 13], [3, 22], [13, 22]];
     const GARDEN_TABLE = [16, 15];
     const FIRE = { e: 71.1, s: 104, r: 8 };
-    const TREES = [[44.1, 62], [38.1, 88], [54.1, 103]];
+    const TREES = [
+      [44.1, 62, 4.5], [38.1, 88, 4.5], [54.1, 103, 4.5],  // planned ~5yo oaks
+      [EAST_FENCE - 16, 21, 8],  // existing: 21' S of N fence, 16' W of E fence
+    ];
     // CAD kidney (params.POOL_PTS, _DE = −7.9). Beach / east lobe toward the patio.
     const POOL_CAD = [
       [80.1, 40], [95.1, 37], [110.1, 43], [119.1, 56],
@@ -2542,10 +2545,11 @@
       g += `<circle cx="${fx(GARDEN_TABLE[0])}" cy="${fy(GARDEN_TABLE[1])}" r="${1.4 * PXFT}" fill="#efe7d8" stroke="#8a744a" stroke-width="0.8" ${pe}/>`;
       g += `<text x="${fx((GARDEN.e0 + GARDEN.e1) / 2)}" y="${fy(GARDEN.s0 + 2.2)}" text-anchor="middle" font-size="9" fill="#3a4a28" font-weight="700" ${pe}>GARDEN</text>`;
 
-      // Trees (CAD). Fire pit is a movable module.
-      for (const [te, ts] of TREES) {
-        g += `<circle cx="${fx(te)}" cy="${fy(ts)}" r="${4.5 * PXFT}" fill="#7a9a5a" fill-opacity="0.45" stroke="#4a6a38" stroke-width="1" ${pe}/>`;
+      // Trees. Fire pit is a movable module.
+      for (const [te, ts, tr = 4.5] of TREES) {
+        g += `<circle cx="${fx(te)}" cy="${fy(ts)}" r="${tr * PXFT}" fill="#7a9a5a" fill-opacity="0.45" stroke="#4a6a38" stroke-width="1" ${pe}/>`;
       }
+      g += `<text x="${fx(EAST_FENCE - 16)}" y="${fy(21)}" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#3a4a28" font-weight="700" ${pe}>TREE</text>`;
 
       // House SW → west fence
       g += dimLine(WEST_FENCE, -2.4, HOUSE_E0, -2.4, `${fmtFt(HOUSE_E0)} house SW → W fence`, "above");
