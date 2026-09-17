@@ -652,10 +652,12 @@
           <h2>Components</h2>
           <div class="hint">Double-click a component on plan to edit.</div>
           <div class="comp-list">
-            <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname">Shop</span><button
-                type="button" class="ebtn" data-edit="shop">Edit</button></div>
-            <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname">Gym</span><button
-                type="button" class="ebtn" data-edit="gym">Edit</button></div>
+            <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname"
+                id="shopCname">Shop</span><button type="button" class="ebtn" data-edit="shop">Edit</button></div>
+            <div class="comp-row" data-edit="work"><span class="ccheck"></span><span class="cname" id="workCname">Shop
+                kitchen</span><button type="button" class="ebtn" data-edit="work">Edit</button></div>
+            <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname"
+                id="gymCname">Gym</span><button type="button" class="ebtn" data-edit="gym">Edit</button></div>
             <div class="comp-row" data-edit="living"><span class="ccheck"></span><span
                 class="cname">Living</span><button type="button" class="ebtn" data-edit="living">Edit</button></div>
             <div class="comp-row" data-edit="patio"><input type="checkbox" id="enPatio"><span
@@ -676,6 +678,15 @@
                 class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
             <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool
                 closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
+            <div class="comp-row" data-edit="laundry"><input type="checkbox" id="enLaundry"><span class="cname">Laundry
+                / storage</span><button type="button" class="ebtn" data-edit="laundry">Edit</button></div>
+            <div class="comp-row" data-edit="hall"><input type="checkbox" id="enHall"><span class="cname">Bath entry
+                hall</span><button type="button" class="ebtn" data-edit="hall">Edit</button></div>
+            <div class="comp-row" data-edit="store"><input type="checkbox" id="enStore"><span class="cname">Garage
+                storage</span><button type="button" class="ebtn" data-edit="store">Edit</button></div>
+            <div class="comp-row" data-edit="kitchen"><input type="checkbox" id="enKitchen"><span
+                class="cname">Kitchenette</span><button type="button" class="ebtn" data-edit="kitchen">Edit</button>
+            </div>
             <div class="comp-row" data-edit="bath"><input type="checkbox" id="enBath"><span
                 class="cname">Bathroom</span><button type="button" class="ebtn" data-edit="bath">Edit</button></div>
             <div class="comp-row" data-edit="bunk"><input type="checkbox" id="enBunk"><span
@@ -712,7 +723,7 @@
               <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
             </div>
             <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. Drag the building
-              west up to the house SE; a wider west-flush shop hangs east and still travels with it.</div>
+              anywhere on the lot — no house-SE stop, no N–S box.</div>
             <div class="subhead">Entry</div>
             <div class="row"><label>Type</label>
               <div class="seg" style="flex:1.4">
@@ -801,6 +812,9 @@
               <button type="button" class="rbtn" data-hingetog="gymEntry">hinge N</button>
             </div>
             <div class="subhead">Cage door</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="gymCageTog">shown</button>
+            </div>
             <div class="row"><label>Leaf</label>
               <button type="button" class="rbtn" data-leaftog="gymCage">single</button>
             </div>
@@ -822,6 +836,9 @@
             <div class="hint">Drag a door on the plan to slide it. In / out and hinge are toggles (in / out is relative
               to the gym). Hinge is off on a double.</div>
             <div class="subhead">Windows</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="gymWinTog">shown</button>
+            </div>
             <div class="row"><label>Length</label>
               <input type="range" id="gymWinW" min="4" max="20" step="0.5"><span class="val" id="gymWinW_v"></span>
             </div>
@@ -866,6 +883,101 @@
             </div>
             <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
               continuous (extra shop hangs east, toward the cage).</div>
+            <div class="subhead">Overhead door 1</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="garATog">shown</button>
+            </div>
+            <div class="row"><label>Width</label>
+              <input type="range" id="garAW" min="8" max="18" step="0.5"><span class="val" id="garAW_v"></span>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="garA:N">N</button>
+                <button type="button" data-openface="garA:S">S</button>
+                <button type="button" data-openface="garA:E">E</button>
+                <button type="button" data-openface="garA:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="garAT" min="0" max="100" step="1"><span class="val" id="garAT_v"></span>
+            </div>
+            <div class="subhead">Overhead door 2</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="garBTog">shown</button>
+            </div>
+            <div class="row"><label>Width</label>
+              <input type="range" id="garBW" min="8" max="18" step="0.5"><span class="val" id="garBW_v"></span>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="garB:N">N</button>
+                <button type="button" data-openface="garB:S">S</button>
+                <button type="button" data-openface="garB:E">E</button>
+                <button type="button" data-openface="garB:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="garBT" min="0" max="100" step="1"><span class="val" id="garBT_v"></span>
+            </div>
+            <div class="hint">Carrie draws <b>two singles on the west face</b>, 10′ each, with a 2′ pier between them
+              and 3′ to each corner. Sectional — no swing. Drag on the plan to slide.</div>
+          </div>
+          <div class="edit-pane" data-edit="work">
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="workW" min="22" max="48" step="0.5"><span class="val" id="workW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="workD" min="0" max="24" step="0.5"><span class="val" id="workD_v"></span>
+            </div>
+            <div class="row"><label>Flush to living</label>
+              <div class="seg" style="flex:1.4">
+                <button data-workflush="E" id="workFlush_E">east</button>
+                <button data-workflush="W" id="workFlush_W">west</button>
+              </div>
+            </div>
+            <div class="hint">Band between garage and gym/living. <b>0</b> = none (the three Masters). Carrie’s plan is
+              a
+              14×26 shop, east-flush so its west wall tucks 6′ under the roofline. Prices as non-living A/C.</div>
+            <div class="subhead">Door to garage</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="shopGarTog">shown</button>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="shopGar:N">N</button>
+                <button type="button" data-openface="shopGar:S">S</button>
+                <button type="button" data-openface="shopGar:E">E</button>
+                <button type="button" data-openface="shopGar:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="shopGarT" min="0" max="100" step="1"><span class="val" id="shopGarT_v"></span>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="shopGar">in</button>
+              <button type="button" class="rbtn" data-hingetog="shopGar">hinge N</button>
+            </div>
+            <div class="subhead">Door to the covered strip · exterior</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="shopWestTog">shown</button>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="shopWest:N">N</button>
+                <button type="button" data-openface="shopWest:S">S</button>
+                <button type="button" data-openface="shopWest:E">E</button>
+                <button type="button" data-openface="shopWest:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="shopWestT" min="0" max="100" step="1"><span class="val" id="shopWestT_v"></span>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="shopWest">in</button>
+              <button type="button" class="rbtn" data-hingetog="shopWest">hinge N</button>
+            </div>
+            <div class="hint">When the shop is inset, the strip under the roofline is covered outdoor space — these two
+              doors are how Carrie gets into it from the shop and the garage side.</div>
           </div>
           <div class="edit-pane" data-edit="patio">
             <div class="row"><label>Rotate</label>
@@ -919,7 +1031,14 @@
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="court">↻ <span id="face_court"></span></button>
             </div>
-            <div class="hint">60×30 pickleball. Drag freely. ↻ swaps the long axis.</div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="courtW" min="20" max="70" step="0.5"><span class="val" id="courtW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="courtD" min="20" max="70" step="0.5"><span class="val" id="courtD_v"></span>
+            </div>
+            <div class="hint">Default 60×30 pad with a 44×20 playing surface. ↻ swaps width/depth. Spend uses the pad
+              area. Drag freely.</div>
           </div>
           <div class="edit-pane" data-edit="fire">
             <div class="row"><label>Rotate</label>
@@ -996,6 +1115,83 @@
               <button class="rbtn" data-rot="closet">↻ <span id="face_closet"></span></button>
             </div>
           </div>
+          <div class="edit-pane" data-edit="laundry">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="laundry">↻ <span id="face_laundry"></span></button>
+            </div>
+            <div class="hint">Carrie’s 8×8 laundry / storage sits in the living room’s north-west corner, west of the
+              kitchen run, W/D on its north wall. Drag to move; size comes from the plan.</div>
+            <div class="subhead">Door · exterior</div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="laundryDoor:N">N</button>
+                <button type="button" data-openface="laundryDoor:S">S</button>
+                <button type="button" data-openface="laundryDoor:E">E</button>
+                <button type="button" data-openface="laundryDoor:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="laundryDoorT" min="0" max="100" step="1"><span class="val"
+                id="laundryDoorT_v"></span>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="laundryDoor">in</button>
+              <button type="button" class="rbtn" data-hingetog="laundryDoor">hinge N</button>
+            </div>
+          </div>
+          <div class="edit-pane" data-edit="hall">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="hall">↻ <span id="face_hall"></span></button>
+            </div>
+            <div class="hint">The 4′-deep entry hall in Carrie’s plan: living opens into it, the bath door is off it,
+              and the bunk door is off it — so the bath is never entered straight from the pool.</div>
+            <div class="subhead">Opening from living</div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="hallOpen:N">N</button>
+                <button type="button" data-openface="hallOpen:S">S</button>
+                <button type="button" data-openface="hallOpen:E">E</button>
+                <button type="button" data-openface="hallOpen:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="hallOpenT" min="0" max="100" step="1"><span class="val" id="hallOpenT_v"></span>
+            </div>
+            <div class="hint">Cased opening — no leaf, no swing.</div>
+          </div>
+          <div class="edit-pane" data-edit="store">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="store">↻ <span id="face_store"></span></button>
+            </div>
+            <div class="hint">Carrie’s 16×6 storage closet bumped off the <b>north end of the garage</b>, centred on the
+              32′ face. Unconditioned — it prices as no-A/C, not living.</div>
+            <div class="subhead">Door from the garage</div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="storeDoor:N">N</button>
+                <button type="button" data-openface="storeDoor:S">S</button>
+                <button type="button" data-openface="storeDoor:E">E</button>
+                <button type="button" data-openface="storeDoor:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="storeDoorT" min="0" max="100" step="1"><span class="val" id="storeDoorT_v"></span>
+            </div>
+            <div class="row"><label>Leaf</label>
+              <button type="button" class="rbtn" data-leaftog="storeDoor">double</button>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="storeDoor">out</button>
+              <button type="button" class="rbtn" data-hingetog="storeDoor">hinge N</button>
+            </div>
+          </div>
+          <div class="edit-pane" data-edit="kitchen">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="kitchen">↻ <span id="face_kitchen"></span></button>
+            </div>
+            <div class="hint">Millwork in the shop/gym band — island + a 2′ counter on the face wall. Size comes from
+              the plan; ↻ swaps width and depth. In the shop it prices as A/C (same as office).</div>
+          </div>
           <div class="edit-pane" data-edit="bath">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="bath">↻ <span id="face_bath"></span></button>
@@ -1010,6 +1206,10 @@
               dashed boxes are clearances. Toilet is a real WC inside a 3×5 stall. ↻ rotates a fixture about its
               center.</div>
             <div class="subhead">Fixtures</div>
+            <div class="row"><label>W/D in here</label>
+              <button type="button" class="rbtn" id="bathWdTog">shown</button>
+            </div>
+            <div class="hint">Off = the laundry lives somewhere else (Carrie puts it in the laundry room).</div>
             <div class="row"><label>Rotate</label>
               <div class="seg" style="flex:1.4">
                 <button type="button" data-bathrot="wd">W/D</button>
@@ -1045,6 +1245,9 @@
               <button type="button" class="rbtn" data-hingetog="bathA">hinge N</button>
             </div>
             <div class="subhead">Door B · interior</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="bathBTog">shown</button>
+            </div>
             <div class="row"><label>Face</label>
               <div class="seg" style="flex:1.4">
                 <button type="button" data-openface="bathB:N">N</button>
@@ -1061,6 +1264,10 @@
               <button type="button" class="rbtn" data-hingetog="bathB">hinge N</button>
             </div>
             <div class="subhead">Door C · exterior</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="bathCTog">shown</button>
+            </div>
+            <div class="hint">Off = the bath is reached from inside only (no door straight in from the pool).</div>
             <div class="row"><label>Face</label>
               <div class="seg" style="flex:1.4">
                 <button type="button" data-openface="bathC:N">N</button>
@@ -1227,20 +1434,23 @@
             </thead>
             <tbody>
               <tr data-spend="living">
-                <td><span class="name">Living</span><span class="sub">fully conditioned · + bunk in shop</span></td>
+                <td><span class="name">Living</span><span class="sub">fully conditioned · + bunk / bath / hall /
+                    laundry / kitchen (even in the gym band)</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_living" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="ac">
-                <td><span class="name">Non-living A/C</span><span class="sub">gym + office in shop · mini-split</span>
+                <td><span class="name">Non-living A/C</span><span class="sub">gym floor + shop + office ·
+                    mini-split</span>
                 </td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_ac" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="noAc">
-                <td><span class="name">No A/C</span><span class="sub">shop − office/bunk in shop · vented</span></td>
+                <td><span class="name">No A/C</span><span class="sub">shop − office/bunk/kitchenette in shop ·
+                    vented</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_noAc" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
@@ -1252,8 +1462,8 @@
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="court">
-                <td><span class="name">Sport court</span><span class="sub">$25k on a 60×30 · coat, lines, hoop,
-                    fence</span></td>
+                <td><span class="name">Sport court</span><span class="sub">coat, lines, hoop, fence · default $25k on
+                    60×30</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_court" type="number" min="0" step="0.01"> /sf</td>
                 <td class="num" data-cost></td>
@@ -1369,7 +1579,22 @@
     // The old site-plan "64 ft buffer" (house at e=130) is retired.
     const HOUSE_E0 = 53.8;
     const HOUSE_E1 = 122.1;
-    const HOUSE_S0 = -46.9;
+    // East wall from the appraisal sketch (front at bottom = north):
+    //   garage 26.9 + body 20 + patio recess 12.5 = 59.4. Was −46.9 (= 26.9+20),
+    //   which dropped the 12.5 and used the garage's *west* 21.7 as N–S.
+    const HOUSE_GAR_D = 26.9;
+    const HOUSE_EAST_MID = 20.0;
+    const HOUSE_PATIO_D = 12.5;
+    const HOUSE_S0 = -(HOUSE_GAR_D + HOUSE_EAST_MID + HOUSE_PATIO_D); // −59.4
+    // Door is an inset on the garage east wall, not the garage width.
+    const HOUSE_GAR_FROM_NE = 3.0;
+    const HOUSE_GAR_W = 18.0;
+    // SE: house cuts in, pad fills the cut. East edge of the pad is flush to
+    // the garage (HOUSE_E1) and runs 21′10½″ to the drive — it does not jut out.
+    const SE_PAD_WIDE = 10 + 11 / 12;   // house SE → pad SE
+    const SE_PAD_NARROW = 6.0;          // north of the 12.5′ band
+    const HOUSE_SE_E = HOUSE_E1 - SE_PAD_WIDE;
+    const HOUSE_CUT6_E = HOUSE_E1 - SE_PAD_NARROW;
     const SE_WING_E0 = 105.2;        // 16.9' SE/master wing
     const KIT_U_E0 = 95.5, KIT_U_E1 = 105.2, KIT_U_S = -12.5;
     const HPATIO_E0 = 74.1, HPATIO_E1 = 95.5, HPATIO_S0 = -12.5;
@@ -1378,13 +1603,14 @@
     const DRIVE_E = 152.1;            // east edge = house SE + 30' (params.DRIVE)
     const DRIVE_W = 18.0;
     const DRIVE_E0 = DRIVE_E - DRIVE_W; // 134.1
-    const DRIVE_S1 = -20.0;           // ends 20' N of backyard N wood (s=0)
+    const DRIVE_S1 = -(21 + 10.5 / 12); // owner tape 21′10½″ fence → drive S
     const DRIVE_TURN_E0 = 92.1;
-    const DRIVE_TURN_S0 = -78.0;
-    const DRIVE_TURN_S1 = -46.5;
-    const HOUSE_SE_PAD = [           // AC / mower pad east of house — N edge stops at the drive
-      [HOUSE_E1, DRIVE_S1], [HOUSE_E1 + 5, DRIVE_S1], [HOUSE_E1 + 5, -10],
-      [HOUSE_E1 + 10, -10], [HOUSE_E1 + 10, 0], [HOUSE_E1, 0],
+    const DRIVE_TURN_S0 = HOUSE_S0 - 31.5; // keep the old turnaround depth
+    const DRIVE_TURN_S1 = HOUSE_S0 + 0.4;
+    const HOUSE_SE_PAD = [           // fills the SE cut; east edge = garage, N = drive
+      [HOUSE_E1, DRIVE_S1], [HOUSE_E1, 0],
+      [HOUSE_SE_E, 0], [HOUSE_SE_E, -HOUSE_PATIO_D],
+      [HOUSE_CUT6_E, -HOUSE_PATIO_D], [HOUSE_CUT6_E, DRIVE_S1],
     ];
     const RUN = { e0: 0, e1: HOUSE_E0, s0: -26.9, s1: 0 };
     const COOP = { e0: 22.9, e1: 30.9, s0: -16.95, s1: -9.95 };
@@ -1473,10 +1699,15 @@
       gymSide: "N",
       shopFlush: "W",
       gymFlush: "W",
+      workW: 36, workD: 0, workFlush: "W",
+      shopLabel: "",
+      gymLabel: "",
+      workLabel: "",
       eastGap: 28,                   // living east → east fence
       bS0: -10,                      // barndo north (pushed up from −20)
       patioRun: 39.5, patioDep: 15,
       cageLen: 70, cageWid: 14,
+      courtW: 60, courtD: 30,
       barLen: 10.5, stools: 4,
       bathAlong: 7.5, bathInto: 10.5,
       bunkLen: 14,
@@ -1492,7 +1723,8 @@
       sitCfg: "love",
       mediaCfg: "dualL",
       mediaChairSide: "left",
-      enPatio: true, enCage: true, enOffice: true, enCloset: true,
+      enPatio: true, enCage: true, enOffice: true, enCloset: true, enKitchen: false,
+      enLaundry: false, enHall: false, enStore: false,
       enBath: true, enBunk: true, enMedia: true, enWeights: true, enDance: true,
       enTable: true, enPtable: true, enDining: false, enSit: false,
       enBar: true, enPool: true, enSpa: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
@@ -1516,13 +1748,21 @@
 
     const OPEN_DEFAULTS = () => ({
       gymEntry: { host: "gym", leaf: "double", face: "W", t: 0.45, swing: "out", w: 6, hinge: "start" },
-      gymCage: { host: "gym", leaf: "single", face: "E", t: 0.55, swing: "in", w: 3, hinge: "start" },
-      gymWin: { host: "gym", leaf: "window", face: "N", t: 0.5, w: 10 },
+      gymCage: { host: "gym", leaf: "single", face: "E", t: 0.55, swing: "in", w: 3, on: true, hinge: "start" },
+      gymWin: { host: "gym", leaf: "window", face: "N", t: 0.5, w: 10, on: true },
+      shopGar: { host: "work", leaf: "single", face: "N", t: 0.12, swing: "in", w: 3.5, on: true, hinge: "start" },
+      shopWest: { host: "work", leaf: "single", face: "W", t: 0.12, swing: "out", w: 3.5, ext: true, on: true, hinge: "start" },
+      laundryDoor: { host: "laundry", leaf: "single", face: "N", t: 0.7, swing: "in", w: 3, ext: true, hinge: "end" },
+      hallOpen: { host: "hall", leaf: "open", face: "N", t: 0.3, w: 3.5 },
+      garA: { host: "shop", leaf: "overhead", face: "W", t: 0.72, w: 10, on: false },
+      garB: { host: "shop", leaf: "overhead", face: "W", t: 0.28, w: 10, on: false },
+      storeDoor: { host: "store", leaf: "double", face: "S", t: 0.5, swing: "out", w: 7, hinge: "start" },
       livEntry: { host: "liv", leaf: "slider", face: "W", t: 0.32, swing: "in", w: 8, hinge: "start" },
       livWin: { host: "liv", leaf: "window", face: "W", t: 0.72, w: 12 },
       offA: { host: "office", leaf: "single", face: "S", t: 0.35, swing: "out", w: 3, hinge: "start" },
       offB: { host: "office", leaf: "single", face: "W", t: 0.5, swing: "in", w: 3, on: true, hinge: "start" },
       offWin: { host: "office", leaf: "window", face: "E", t: 0.5, w: 4 },
+      offWin2: { host: "office", leaf: "window", face: "N", t: 0.875, w: 3.5, on: false },
       bunkEg: { host: "bunk", leaf: "window", face: "W", t: 0.55, w: 3 },
       bathA: { host: "bath", leaf: "single", face: "E", t: 0.35, swing: "in", w: 2.67, hinge: "start" },
       bathB: { host: "bath", leaf: "single", face: "N", t: 0.55, swing: "in", w: 2.67, hinge: "start" },
@@ -1559,9 +1799,11 @@
       const maxWin = 25 - S.opens.livEntry.w;
       S.opens.livWin.w = clamp(S.opens.livWin.w, 4, maxWin);
       delete S.opens.cageEntry;
-      if (S.opens.offB.on == null) S.opens.offB.on = true;
+      for (const k of ["offB", "bathC", "gymWin", "gymCage", "shopGar", "shopWest"]) {
+        if (S.opens[k].on == null) S.opens[k].on = true;
+      }
       for (const spec of Object.values(S.opens)) {
-        if (!spec || spec.leaf === "window" || spec.leaf === "slider") continue;
+        if (!spec || spec.leaf === "window" || spec.leaf === "slider" || spec.leaf === "pocket") continue;
         if (spec.hinge !== "end") spec.hinge = "start";
         if (spec.swing !== "out") spec.swing = "in";
       }
@@ -1595,6 +1837,15 @@
         const z = zones().liv;
         return { e: z.e0, s: z.s0, w: z.e1 - z.e0, h: z.s1 - z.s0 };
       }
+      if (host === "shop") {
+        const z = zones().shop;
+        return { e: z.e0, s: z.s0, w: z.e1 - z.e0, h: z.s1 - z.s0 };
+      }
+      if (host === "work") {
+        if (!hasWork()) return null;
+        const z = zones().work;
+        return { e: z.e0, s: z.s0, w: z.e1 - z.e0, h: z.s1 - z.s0 };
+      }
       return F[host];
     }
     function openWallLen(box, face) {
@@ -1618,8 +1869,30 @@
     function openInward(face) {
       return { W: [1, 0], E: [-1, 0], N: [0, 1], S: [0, -1] }[face];
     }
+    // Sectional door marks: heavy jambs + panel ticks + width label. The cut
+    // through the wall is drawn by the caller so swing/pocket/window share it.
+    function overheadMarks(x0, y0, w, face, col) {
+      const pe = 'style="pointer-events:none"';
+      const ns = face === "N" || face === "S";
+      const along = ns ? [1, 0] : [0, 1];
+      const inn = openInward(face);
+      const x1 = x0 + along[0] * w, y1 = y0 + along[1] * w;
+      const jamb = (px, py) =>
+        `<line x1="${fx(px - inn[0] * 0.85)}" y1="${fy(py - inn[1] * 0.85)}" x2="${fx(px + inn[0] * 0.85)}" y2="${fy(py + inn[1] * 0.85)}" stroke="${col}" stroke-width="2.4" ${pe}/>`;
+      let s = jamb(x0, y0) + jamb(x1, y1);
+      const n = Math.max(2, Math.round(w / 2.2));
+      for (let i = 1; i < n; i++) {
+        const f = i / n;
+        const px = x0 + along[0] * w * f, py = y0 + along[1] * w * f;
+        s += `<line x1="${fx(px)}" y1="${fy(py)}" x2="${fx(px + inn[0] * 0.75)}" y2="${fy(py + inn[1] * 0.75)}" stroke="${col}" stroke-width="0.7" opacity="0.7" ${pe}/>`;
+      }
+      const mx = (x0 + x1) / 2 + inn[0] * 2.1, my = (y0 + y1) / 2 + inn[1] * 2.1;
+      const tx = fx(mx), ty = fy(my);
+      s += `<text x="${tx}" y="${ty + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700"${ns ? "" : ` transform="rotate(-90 ${tx} ${ty})"`} ${pe}>${fmtFt(w)} OH</text>`;
+      return s;
+    }
     function doorIsSwing(spec) {
-      return !!(spec && spec.leaf !== "window" && spec.leaf !== "slider");
+      return !!(spec && !["window", "slider", "pocket", "open", "overhead"].includes(spec.leaf));
     }
     function openHingeLabel(spec) {
       if (!spec) return "—";
@@ -1689,25 +1962,59 @@
       return Math.max(0, e1 - e0) * Math.max(0, s1 - s0);
     }
 
-    // Conditioned rooms are only extra A/C when they sit in the shop. Inside
-    // living/gym they are already in that band — adding the rectangle would
-    // double-count. Office → gym-rate; bunk → living-rate.
+    // Cheap / non-living A/C is gym + office only. Hall, bath, laundry,
+    // kitchen, bunk are living-rate even when they sit in the gym/shop band.
     function inShopSf(key, en) {
       if (!S[en] || !F[key]) return 0;
       return overlapSf(F[key], zones().shop);
     }
+    function inGymSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return overlapSf(F[key], zones().gym);
+    }
+    function inWorkSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return overlapSf(F[key], zones().work);
+    }
+    function zoneUnionSf(box) {
+      const z = zones();
+      return overlapSf(box, z.shop) + overlapSf(box, z.work) + overlapSf(box, z.gym) + overlapSf(box, z.liv);
+    }
+    // Conditioned rooms hanging outside living/gym/shop (a west bunk wing, an
+    // office bump) still have to price. Inside a zone they are already in that
+    // rectangle — only the overhang is extra.
+    function overhangSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return Math.max(0, F[key].w * F[key].h - zoneUnionSf(F[key]));
+    }
+    function roomSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return F[key].w * F[key].h;
+    }
+    function livingExtraSf(key, en) {
+      if (!S[en] || !F[key]) return 0;
+      return Math.max(0, roomSf(key, en) - overlapSf(F[key], zones().liv));
+    }
     const officeInShopSf = () => inShopSf("office", "enOffice");
     const bunkInShopSf = () => inShopSf("bunk", "enBunk");
+    const kitchenInShopSf = () => inShopSf("kitchen", "enKitchen");
+    const LIVING_RATE = [
+      ["bunk", "enBunk"], ["bath", "enBath"], ["hall", "enHall"],
+      ["laundry", "enLaundry"], ["kitchen", "enKitchen"],
+    ];
 
     function spendTakeoff() {
       const shopSf = S.garageW * S.garageD;
       const officeSf = officeInShopSf();
       const bunkSf = bunkInShopSf();
+      const kitchenSf = kitchenInShopSf();
       const courtSf = (S.enCourt && F.court) ? F.court.w * F.court.h : 0;
+      const livingExtra = LIVING_RATE.reduce((n, [k, en]) => n + livingExtraSf(k, en), 0);
+      const acPull = LIVING_RATE.reduce((n, [k, en]) => n + inGymSf(k, en) + inWorkSf(k, en), 0);
       return {
-        living: { on: true, sf: S.livingW * S.livingD + bunkSf },
-        ac: { on: true, sf: S.gymW * S.gymD + officeSf },
-        noAc: { on: true, sf: Math.max(0, shopSf - officeSf - bunkSf) },
+        living: { on: true, sf: S.livingW * S.livingD + livingExtra },
+        ac: { on: true, sf: S.gymW * S.gymD + (S.workW || 0) * (S.workD || 0) + officeSf + overhangSf("office", "enOffice") - acPull },
+        noAc: { on: true, sf: Math.max(0, shopSf - officeSf - bunkSf - kitchenSf) + overhangSf("store", "enStore") },
         patio: { on: !!S.enPatio, sf: S.enPatio ? S.patioRun * S.patioDep : 0 },
         court: { on: !!S.enCourt, sf: courtSf },
         cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
@@ -1749,17 +2056,21 @@
     function fx(e) { return M + (e - CAN_E0) * PXFT; }
     function fy(s) { return M + (s - CAN_S0) * PXFT; }
 
+    function hasWork() { return (S.workD || 0) > 0.05; }
+
     function zones() {
       const shopS0 = S.bS0;
       const shopS1 = shopS0 + S.garageD;
+      const workS0 = shopS1;
+      const workS1 = workS0 + (S.workD || 0);
       let gymS0, gymS1, livS0, livS1;
       if (S.gymSide === "S") {
-        livS0 = shopS1;
+        livS0 = workS1;
         livS1 = livS0 + S.livingD;
         gymS0 = livS1;
         gymS1 = gymS0 + S.gymD;
       } else {
-        gymS0 = shopS1;
+        gymS0 = workS1;
         gymS1 = gymS0 + S.gymD;
         livS0 = gymS1;
         livS1 = livS0 + S.livingD;
@@ -1768,10 +2079,11 @@
       const livE0 = livE1 - S.livingW;
       const shop = flushToLiving(S.garageW, S.shopFlush, livE0, livE1);
       const gym = flushToLiving(S.gymW, S.gymFlush, livE0, livE1);
-      const shopE0 = shop.e0, shopE1 = shop.e1, gymE0 = gym.e0, gymE1 = gym.e1;
+      const work = flushToLiving(S.workW || S.livingW, S.workFlush || "W", livE0, livE1);
       return {
-        shop: { e0: shopE0, e1: shopE1, s0: shopS0, s1: shopS1 },
-        gym: { e0: gymE0, e1: gymE1, s0: gymS0, s1: gymS1 },
+        shop: { e0: shop.e0, e1: shop.e1, s0: shopS0, s1: shopS1 },
+        work: { e0: work.e0, e1: work.e1, s0: workS0, s1: workS1 },
+        gym: { e0: gym.e0, e1: gym.e1, s0: gymS0, s1: gymS1 },
         liv: { e0: livE0, e1: livE1, s0: livS0, s1: livS1 },
       };
     }
@@ -1782,20 +2094,21 @@
     }
 
     // eastGap is living-east → east fence. A west-flush shop/gym wider than
-    // living hangs EAST of that edge, so a fixed 28′ max (the old 36′ bar)
-    // stopped the whole L short of the house. Bounds come from the envelope:
-    // westernmost face can meet house SE; easternmost stays 2′ off the fence.
+    // living hangs EAST of that edge. Lot bounds only — no house-SE stop.
+    // Easternmost face stays 2′ off the east fence; west can reach the west fence.
     const EAST_SETBACK = 2;
-    const WEST_STOP = HOUSE_E1;
 
     function hangPastLiving() {
+      const workOn = hasWork();
       const east = Math.max(
         S.shopFlush === "W" ? S.garageW - S.livingW : 0,
         S.gymFlush === "W" ? S.gymW - S.livingW : 0,
+        workOn && S.workFlush === "W" ? (S.workW || 0) - S.livingW : 0,
         0);
       const west = Math.max(
         S.shopFlush === "E" ? S.garageW - S.livingW : 0,
         S.gymFlush === "E" ? S.gymW - S.livingW : 0,
+        workOn && S.workFlush === "E" ? (S.workW || 0) - S.livingW : 0,
         0);
       return { east, west };
     }
@@ -1803,7 +2116,7 @@
     function eastGapLimits() {
       const { east, west } = hangPastLiving();
       const minG = EAST_SETBACK + east;
-      const maxG = EAST_FENCE - S.livingW - west - WEST_STOP;
+      const maxG = EAST_FENCE - S.livingW - west - WEST_FENCE;
       return [minG, Math.max(minG, maxG)];
     }
 
@@ -1814,16 +2127,29 @@
 
     function bbox() {
       const z = zones();
-      return {
-        e0: Math.min(z.shop.e0, z.gym.e0, z.liv.e0),
-        e1: Math.max(z.shop.e1, z.gym.e1, z.liv.e1),
-        s0: z.shop.s0,
-        s1: Math.max(z.liv.s1, z.gym.s1),
-      };
+      let e0 = Math.min(z.shop.e0, z.gym.e0, z.liv.e0, z.work.e0);
+      let e1 = Math.max(z.shop.e1, z.gym.e1, z.liv.e1, z.work.e1);
+      let s0 = z.shop.s0;
+      let s1 = Math.max(z.liv.s1, z.gym.s1);
+      for (const k of ["bunk", "bath", "office", "kitchen", "laundry", "hall", "store"]) {
+        const f = F[k];
+        if (!f) continue;
+        const en = {
+          bunk: "enBunk", bath: "enBath", office: "enOffice", kitchen: "enKitchen",
+          laundry: "enLaundry", hall: "enHall", store: "enStore"
+        }[k];
+        if (!S[en]) continue;
+        e0 = Math.min(e0, f.e);
+        e1 = Math.max(e1, f.e + f.w);
+        s0 = Math.min(s0, f.s);
+        s1 = Math.max(s1, f.s + f.h);
+      }
+      return { e0, e1, s0, s1 };
     }
 
     function isL() {
-      return Math.abs(S.garageW - S.livingW) > 0.05 || Math.abs(S.gymW - S.livingW) > 0.05;
+      return Math.abs(S.garageW - S.livingW) > 0.05 || Math.abs(S.gymW - S.livingW) > 0.05
+        || (hasWork() && Math.abs((S.workW || 0) - S.livingW) > 0.05);
     }
 
     // West-wall run the patio is allowed to slide on — living west face.
@@ -1835,25 +2161,37 @@
       let s0 = z.liv.s0, s1 = z.liv.s1;
       const joints = [z.liv.s0, z.liv.s1];
       if (S.gymSide === "N") {
-        // shop → gym → living. Shop only joins if gym’s west face is also flush.
+        // shop → work → gym → living
         if (flushW(z.gym)) {
           s0 = z.gym.s0;
           joints.push(z.gym.s0, z.gym.s1);
-          if (flushW(z.shop)) {
+          if (hasWork() && flushW(z.work)) {
+            s0 = z.work.s0;
+            joints.push(z.work.s0, z.work.s1);
+          }
+          if (flushW(z.shop) && (!hasWork() || flushW(z.work))) {
             s0 = z.shop.s0;
             joints.push(z.shop.s0, z.shop.s1);
           }
         }
       } else {
-        // shop → living → gym
+        // shop → work → living → gym
         if (flushW(z.gym)) {
           s1 = z.gym.s1;
           joints.push(z.gym.s0, z.gym.s1);
         }
-        if (flushW(z.shop)) {
+        if (hasWork() && flushW(z.work)) {
+          s0 = z.work.s0;
+          joints.push(z.work.s0, z.work.s1);
+        }
+        if (flushW(z.shop) && (!hasWork() || flushW(z.work))) {
           s0 = z.shop.s0;
           joints.push(z.shop.s0, z.shop.s1);
         }
+      }
+      if (S.enBunk && F.bunk && Math.abs(F.bunk.e + F.bunk.w - e) < 0.2) {
+        s1 = Math.min(s1, F.bunk.s);
+        joints.push(F.bunk.s);
       }
       return {
         e,
@@ -2010,10 +2348,16 @@
     function applyCourt() {
       if (!F.court) return;
       const ce = F.court.e + F.court.w / 2, cs = F.court.s + F.court.h / 2;
-      if (F.court.face === "N" || F.court.face === "S") { F.court.w = 60; F.court.h = 30; }
-      else { F.court.w = 30; F.court.h = 60; }
+      F.court.w = S.courtW || 60;
+      F.court.h = S.courtD || 30;
       F.court.e = ce - F.court.w / 2;
       F.court.s = cs - F.court.h / 2;
+    }
+
+    function alignCourtToGarage() {
+      if (!F.court || !S.enCourt) return;
+      const g = zones().shop;
+      F.court.s = (g.s0 + g.s1) / 2 - F.court.h / 2;
     }
 
     const POOL_CAD_E0 = 79.1, POOL_CAD_S0 = 37.0, POOL_CAD_W = 40.0, POOL_CAD_H = 46.0;
@@ -2064,6 +2408,9 @@
       if (ns) {
         F.patio.e = wall.e - F.patio.w;
         const lo = wall.s0, hi = wall.s1 - F.patio.h;
+        if (S.enBunk && F.bunk && Math.abs(F.bunk.e + F.bunk.w - wall.e) < 0.2) {
+          F.patio.s = F.bunk.s - F.patio.h;
+        }
         F.patio.s = clamp(F.patio.s, lo, Math.max(lo, hi));
       } else {
         // Rotated: patio runs E–W off the wall; keep the east edge on the wall and
@@ -2167,10 +2514,15 @@
       S.gymSide = "N";
       S.shopFlush = "W";
       S.gymFlush = "W";
+      S.workW = 36; S.workD = 0; S.workFlush = "W";
+      S.shopLabel = "";
+      S.gymLabel = "";
+      S.workLabel = "";
       S.eastGap = 28;
       S.bS0 = -10;
       S.patioRun = 39.5; S.patioDep = 15;
       S.cageLen = 70; S.cageWid = 14;
+      S.courtW = 60; S.courtD = 30;
       S.barLen = 10.5; S.stools = 4;
       S.bathAlong = 7.5; S.bathInto = 10.5;
       S.bunkLen = 14;
@@ -2187,7 +2539,8 @@
       S.sitCfg = "love";
       S.mediaCfg = "dualL";
       S.mediaChairSide = "left";
-      S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true;
+      S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true; S.enKitchen = false;
+      S.enLaundry = false; S.enHall = false; S.enStore = false;
       S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true; S.enDance = true;
       S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
       S.enBar = true; S.enPool = true; S.enSpa = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
@@ -2199,6 +2552,22 @@
       seedModule("closet", {
         label: "pool closet", e: z.shop.e0, s: z.shop.s1 - 8, w: 6, h: 8, face: "W",
         c: "#d7e0d4", ec: "#4a6a48", tc: "#1f3a20"
+      });
+      seedModule("laundry", {
+        label: "laundry", e: z.liv.e0, s: z.liv.s0, w: 8, h: 8, face: "N",
+        c: "#e6e2ea", ec: "#6a5a78", tc: "#3a2f48"
+      });
+      seedModule("hall", {
+        label: "hall", e: z.gym.e0, s: z.gym.s0, w: 8, h: 4, face: "N",
+        c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
+      });
+      seedModule("store", {
+        label: "storage", e: z.shop.e0 + 8, s: z.shop.s0 - 6, w: 16, h: 6, face: "S",
+        c: "#dcd9cf", ec: "#6a6a5a", tc: "#3a3a2c"
+      });
+      seedModule("kitchen", {
+        label: "kitchenette", e: z.shop.e0 + 8, s: z.shop.s1 - 12, w: 24, h: 12, face: "S",
+        c: "#efe6d3", ec: "#8a6b4a", tc: "#5a3f2a"
       });
       seedModule("bath", {
         label: "pool bath", e: z.gym.e0, s: z.gym.s1 - 7.5, w: 10.5, h: 7.5, face: "W",
@@ -2291,12 +2660,12 @@
       applyMirror(); applyBarre();
     }
 
-    const INTERIOR = ["office", "closet", "bath", "bunk", "media", "weights", "dance", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
+    const INTERIOR = ["office", "closet", "kitchen", "laundry", "hall", "store", "bath", "bunk", "media", "weights", "dance", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
     const SITE_MODS = ["patio", "cage", "court", "pool", "spa", "fire", "deck"];
 
     function enabledKeys() {
       const map = {
-        office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
         media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
@@ -2350,10 +2719,14 @@
       el("gymD_v").textContent = fmtFt(S.gymD);
       el("garageW_v").textContent = fmtFt(S.garageW);
       el("garageD_v").textContent = fmtFt(S.garageD);
+      el("workW_v").textContent = fmtFt(S.workW || 0);
+      el("workD_v").textContent = fmtFt(S.workD || 0);
       el("patioRun_v").textContent = fmtFt(S.patioRun);
       el("patioDep_v").textContent = fmtFt(S.patioDep);
       el("cageLen_v").textContent = fmtFt(S.cageLen);
       el("cageWid_v").textContent = fmtFt(S.cageWid);
+      el("courtW_v").textContent = fmtFt(S.courtW);
+      el("courtD_v").textContent = fmtFt(S.courtD);
       el("barLen_v").textContent = fmtFt(S.barLen);
       el("bathAlong_v").textContent = fmtFt(S.bathAlong);
       el("bathInto_v").textContent = fmtFt(S.bathInto);
@@ -2374,8 +2747,9 @@
       for (const [id, key] of [
         ["livingW", "livingW"], ["livingD", "livingD"], ["gymW", "gymW"], ["gymD", "gymD"],
         ["garageW", "garageW"], ["garageD", "garageD"],
+        ["workW", "workW"], ["workD", "workD"],
         ["patioRun", "patioRun"], ["patioDep", "patioDep"],
-        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["barLen", "barLen"],
+        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkW", "bunkW"], ["bunkD", "bunkD"],
         ["mirrorLen", "mirrorLen"], ["barreLen", "barreLen"],
         ["danceLen", "danceLen"], ["danceWid", "danceWid"],
@@ -2388,6 +2762,10 @@
       el("enCage").checked = S.enCage;
       el("enOffice").checked = S.enOffice;
       el("enCloset").checked = S.enCloset;
+      el("enLaundry").checked = !!S.enLaundry;
+      el("enHall").checked = !!S.enHall;
+      el("enStore").checked = !!S.enStore;
+      el("enKitchen").checked = !!S.enKitchen;
       el("enBath").checked = S.enBath;
       el("enBunk").checked = S.enBunk;
       el("enMedia").checked = S.enMedia;
@@ -2430,6 +2808,11 @@
       el("tool_measure").classList.toggle("on", S.tool === "measure");
       el("shopFlush_E").classList.toggle("on", S.shopFlush === "E");
       el("shopFlush_W").classList.toggle("on", S.shopFlush === "W");
+      el("shopCname").textContent = S.shopLabel || "Shop";
+      el("gymCname").textContent = S.gymLabel || "Gym";
+      el("workCname").textContent = S.workLabel || "Shop kitchen";
+      el("workFlush_E").classList.toggle("on", (S.workFlush || "W") === "E");
+      el("workFlush_W").classList.toggle("on", (S.workFlush || "W") === "W");
       el("gymFlush_E").classList.toggle("on", S.gymFlush === "E");
       el("gymFlush_W").classList.toggle("on", S.gymFlush === "W");
       el("gymside_N").classList.toggle("on", S.gymSide === "N");
@@ -2459,24 +2842,18 @@
       const bb = bbox();
       const overallW = bb.e1 - bb.e0;
       const overallD = bb.s1 - bb.s0;
-      const shopSf = S.garageW * S.garageD;
-      const gymSf = S.gymW * S.gymD;
-      const livSf = S.livingW * S.livingD;
-      const officeSf = officeInShopSf();
-      const bunkSf = bunkInShopSf();
-      const acSf = gymSf + livSf + officeSf + bunkSf;
-      const noAcSf = shopSf - officeSf - bunkSf;
-      const patioSf = S.patioRun * S.patioDep;
+      const t = spendTakeoff();
+      const condSf = t.living.sf + t.ac.sf;
       el("overallBox").innerHTML =
         `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall` +
-        ` · A/C · ${Math.round(acSf)} sqft (living + gym + office/bunk in shop)` +
-        ` · no A/C · ${Math.round(noAcSf)} sqft (shop − office/bunk in shop)` +
-        ` · ` + (S.enPatio ? `patio · ${Math.round(patioSf)} sqft` : `patio · off`);
+        ` · conditioned · ${Math.round(condSf)} sqft (living ${Math.round(t.living.sf)} + A/C ${Math.round(t.ac.sf)})` +
+        ` · no A/C · ${Math.round(t.noAc.sf)} sqft` +
+        ` · ` + (S.enPatio ? `patio · ${Math.round(t.patio.sf)} sqft` : `patio · off`);
       renderSpend();
 
       const faceName = { N: "N", S: "S", W: "W", E: "E" };
       const enKey = {
-        office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
         media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
@@ -2506,15 +2883,37 @@
       g += `<polygon points="${polyPts([[HOUSE_E1, HOUSE_S0], [DRIVE_E, HOUSE_S0], [DRIVE_E, DRIVE_S1], [HOUSE_E1, DRIVE_S1]])}" fill="#c5c0b4" stroke="#8a8378" stroke-width="1"/>`;
       g += `<text x="${fx((HOUSE_E1 + DRIVE_E) / 2)}" y="${fy((HOUSE_S0 + DRIVE_S1) / 2) + 3}" text-anchor="middle" font-size="10" fill="#5a5348" font-weight="700" ${pe}>EXISTING DRIVE</text>`;
 
-      // Full house (params.HOUSE) — west bedroom @ s=0, covered recess, SE wing @ s=0
+      // Full house — east wall cuts in at the SE (pad fills the cut).
       const housePoly = [
-        [HOUSE_E0, HOUSE_S0], [HOUSE_E1, HOUSE_S0], [HOUSE_E1, 0],
+        [HOUSE_E0, HOUSE_S0], [HOUSE_E1, HOUSE_S0],
+        [HOUSE_E1, DRIVE_S1], [HOUSE_CUT6_E, DRIVE_S1],
+        [HOUSE_CUT6_E, -HOUSE_PATIO_D], [HOUSE_SE_E, -HOUSE_PATIO_D],
+        [HOUSE_SE_E, 0],
         [SE_WING_E0, 0], [SE_WING_E0, KIT_U_S], [HPATIO_E0, KIT_U_S],
         [HPATIO_E0, 0], [HOUSE_E0, 0],
       ];
       g += `<polygon points="${polyPts(housePoly)}" fill="#c8c2b4" stroke="#5a5348" stroke-width="1.6"/>`;
-      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28)}" text-anchor="middle" font-size="12" fill="#5a5348" font-weight="700" ${pe}>HOUSE</text>`;
-      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(-28) + 13}" text-anchor="middle" font-size="9" fill="#5a5348" ${pe}>${fmtFt(HOUSE_E1 - HOUSE_E0)} × ${fmtFt(-HOUSE_S0)}</text>`;
+      const houseMidS = HOUSE_S0 / 2;
+      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(houseMidS)}" text-anchor="middle" font-size="12" fill="#5a5348" font-weight="700" ${pe}>HOUSE</text>`;
+      g += `<text x="${fx((HOUSE_E0 + HOUSE_E1) / 2)}" y="${fy(houseMidS) + 13}" text-anchor="middle" font-size="9" fill="#5a5348" ${pe}>${fmtFt(HOUSE_E1 - HOUSE_E0)} × ${fmtFt(-HOUSE_S0)}</text>`;
+
+      // Garage mass + east-wall door. Door starts 3′ from NE; garage itself is 26.9′.
+      const houseGarS0 = HOUSE_S0 + HOUSE_GAR_FROM_NE;
+      const houseGarS1 = houseGarS0 + HOUSE_GAR_W;
+      const houseGarBandS1 = HOUSE_S0 + HOUSE_GAR_D;
+      const houseMidBandS1 = houseGarBandS1 + HOUSE_EAST_MID;
+      g += `<line x1="${fx(HOUSE_E1 - 22)}" y1="${fy(houseGarBandS1)}" x2="${fx(HOUSE_E1)}" y2="${fy(houseGarBandS1)}" stroke="#5a5348" stroke-width="1" ${pe}/>`;
+      g += `<line x1="${fx(HOUSE_E1)}" y1="${fy(houseGarS0)}" x2="${fx(HOUSE_E1)}" y2="${fy(houseGarS1)}" stroke="#fffef8" stroke-width="4" ${pe}/>`;
+      g += `<line x1="${fx(HOUSE_E1)}" y1="${fy(houseGarS0)}" x2="${fx(HOUSE_E1)}" y2="${fy(houseGarS1)}" stroke="#5a5348" stroke-width="1.1" stroke-dasharray="7 4" ${pe}/>`;
+      g += overheadMarks(HOUSE_E1, houseGarS0, HOUSE_GAR_W, "E", "#5a5348");
+      g += `<text x="${fx(HOUSE_E1 - 11)}" y="${fy(HOUSE_S0 + HOUSE_GAR_D / 2)}" text-anchor="middle" font-size="9" fill="#5a5348" font-weight="700" ${pe}>GARAGE</text>`;
+      dimLine(HOUSE_E1 + 3.2, HOUSE_S0, HOUSE_E1 + 3.2, houseGarS0, "3′", "above");
+      dimLine(HOUSE_E1 + 7.2, HOUSE_S0, HOUSE_E1 + 7.2, houseGarBandS1, "26.9′", "above");
+      dimLine(HOUSE_E1 + 7.2, houseGarBandS1, HOUSE_E1 + 7.2, houseMidBandS1, "20′", "above");
+      dimLine(HOUSE_SE_E, 2.4, HOUSE_E1, 2.4, "10′-11″", "below");
+      dimLine(HOUSE_SE_E - 2.4, 0, HOUSE_SE_E - 2.4, -HOUSE_PATIO_D, "12′-6″", "above");
+      dimLine(HOUSE_CUT6_E, DRIVE_S1 + 2, HOUSE_E1, DRIVE_S1 + 2, "6′", "above");
+      dimLine(HOUSE_E1 + 3.2, 0, HOUSE_E1 + 3.2, DRIVE_S1, "21′-10½″ fence → drive S", "above");
 
       // Uncovered pad — south run is straight; radius only at the SE corner.
       const padPoly = [
@@ -2530,7 +2929,7 @@
 
       // Existing AC / mower pad (params.HOUSE_SE_PAD)
       g += `<polygon points="${polyPts(HOUSE_SE_PAD)}" fill="#b8b0a0" stroke="#6a6358" stroke-width="1.2"/>`;
-      g += `<text x="${fx(127.2)}" y="${fy(-11)}" text-anchor="middle" font-size="9" fill="#5a5348" font-weight="700" ${pe}>existing pad</text>`;
+      g += `<text x="${fx((HOUSE_SE_E + HOUSE_E1) / 2)}" y="${fy(-HOUSE_PATIO_D / 2)}" text-anchor="middle" font-size="9" fill="#5a5348" font-weight="700" ${pe}>existing pad</text>`;
 
       // Chicken run + coop (west of house)
       g += `<rect x="${fx(RUN.e0)}" y="${fy(RUN.s0)}" width="${(RUN.e1 - RUN.e0) * PXFT}" height="${(RUN.s1 - RUN.s0) * PXFT}" fill="#d5e0c8" stroke="#5c7a3c" stroke-width="1.2"/>`;
@@ -2570,9 +2969,27 @@
       // building zones (drag the shell)
       g += `<g data-fx="building" style="cursor:grab">`;
       g += `<rect x="${fx(z.shop.e0)}" y="${fy(z.shop.s0)}" width="${S.garageW * PXFT}" height="${S.garageD * PXFT}" fill="#d8dcd0" stroke="#3a4036" stroke-width="2"/>`;
+      if (hasWork()) {
+        g += `<rect x="${fx(z.work.e0)}" y="${fy(z.work.s0)}" width="${(S.workW || 0) * PXFT}" height="${S.workD * PXFT}" fill="#ddd8ce" stroke="#3a4036" stroke-width="2"/>`;
+      }
       g += `<rect x="${fx(z.gym.e0)}" y="${fy(z.gym.s0)}" width="${S.gymW * PXFT}" height="${S.gymD * PXFT}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
       g += `<rect x="${fx(z.liv.e0)}" y="${fy(z.liv.s0)}" width="${S.livingW * PXFT}" height="${S.livingD * PXFT}" fill="#f4efe4" stroke="#3a4036" stroke-width="2"/>`;
       g += `</g>`;
+
+      // A work band narrower than its neighbours pulls its wall back under the
+      // eave (Carrie's shop). Dash the envelope face so the covered strip reads.
+      if (hasWork()) {
+        const nb = [z.shop, z.gym, z.liv];
+        const wEnv = Math.min(...nb.map(b => b.e0));
+        const eEnv = Math.max(...nb.map(b => b.e1));
+        const roofLine = (eOut, eIn) => {
+          const cx = (fx(eOut) + fx(eIn)) / 2, cy = fy((z.work.s0 + z.work.s1) / 2);
+          return `<line x1="${fx(eOut)}" y1="${fy(z.work.s0)}" x2="${fx(eOut)}" y2="${fy(z.work.s1)}" stroke="#3a4036" stroke-width="1.2" stroke-dasharray="6 4" ${pe}/>` +
+            `<text x="${cx}" y="${cy}" text-anchor="middle" font-size="7.5" fill="#5a6356" transform="rotate(-90 ${cx} ${cy})" ${pe}>roof line</text>`;
+        };
+        if (z.work.e0 - wEnv > 0.05) g += roofLine(wEnv, z.work.e0);
+        if (eEnv - z.work.e1 > 0.05) g += roofLine(eEnv, z.work.e1);
+      }
 
       // overall dims
       g += dimLine(bb.e0, bb.s0 - 3.2, bb.e1, bb.s0 - 3.2, `${fmtFt(overallW)} overall`, "above");
@@ -2618,6 +3035,10 @@
       if (S.enCourt) drawCourt(acc);
       if (S.enOffice) drawOffice(acc);
       if (S.enCloset) drawSimple(acc, "closet");
+      if (S.enLaundry) drawLaundry(acc);
+      if (S.enHall) drawSimple(acc, "hall");
+      if (S.enStore) drawSimple(acc, "store");
+      if (S.enKitchen) drawKitchen(acc);
       if (S.enBath) drawBath(acc);
       if (S.enBunk) drawBunk(acc);
       if (S.enMedia) drawMedia(acc);
@@ -2655,8 +3076,9 @@
           `</g>`;
       };
       acc.s += `<g id="zoneLabels">`;
-      acc.s += zoneChip(z.shop, "SHOP", S.garageW, S.garageD);
-      acc.s += zoneChip(z.gym, "GYM", S.gymW, S.gymD);
+      acc.s += zoneChip(z.shop, (S.shopLabel || "SHOP").toUpperCase(), S.garageW, S.garageD);
+      if (hasWork()) acc.s += zoneChip(z.work, (S.workLabel || "SHOP").toUpperCase(), S.workW, S.workD);
+      acc.s += zoneChip(z.gym, (S.gymLabel || "GYM").toUpperCase(), S.gymW, S.gymD);
       acc.s += zoneChip(z.liv, "LIVING", S.livingW, S.livingD);
       acc.s += `</g>`;
 
@@ -2712,6 +3134,74 @@
       wrapMod(g, key, body);
     }
 
+    function drawLaundry(g) {
+      const f = F.laundry;
+      const pe = 'style="pointer-events:none"';
+      // W/D pair stands against the face wall at the far end of it; the rest is shelving.
+      const d = 2.67, pair = 5;
+      let wd;
+      if (f.face === "N" || f.face === "S") {
+        const run = Math.min(pair, f.w - 0.8);
+        wd = { e: f.e + f.w - run - 0.35, s: f.face === "N" ? f.s + 0.35 : f.s + f.h - d - 0.35, w: run, h: Math.min(d, f.h - 0.8) };
+      } else {
+        const run = Math.min(pair, f.h - 0.8);
+        wd = { e: f.face === "W" ? f.e + 0.35 : f.e + f.w - d - 0.35, s: f.s + f.h - run - 0.35, w: Math.min(d, f.w - 0.8), h: run };
+      }
+      const ns = (f.face === "N" || f.face === "S");
+      let body = `<rect x="${fx(wd.e)}" y="${fy(wd.s)}" width="${wd.w * PXFT}" height="${wd.h * PXFT}" rx="1.5" fill="#e8dccf" stroke="#8a6b4a" stroke-width="0.9" ${pe}/>`;
+      const mx = wd.e + (ns ? wd.w / 2 : 0), my = wd.s + (ns ? 0 : wd.h / 2);
+      body += ns
+        ? `<line x1="${fx(mx)}" y1="${fy(wd.s)}" x2="${fx(mx)}" y2="${fy(wd.s + wd.h)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`
+        : `<line x1="${fx(wd.e)}" y1="${fy(my)}" x2="${fx(wd.e + wd.w)}" y2="${fy(my)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`;
+      body += `<text x="${fx(wd.e + wd.w / 2)}" y="${fy(wd.s + wd.h / 2) + 3}" text-anchor="middle" font-size="7" fill="#5a3f2a" font-weight="700" ${pe}>W/D</text>`;
+      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h - 0.9)}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      wrapMod(g, "laundry", body, { fillOp: 0.85 });
+    }
+
+    function drawKitchen(g) {
+      const f = F.kitchen;
+      const pe = 'style="pointer-events:none"';
+      // Pantry caps the EAST end of the run; island sits an aisle off the counter face.
+      const pan = 4, ctr = 2, aisle = 4, isl = 4;
+      let pantry, counter, island, fridge;
+      if (f.face === "N" || f.face === "S") {
+        const run = Math.max(6, f.w - pan);
+        const north = f.face === "N";
+        const cs = north ? f.s : f.s + f.h - ctr;
+        pantry = { e: f.e + run, s: f.s, w: pan, h: f.h };
+        counter = { e: f.e, s: cs, w: run, h: ctr };
+        const iw = Math.min(12, run - 4);
+        island = {
+          e: f.e + (run - iw) / 2,
+          s: north ? cs + ctr + aisle : cs - aisle - isl,
+          w: iw, h: isl
+        };
+        fridge = { e: f.e + run - 2.8, s: north ? f.s : f.s + f.h - 2.6, w: 2.8, h: 2.6 };
+      } else {
+        const run = Math.max(6, f.h - pan);
+        const west = f.face === "W";
+        const ce = west ? f.e : f.e + f.w - ctr;
+        pantry = { e: f.e, s: f.s + run, w: f.w, h: pan };
+        counter = { e: ce, s: f.s, w: ctr, h: run };
+        const ih = Math.min(12, run - 4);
+        island = {
+          e: west ? ce + ctr + aisle : ce - aisle - isl,
+          s: f.s + (run - ih) / 2,
+          w: isl, h: ih
+        };
+        fridge = { e: west ? f.e : f.e + f.w - 2.6, s: f.s + run - 2.8, w: 2.6, h: 2.8 };
+      }
+      const box = (r, fill) =>
+        `<rect x="${fx(r.e)}" y="${fy(r.s)}" width="${r.w * PXFT}" height="${r.h * PXFT}" fill="${fill}" stroke="${f.ec}" stroke-width="0.8" ${pe}/>`;
+      const body =
+        box(pantry, "#e0d4c4") + box(counter, "#e8dccf") + box(island, "#e8dccf") + box(fridge, "#d5d8dc") +
+        `<text x="${fx(pantry.e + pantry.w / 2)}" y="${fy(pantry.s + pantry.h / 2) + 3}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>pantry</text>` +
+        `<text x="${fx(island.e + island.w / 2)}" y="${fy(island.s + island.h / 2) + 3}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>island ${fmtFt(Math.max(island.w, island.h))}</text>` +
+        `<text x="${fx(fridge.e + fridge.w / 2)}" y="${fy(fridge.s + fridge.h / 2) + 3}" text-anchor="middle" font-size="7" fill="#3a4650" ${pe}>F</text>` +
+        `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 1.1)}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      wrapMod(g, "kitchen", body, { skipLabel: true, fillOp: 0.2 });
+    }
+
     function drawOffice(g) {
       const f = F.office;
       const pe = 'style="pointer-events:none"';
@@ -2732,6 +3222,7 @@
       for (const id of Object.keys(BATH_FIX_SPEC)) {
         const spec = BATH_FIX_SPEC[id];
         const bit = S.bathFix[id];
+        if (bit.off) continue;
         const dim = bathFixDim(id, bit.rot);
         const e = f.e + bit.lx, s = f.s + bit.ly;
         let html = `<g data-fx="bathfix:${id}" style="cursor:grab">`;
@@ -3094,8 +3585,11 @@
       const hh = ns ? hit : spec.w;
       g.s += `<g data-fx="open:${id}" style="cursor:ew-resize">`;
       g.s += `<rect x="${fx(hx)}" y="${fy(hy)}" width="${hw * PXFT}" height="${hh * PXFT}" fill="transparent"/>`;
+      const isPocket = spec.leaf === "pocket";
+      const isOpen = spec.leaf === "open";
+      const thin = isPocket || isOpen || spec.leaf === "overhead";
       g.s += `<line x1="${fx(seg.x0)}" y1="${fy(seg.y0)}" x2="${fx(seg.x1)}" y2="${fy(seg.y1)}" stroke="#fffef8" stroke-width="4" ${pe}/>`;
-      g.s += `<line x1="${fx(seg.x0)}" y1="${fy(seg.y0)}" x2="${fx(seg.x1)}" y2="${fy(seg.y1)}" stroke="${col}" stroke-width="2.2" ${pe}/>`;
+      g.s += `<line x1="${fx(seg.x0)}" y1="${fy(seg.y0)}" x2="${fx(seg.x1)}" y2="${fy(seg.y1)}" stroke="${col}" stroke-width="${thin ? 1.1 : 2.2}"${thin ? ` stroke-dasharray="7 4"` : ""} ${pe}/>`;
       if (spec.ext) {
         const inn = openInward(spec.face);
         const mx = (seg.x0 + seg.x1) / 2 + inn[0] * 0.7, my = (seg.y0 + seg.y1) / 2 + inn[1] * 0.7;
@@ -3107,12 +3601,34 @@
         g.s += `<line x1="${fx(seg.x0 + ox)}" y1="${fy(seg.y0 + oy)}" x2="${fx(seg.x1 + ox)}" y2="${fy(seg.y1 + oy)}" stroke="${col}" stroke-width="1.4" stroke-dasharray="4 2" ${pe}/>`;
         const mx = (seg.x0 + seg.x1) / 2 + ox * 2, my = (seg.y0 + seg.y1) / 2 + oy * 2;
         g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>${fmtFt(spec.w)}</text>`;
-      } else if (spec.leaf === "slider") {
+      } else if (spec.leaf === "overhead") {
+        g.s += overheadMarks(seg.x0, seg.y0, spec.w, spec.face, col);
+      } else if (isOpen) {
+        // Cased opening: no leaf, no swing — just the gap and its width.
         const inn = openInward(spec.face);
-        const park = spec.w * 0.45;
+        const mx = (seg.x0 + seg.x1) / 2 + inn[0] * 1.1, my = (seg.y0 + seg.y1) / 2 + inn[1] * 1.1;
+        g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>open ${fmtFt(spec.w)}</text>`;
+      } else if (spec.leaf === "slider" || isPocket) {
+        const inn = openInward(spec.face);
         const along = ns ? [1, 0] : [0, 1];
-        g.s += `<line x1="${fx(seg.x1)}" y1="${fy(seg.y1)}" x2="${fx(seg.x1 + along[0] * park)}" y2="${fy(seg.y1 + along[1] * park)}" stroke="${col}" stroke-width="3" ${pe}/>`;
-        g.s += `<line x1="${fx(seg.x0 + inn[0] * 0.25)}" y1="${fy(seg.y0 + inn[1] * 0.25)}" x2="${fx(seg.x1 + inn[0] * 0.25)}" y2="${fy(seg.y1 + inn[1] * 0.25)}" stroke="${col}" stroke-width="1.2" stroke-dasharray="3 2" ${pe}/>`;
+        // Parked leaves are clamped to the wall either side of the opening, so a
+        // wide pocket can't draw itself past the building corner.
+        const wallL = ns ? box.w : box.h;
+        const a0 = (ns ? Math.min(seg.x0, seg.x1) - box.e : Math.min(seg.y0, seg.y1) - box.s);
+        const want = isPocket ? spec.w / 2 : spec.w * 0.45;
+        const p0 = Math.min(want, Math.max(0, a0));
+        const p1 = Math.min(want, Math.max(0, wallL - a0 - spec.w));
+        const lw = isPocket ? 1.6 : 3;
+        const dash = isPocket ? ` stroke-dasharray="4 3"` : "";
+        g.s += `<line x1="${fx(seg.x0)}" y1="${fy(seg.y0)}" x2="${fx(seg.x0 - along[0] * p0)}" y2="${fy(seg.y0 - along[1] * p0)}" stroke="${col}" stroke-width="${lw}"${dash} ${pe}/>`;
+        g.s += `<line x1="${fx(seg.x1)}" y1="${fy(seg.y1)}" x2="${fx(seg.x1 + along[0] * p1)}" y2="${fy(seg.y1 + along[1] * p1)}" stroke="${col}" stroke-width="${lw}"${dash} ${pe}/>`;
+        if (!isPocket) {
+          g.s += `<line x1="${fx(seg.x0 + inn[0] * 0.25)}" y1="${fy(seg.y0 + inn[1] * 0.25)}" x2="${fx(seg.x1 + inn[0] * 0.25)}" y2="${fy(seg.y1 + inn[1] * 0.25)}" stroke="${col}" stroke-width="1.2" stroke-dasharray="3 2" ${pe}/>`;
+        }
+        if (isPocket) {
+          const mx = (seg.x0 + seg.x1) / 2 + inn[0] * 1.1, my = (seg.y0 + seg.y1) / 2 + inn[1] * 1.1;
+          g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>pocket ${fmtFt(spec.w)}</text>`;
+        }
       } else {
         const inn = openInward(spec.face);
         const sign = spec.swing === "out" ? -1 : 1;
@@ -3141,12 +3657,18 @@
     function drawOpenings(g) {
       ensureOpens();
       placeLivWin();
-      const order = ["gymEntry", "gymCage", "gymWin", "livEntry", "livWin", "offA", "offB", "offWin", "bunkEg", "bathA", "bathB", "bathC"];
+      const order = ["gymEntry", "gymCage", "gymWin", "livEntry", "livWin", "offA", "offB", "offWin", "offWin2", "bunkEg",
+        "bathA", "bathB", "bathC", "shopGar", "shopWest", "laundryDoor", "hallOpen",
+        "garA", "garB", "storeDoor"];
       for (const id of order) {
-        if (id === "offA" || id === "offB" || id === "offWin") { if (!S.enOffice) continue; }
-        if (id === "offB" && !S.opens.offB.on) continue;
+        if (id === "offA" || id === "offB" || id === "offWin" || id === "offWin2") { if (!S.enOffice) continue; }
         if (id === "bunkEg") { if (!S.enBunk) continue; }
         if (id.startsWith("bath")) { if (!S.enBath) continue; }
+        if (id === "shopGar" || id === "shopWest") { if (!hasWork()) continue; }
+        if (id === "laundryDoor") { if (!S.enLaundry) continue; }
+        if (id === "hallOpen") { if (!S.enHall) continue; }
+        if (id === "storeDoor") { if (!S.enStore) continue; }
+        if (S.opens[id].on === false) continue;
         drawOpening(g, id);
       }
     }
@@ -3349,8 +3871,9 @@
     function drawCourt(g) {
       const f = F.court;
       const pe = 'style="pointer-events:none"';
-      const longEW = (f.face === "N" || f.face === "S");
-      const playW = longEW ? 44 : 20, playH = longEW ? 20 : 44;
+      const longEW = f.w >= f.h;
+      const playW = Math.min(longEW ? 44 : 20, f.w);
+      const playH = Math.min(longEW ? 20 : 44, f.h);
       const pe0 = f.e + (f.w - playW) / 2, ps0 = f.s + (f.h - playH) / 2;
       g.s += `<g data-fx="court" style="cursor:grab">`;
       g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.55" stroke="${f.ec}" stroke-width="1.6"/>`;
@@ -3504,7 +4027,9 @@
       });
       document.querySelectorAll("[data-leaftog]").forEach(b => {
         const spec = S.opens[b.dataset.leaftog];
-        b.textContent = spec && spec.leaf === "double" ? "double" : "single";
+        b.textContent = spec && spec.leaf === "double" ? "double"
+          : spec && spec.leaf === "pocket" ? "pocket"
+            : spec && spec.leaf === "slider" ? "slider" : "single";
       });
       el("livEntry_door").classList.toggle("on", S.livEntryKind === "door");
       el("livEntry_slider").classList.toggle("on", S.livEntryKind === "slider");
@@ -3525,6 +4050,23 @@
       setT("bathAT", "bathA");
       setT("bathBT", "bathB");
       setT("bathCT", "bathC");
+      setT("shopGarT", "shopGar");
+      setT("shopWestT", "shopWest");
+      setT("laundryDoorT", "laundryDoor");
+      setT("hallOpenT", "hallOpen");
+      setT("garAT", "garA");
+      setT("garBT", "garB");
+      setT("storeDoorT", "storeDoor");
+      el("garAW").value = S.opens.garA.w;
+      el("garAW_v").textContent = fmtFt(S.opens.garA.w);
+      el("garBW").value = S.opens.garB.w;
+      el("garBW_v").textContent = fmtFt(S.opens.garB.w);
+      for (const [btn, specId] of [["gymCageTog", "gymCage"], ["gymWinTog", "gymWin"],
+      ["shopGarTog", "shopGar"], ["shopWestTog", "shopWest"], ["bathBTog", "bathB"],
+      ["garATog", "garA"], ["garBTog", "garB"]]) {
+        el(btn).textContent = S.opens[specId].on === false ? "hidden" : "shown";
+      }
+      el("bathWdTog").textContent = S.bathFix.wd.off ? "hidden" : "shown";
       el("livWinW").value = S.opens.livWin.w;
       el("livWinW").max = 25 - S.opens.livEntry.w;
       el("livWinW_v").textContent = fmtFt(S.opens.livWin.w);
@@ -3536,6 +4078,7 @@
       el("offBW").value = S.opens.offB.w;
       el("offBW_v").textContent = fmtFt(S.opens.offB.w);
       el("offBTog").textContent = S.opens.offB.on ? "shown" : "hidden";
+      el("bathCTog").textContent = S.opens.bathC.on ? "shown" : "hidden";
       el("gymWinW").value = S.opens.gymWin.w;
       el("gymWinW_v").textContent = fmtFt(S.opens.gymWin.w);
       el("offWinW").value = S.opens.offWin.w;
@@ -3605,14 +4148,14 @@
         const z0 = zones();
         const de = p.e - drag.pe;
         const ds = p.s - drag.ps;
-        // eastGap shrinks when the building moves east. Limits follow the
-        // full envelope (wider west-flush shop hangs toward the fence).
+        // Lot bounds only — no house-SE stop, no N–S box.
         const [lo, hi] = eastGapLimits();
         S.eastGap = clamp(Math.round((drag.oe - de) * 4) / 4, lo, hi);
-        S.bS0 = clamp(Math.round((drag.os + ds) * 2) / 2, -30, 10);
+        S.bS0 = Math.round((drag.os + ds) * 2) / 2;
         const z1 = zones();
         shiftInteriors(z1.liv.e0 - z0.liv.e0, z1.shop.s0 - z0.shop.s0);
         applyPatio();
+        alignCourtToGarage();
         draw(); return;
       }
       if (drag.type === "open") {
@@ -3670,6 +4213,10 @@
         const t = S.bunkW; S.bunkW = S.bunkD; S.bunkD = t;
         applyBunk();
       }
+      else if (k === "court") {
+        const t = S.courtW; S.courtW = S.courtD; S.courtD = t;
+        applyCourt();
+      }
       else if (k === "media") applyMedia();
       else if (k === "weights") applyWeights();
       else if (k === "dance") applyDance();
@@ -3678,7 +4225,6 @@
       else if (k === "dining") applyDining();
       else if (k === "sit") applySit();
       else if (k === "cage") applyCage();
-      else if (k === "court") applyCourt();
       else if (k === "pool") applyPool();
       else if (k === "patio") applyPatio();
       else if (k === "mirror") { setMirrorWall(nextFace[f.face]); draw(); return; }
@@ -3716,16 +4262,25 @@ garageW   = ${S.garageW}
 garageD   = ${S.garageD}
 shopFlush = "${S.shopFlush}"
 gymFlush  = "${S.gymFlush}"
+workW     = ${S.workW || 0}
+workD     = ${S.workD || 0}
+workFlush = "${S.workFlush || "W"}"
+shopLabel = ${JSON.stringify(S.shopLabel || "")}
+gymLabel  = ${JSON.stringify(S.gymLabel || "")}
+workLabel = ${JSON.stringify(S.workLabel || "")}
 eastGap   = ${S.eastGap}     # living east → east fence
 bS0       = ${S.bS0}
 overall   = ${(bb.e1 - bb.e0).toFixed(2)} × ${(bb.s1 - bb.s0).toFixed(2)}${isL() ? "  # L" : ""}
 shop      = e ${z.shop.e0.toFixed(2)}…${z.shop.e1.toFixed(2)}  s ${z.shop.s0.toFixed(2)}…${z.shop.s1.toFixed(2)}
+work      = e ${z.work.e0.toFixed(2)}…${z.work.e1.toFixed(2)}  s ${z.work.s0.toFixed(2)}…${z.work.s1.toFixed(2)}
 gym       = e ${z.gym.e0.toFixed(2)}…${z.gym.e1.toFixed(2)}  s ${z.gym.s0.toFixed(2)}…${z.gym.s1.toFixed(2)}
 living    = e ${z.liv.e0.toFixed(2)}…${z.liv.e1.toFixed(2)}  s ${z.liv.s0.toFixed(2)}…${z.liv.s1.toFixed(2)}
 patioRun  = ${S.patioRun}
 patioDep  = ${S.patioDep}
 cageLen   = ${S.cageLen}
 cageWid   = ${S.cageWid}
+courtW    = ${S.courtW}
+courtD    = ${S.courtD}
 barLen    = ${S.barLen}
 stools    = ${S.stools || 4}
 bathAlong = ${S.bathAlong}
@@ -3755,6 +4310,10 @@ opens     = ${JSON.stringify(S.opens)}
 bathFix   = ${JSON.stringify(S.bathFix)}
 office    = ${o(S.enOffice, "office")}
 closet    = ${o(S.enCloset, "closet")}
+laundry   = ${o(S.enLaundry, "laundry")}
+hall      = ${o(S.enHall, "hall")}
+store     = ${o(S.enStore, "store")}
+kitchen   = ${o(S.enKitchen, "kitchen")}
 bath      = ${o(S.enBath, "bath")}
 bunk      = ${o(S.enBunk, "bunk")}
 media     = ${o(S.enMedia, "media")}
@@ -3779,15 +4338,15 @@ spendTot  = ${Math.round(spendSum())}`;
     }
 
     const PARAM_MOD = {
-      office: "enOffice", closet: "enCloset", bath: "enBath", bunk: "enBunk",
+      office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
       media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
       dining: "enDining", sit: "enSit", bar: "enBar",
       patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
       mirror: "enMirror", barre: "enMirror", deck: "enDeck",
     };
-    const PARAM_SKIP = { overall: 1, shop: 1, gym: 1, living: 1, spendTot: 1 };
+    const PARAM_SKIP = { overall: 1, shop: 1, work: 1, gym: 1, living: 1, spendTot: 1 };
     const PARAM_INT = { poolLen: 1, stools: 1, diningChairs: 1 };
-    const PARAM_STR = { gymSide: 1, shopFlush: 1, gymFlush: 1, sitCfg: 1, mediaCfg: 1, mediaChairSide: 1, bunkDoorAt: 1, bunkDoorSwing: 1, bunkHinge: 1, livEntryKind: 1 };
+    const PARAM_STR = { gymSide: 1, shopFlush: 1, gymFlush: 1, workFlush: 1, shopLabel: 1, gymLabel: 1, workLabel: 1, sitCfg: 1, mediaCfg: 1, mediaChairSide: 1, bunkDoorAt: 1, bunkDoorSwing: 1, bunkHinge: 1, livEntryKind: 1 };
 
     function looksLikeParams(text) {
       return /(?:^|\n)\s*(?:#\s*site-studio params|livingW\s*=|garageW\s*=)/.test(text);
@@ -3795,6 +4354,15 @@ spendTot  = ${Math.round(spendSum())}`;
 
     function applyParamsText(text) {
       if (!looksLikeParams(text)) return null;
+      S.workW = null;
+      S.workD = 0;
+      S.workFlush = "W";
+      S.enLaundry = false;
+      S.enHall = false;
+      S.enStore = false;
+      S.shopLabel = "";
+      S.gymLabel = "";
+      S.workLabel = "";
       const tuple = /^\(\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.-]+),\s*"([NSEW])"\s*\)/;
       let pastedName = "";
       const stripComment = raw => {
@@ -3869,6 +4437,46 @@ spendTot  = ${Math.round(spendSum())}`;
         S.bunkW = F.bunk.w;
         S.bunkD = F.bunk.h;
       }
+      if (F.court) {
+        S.courtW = F.court.w;
+        S.courtD = F.court.h;
+      }
+      if (S.enKitchen == null) S.enKitchen = false;
+      if (!F.kitchen) {
+        seedModule("kitchen", {
+          label: "kitchenette", e: 0, s: 0, w: 24, h: 12, face: "S",
+          c: "#efe6d3", ec: "#8a6b4a", tc: "#5a3f2a"
+        });
+      }
+      if (!F.laundry) {
+        seedModule("laundry", {
+          label: "laundry", e: 0, s: 0, w: 8, h: 8, face: "N",
+          c: "#e6e2ea", ec: "#6a5a78", tc: "#3a2f48"
+        });
+      }
+      if (!F.hall) {
+        seedModule("hall", {
+          label: "hall", e: 0, s: 0, w: 8, h: 4, face: "N",
+          c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
+        });
+      }
+      if (!F.store) {
+        seedModule("store", {
+          label: "storage", e: 0, s: 0, w: 16, h: 6, face: "S",
+          c: "#dcd9cf", ec: "#6a6a5a", tc: "#3a3a2c"
+        });
+      }
+      if (S.enLaundry == null) S.enLaundry = false;
+      if (S.enHall == null) S.enHall = false;
+      if (S.enStore == null) S.enStore = false;
+      if (S.shopLabel == null) S.shopLabel = "";
+      if (S.gymLabel == null) S.gymLabel = "";
+      if (S.workLabel == null) S.workLabel = "";
+      if (S.workW == null) S.workW = S.livingW;
+      if (S.workD == null) S.workD = 0;
+      if (!S.workFlush) S.workFlush = "W";
+      if (S.courtW == null) S.courtW = 60;
+      if (S.courtD == null) S.courtD = 30;
       ensureOpens();
       ensureBathFix();
       draw();
@@ -3888,6 +4496,7 @@ spendTot  = ${Math.round(spendSum())}`;
       const z = zones();
       shiftInteriors(z.liv.e0 - prev.e0, S.bS0 - prev.s0);
       applyPatio();
+      alignCourtToGarage();
     }
 
     function shiftSouthOf(sCut, ds) {
@@ -3946,10 +4555,19 @@ spendTot  = ${Math.round(spendSum())}`;
       shiftSouthOf(cut, zones().shop.s1 - cut);
       applyPatio(); draw();
     });
+    el("workW").addEventListener("input", e => { S.workW = parseFloat(e.target.value); clampEastGap(); applyPatio(); draw(); });
+    el("workD").addEventListener("input", e => {
+      const cut = zones().work.s1;
+      S.workD = parseFloat(e.target.value);
+      shiftSouthOf(cut, zones().work.s1 - cut);
+      applyPatio(); draw();
+    });
     el("patioRun").addEventListener("input", e => { S.patioRun = parseFloat(e.target.value); applyPatio(); draw(); });
     el("patioDep").addEventListener("input", e => { S.patioDep = parseFloat(e.target.value); applyPatio(); draw(); });
     el("cageLen").addEventListener("input", e => { S.cageLen = parseFloat(e.target.value); applyCage(); draw(); });
     el("cageWid").addEventListener("input", e => { S.cageWid = parseFloat(e.target.value); applyCage(); draw(); });
+    el("courtW").addEventListener("input", e => { S.courtW = parseFloat(e.target.value); applyCourt(); draw(); });
+    el("courtD").addEventListener("input", e => { S.courtD = parseFloat(e.target.value); applyCourt(); draw(); });
     el("barLen").addEventListener("input", e => { S.barLen = parseFloat(e.target.value); applyBar(); draw(); });
     el("bathAlong").addEventListener("input", e => { S.bathAlong = parseFloat(e.target.value); applyBath(); draw(); });
     el("bathInto").addEventListener("input", e => { S.bathInto = parseFloat(e.target.value); applyBath(); draw(); });
@@ -4047,6 +4665,10 @@ spendTot  = ${Math.round(spendSum())}`;
       S.gymFlush = b.dataset.gymflush;
       clampEastGap(); applyPatio(); draw();
     }));
+    document.querySelectorAll("[data-workflush]").forEach(b => b.addEventListener("click", () => {
+      S.workFlush = b.dataset.workflush;
+      clampEastGap(); applyPatio(); draw();
+    }));
     document.querySelectorAll("[data-gymside]").forEach(b => b.addEventListener("click", () => {
       setGymSide(b.dataset.gymside);
       draw();
@@ -4062,7 +4684,8 @@ spendTot  = ${Math.round(spendSum())}`;
     }));
 
     [["enPatio", "enPatio"], ["enCage", "enCage"], ["enOffice", "enOffice"],
-    ["enCloset", "enCloset"], ["enBath", "enBath"], ["enBunk", "enBunk"],
+    ["enCloset", "enCloset"], ["enKitchen", "enKitchen"], ["enLaundry", "enLaundry"], ["enHall", "enHall"], ["enStore", "enStore"],
+    ["enBath", "enBath"], ["enBunk", "enBunk"],
     ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enDance", "enDance"], ["enTable", "enTable"],
     ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
     ["enBar", "enBar"], ["enPool", "enPool"], ["enSpa", "enSpa"], ["enCourt", "enCourt"], ["enFire", "enFire"],
@@ -4094,8 +4717,15 @@ spendTot  = ${Math.round(spendSum())}`;
     document.querySelectorAll("[data-leaftog]").forEach(b => b.addEventListener("click", () => {
       ensureOpens();
       const spec = S.opens[b.dataset.leaftog];
-      spec.leaf = spec.leaf === "double" ? "single" : "double";
-      spec.w = spec.leaf === "double" ? 6 : 3;
+      const id = b.dataset.leaftog;
+      if (id === "gymEntry") {
+        if (spec.leaf === "pocket") { spec.leaf = "double"; spec.w = 6; }
+        else if (spec.leaf === "double") { spec.leaf = "single"; spec.w = 3; }
+        else { spec.leaf = "pocket"; spec.w = 12; }
+      } else {
+        spec.leaf = spec.leaf === "double" ? "single" : "double";
+        spec.w = spec.leaf === "double" ? 6 : 3;
+      }
       draw();
     }));
     document.querySelectorAll("[data-liventry]").forEach(b => b.addEventListener("click", () => {
@@ -4121,6 +4751,9 @@ spendTot  = ${Math.round(spendSum())}`;
       ["gymWinT", "gymWin"], ["offAT", "offA"], ["offBT", "offB"], ["offWinT", "offWin"],
       ["bunkEgT", "bunkEg"],
       ["bathAT", "bathA"], ["bathBT", "bathB"], ["bathCT", "bathC"],
+      ["shopGarT", "shopGar"], ["shopWestT", "shopWest"],
+      ["laundryDoorT", "laundryDoor"], ["hallOpenT", "hallOpen"],
+      ["garAT", "garA"], ["garBT", "garB"], ["storeDoorT", "storeDoor"],
     ].forEach(([id, specId]) => {
       el(id).addEventListener("input", e => {
         ensureOpens();
@@ -4142,6 +4775,32 @@ spendTot  = ${Math.round(spendSum())}`;
     el("offBW").addEventListener("input", e => {
       ensureOpens();
       S.opens.offB.w = parseFloat(e.target.value);
+      draw();
+    });
+    el("bathCTog").addEventListener("click", () => {
+      ensureOpens();
+      S.opens.bathC.on = !S.opens.bathC.on;
+      draw();
+    });
+    for (const [btn, specId] of [["gymCageTog", "gymCage"], ["gymWinTog", "gymWin"],
+    ["shopGarTog", "shopGar"], ["shopWestTog", "shopWest"], ["bathBTog", "bathB"],
+    ["garATog", "garA"], ["garBTog", "garB"]]) {
+      el(btn).addEventListener("click", () => {
+        ensureOpens();
+        S.opens[specId].on = S.opens[specId].on === false;
+        draw();
+      });
+    }
+    for (const [id, specId] of [["garAW", "garA"], ["garBW", "garB"]]) {
+      el(id).addEventListener("input", e => {
+        ensureOpens();
+        S.opens[specId].w = parseFloat(e.target.value);
+        draw();
+      });
+    }
+    el("bathWdTog").addEventListener("click", () => {
+      ensureBathFix();
+      S.bathFix.wd.off = !S.bathFix.wd.off;
       draw();
     });
     el("offBTog").addEventListener("click", () => {
@@ -4179,9 +4838,10 @@ spendTot  = ${Math.round(spendSum())}`;
     });
 
     const EDIT_TITLES = {
-      living: "Living", gym: "Gym", shop: "Shop", patio: "Patio", cage: "Batting cage",
+      living: "Living", gym: "Gym", shop: "Shop", work: "Shop kitchen", patio: "Patio", cage: "Batting cage",
       deck: "Pool deck", pool: "Pool", spa: "Hot tub", court: "Pickleball", fire: "Fire pit",
-      office: "Office", closet: "Pool closet", bath: "Bathroom", bunk: "Bunk",
+      office: "Office", closet: "Pool closet", kitchen: "Kitchenette", bath: "Bathroom", bunk: "Bunk",
+      laundry: "Laundry / storage", hall: "Bath entry hall", store: "Garage storage",
       media: "Media", weights: "Weights", dance: "Dance floor", table: "Game table", ptable: "Pool table",
       dining: "Dining", sit: "Sitting", bar: "Bar",
     };
@@ -4199,6 +4859,7 @@ spendTot  = ${Math.round(spendSum())}`;
       if (k === "building") {
         const z = zones();
         if (p.e >= z.shop.e0 && p.e <= z.shop.e1 && p.s >= z.shop.s0 && p.s <= z.shop.s1) return "shop";
+        if (hasWork() && p.e >= z.work.e0 && p.e <= z.work.e1 && p.s >= z.work.s0 && p.s <= z.work.s1) return "work";
         if (p.e >= z.gym.e0 && p.e <= z.gym.e1 && p.s >= z.gym.s0 && p.s <= z.gym.s1) return "gym";
         return "living";
       }
@@ -4208,7 +4869,9 @@ spendTot  = ${Math.round(spendSum())}`;
     function openEdit(id) {
       if (!id || !EDIT_TITLES[id]) return;
       document.querySelectorAll(".edit-pane").forEach(p => p.classList.toggle("on", p.dataset.edit === id));
-      el("editTitle").textContent = EDIT_TITLES[id];
+      const titled = (id === "shop" && S.shopLabel) || (id === "gym" && S.gymLabel)
+        || (id === "work" && S.workLabel) || EDIT_TITLES[id];
+      el("editTitle").textContent = titled;
       const dlg = el("editDlg");
       if (!dlg.open) dlg.showModal();
     }
@@ -4277,8 +4940,9 @@ spendTot  = ${Math.round(spendSum())}`;
       "Gym entry from patio",
       "N/S Gym @ South End",
       "Media Nook + Middle Gym",
+      "Shop kitchen · west bunk",
     ];
-    const BUILTIN_REV = 4;
+    const BUILTIN_REV = 14;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
 name      = "Gym entry from patio"
@@ -4493,6 +5157,90 @@ mirror    = (14.00, 0.80, 162.19, 20.00, "N")  # w,h,e,s,face
 barre     = (10.00, 0.90, 166.68, 37.10, "S")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599912`,
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "Shop kitchen · west bunk"
+livingW   = 32
+livingD   = 40
+gymW      = 32
+gymD      = 16
+gymSide   = "S"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 32
+garageD   = 28
+shopFlush = "W"
+gymFlush  = "W"
+workW     = 26
+workD     = 14
+workFlush = "E"
+shopLabel = "Garage"
+gymLabel  = ""
+workLabel = "Shop"
+eastGap   = 14.25     # living east → east fence
+bS0       = -30
+overall   = 62.00 × 104.00  # L
+shop      = e 160.85…192.85  s -30.00…-2.00
+work      = e 166.85…192.85  s -2.00…12.00
+living    = e 160.85…192.85  s 12.00…52.00
+gym       = e 160.85…192.85  s 52.00…68.00
+patioRun  = 27
+patioDep  = 14
+cageLen   = 70
+cageWid   = 12
+courtW    = 20
+courtD    = 44
+barLen    = 10.5
+stools    = 4
+bathAlong = 8
+bathInto  = 12
+bunkLen   = 16
+bunkW     = 16
+bunkD     = 16
+bunkDoorAt = "E"
+bunkDoorSwing = "in"
+bunkHinge = "nook"
+mirrorLen = 14
+barreLen  = 10
+danceLen  = 30
+danceWid  = 10
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "converse"
+mediaChairSide = "left"
+livEntryKind = "door"
+opens     = {"gymEntry":{"host":"gym","leaf":"pocket","face":"N","t":0.578,"swing":"out","w":12,"hinge":"start"},"gymCage":{"host":"liv","leaf":"single","face":"E","t":0.95,"swing":"in","w":3,"on":true,"hinge":"start"},"gymWin":{"host":"gym","leaf":"window","face":"S","t":0.7,"w":10,"on":false},"livEntry":{"host":"liv","leaf":"single","face":"W","t":0.2625,"swing":"in","w":3,"hinge":"start","on":false},"livWin":{"host":"liv","leaf":"window","face":"W","t":0.585,"w":22,"on":false},"offA":{"host":"office","leaf":"single","face":"N","t":0.5,"swing":"out","w":3,"hinge":"start"},"offB":{"host":"office","leaf":"single","face":"W","t":0.5,"swing":"in","w":3,"on":false,"hinge":"start"},"offWin":{"host":"office","leaf":"window","face":"N","t":0.125,"w":3.5},"offWin2":{"host":"office","leaf":"window","face":"N","t":0.875,"w":3.5,"on":true},"bunkEg":{"host":"bunk","leaf":"window","face":"W","t":0.12,"w":3},"bathA":{"host":"bath","leaf":"single","face":"N","t":0.6875,"swing":"in","w":3,"hinge":"end"},"bathB":{"host":"bath","leaf":"single","face":"E","t":0.3,"swing":"in","w":2.67,"hinge":"start","on":false},"bathC":{"host":"bath","leaf":"single","face":"W","t":0.5,"swing":"out","w":3,"ext":true,"hinge":"start","on":false},"shopGar":{"host":"work","leaf":"single","face":"N","t":0.913,"swing":"in","w":3.5,"on":true,"hinge":"end"},"shopWest":{"host":"work","leaf":"single","face":"W","t":0.179,"swing":"out","w":3.5,"ext":true,"on":false,"hinge":"start"},"laundryDoor":{"host":"laundry","leaf":"single","face":"N","t":0.406,"swing":"in","w":3,"ext":true,"hinge":"start"},"hallOpen":{"host":"hall","leaf":"open","face":"N","t":0.719,"w":3.5,"hinge":"start","swing":"in"},"garA":{"host":"shop","leaf":"overhead","face":"W","t":0.7143,"w":10,"on":true,"hinge":"start","swing":"in"},"garB":{"host":"shop","leaf":"overhead","face":"W","t":0.2857,"w":10,"on":true,"hinge":"start","swing":"in"},"storeDoor":{"host":"store","leaf":"double","face":"S","t":0.594,"swing":"out","w":7,"hinge":"start"}}
+bathFix   = {"wd":{"lx":0.2,"ly":0.2,"rot":0,"off":true},"vanity":{"lx":0.2,"ly":0.2,"rot":0},"toilet":{"lx":5,"ly":3.2,"rot":0},"shower":{"lx":0.2,"ly":8.3,"rot":0,"w":4,"h":3.5}}
+office    = (14.00, 14.00, 192.85, -16.00, "W")  # w,h,e,s,face
+closet    = off
+laundry   = (8.00, 8.00, 160.85, 12.00, "N")  # w,h,e,s,face
+hall      = (8.00, 4.00, 160.85, 52.00, "N")  # w,h,e,s,face
+store     = (16.00, 6.00, 168.85, -36.00, "S")  # w,h,e,s,face
+kitchen   = (24.00, 11.00, 168.85, 12.00, "N")  # w,h,e,s,face
+bath      = (8.00, 12.00, 160.85, 56.00, "N")  # w,h,e,s,face
+bunk      = (16.00, 16.00, 144.85, 52.00, "E")  # w,h,e,s,face
+media     = (13.50, 18.00, 179.35, 30.00, "E")  # w,h,e,s,face
+weights   = (8.00, 7.50, 184.85, 59.50, "E")  # w,h,e,s,face
+dance     = off
+table     = off
+ptable    = off
+dining    = off
+sit       = off
+bar       = off
+patio     = (14.00, 27.00, 146.85, 25.00, "E")  # w,h,e,s,face — south edge butts bunk
+cage      = (12.00, 70.00, 192.85, -2.00, "N")  # w,h,e,s,face
+court     = (20.00, 44.00, 133.60, -38.00, "E")  # w,h,e,s,face — N–S center = garage
+pool      = (40.00, 46.00, 79.06, 32.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 102.56, 30.82, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 65.46, 14.95, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 72.67, 94.78, "N")  # w,h,e,s,face
+mirror    = off
+barre     = off
+spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
+spendTot  = 670743`,
     ];
     const clone = o => JSON.parse(JSON.stringify(o));
     const loadStore = () => { try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch (_) { return {}; } };
@@ -4645,6 +5393,44 @@ spendTot  = 599912`,
         });
       }
       if (!F.dance) seedDance();
+      if (!F.kitchen) {
+        seedModule("kitchen", {
+          label: "kitchenette", e: 0, s: 0, w: 24, h: 12, face: "S",
+          c: "#efe6d3", ec: "#8a6b4a", tc: "#5a3f2a"
+        });
+      }
+      if (!F.laundry) {
+        seedModule("laundry", {
+          label: "laundry", e: 0, s: 0, w: 8, h: 8, face: "N",
+          c: "#e6e2ea", ec: "#6a5a78", tc: "#3a2f48"
+        });
+      }
+      if (!F.hall) {
+        seedModule("hall", {
+          label: "hall", e: 0, s: 0, w: 8, h: 4, face: "N",
+          c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
+        });
+      }
+      if (!F.store) {
+        seedModule("store", {
+          label: "storage", e: 0, s: 0, w: 16, h: 6, face: "S",
+          c: "#dcd9cf", ec: "#6a6a5a", tc: "#3a3a2c"
+        });
+      }
+      if (S.enLaundry == null) S.enLaundry = false;
+      if (S.enHall == null) S.enHall = false;
+      if (S.enStore == null) S.enStore = false;
+      if (S.enKitchen == null) S.enKitchen = false;
+      if (S.courtW == null && F.court) S.courtW = F.court.w;
+      if (S.courtD == null && F.court) S.courtD = F.court.h;
+      if (S.courtW == null) S.courtW = 60;
+      if (S.courtD == null) S.courtD = 30;
+      if (S.shopLabel == null) S.shopLabel = "";
+      if (S.gymLabel == null) S.gymLabel = "";
+      if (S.workLabel == null) S.workLabel = "";
+      if (S.workW == null) S.workW = S.livingW;
+      if (S.workD == null) S.workD = 0;
+      if (!S.workFlush) S.workFlush = "W";
       if (S.danceLen == null && F.dance) {
         const ns = F.dance.face === "N" || F.dance.face === "S";
         S.danceLen = ns ? F.dance.w : F.dance.h;
