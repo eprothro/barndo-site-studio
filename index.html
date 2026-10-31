@@ -1661,10 +1661,10 @@
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="upper">
-                <td><span class="name">2nd-floor credit</span><span class="sub">stacked area · no slab or roof · net of
-                    floor framing + stair</span></td>
+                <td><span class="name">2nd-floor credit</span><span class="sub">% off floor-2 rooms at their own rate ·
+                    Carrie: ~25%</span></td>
                 <td class="num" data-sf></td>
-                <td class="num">− <input id="spend_upper" type="number" min="0" step="1"> /sf</td>
+                <td class="num">− <input id="spend_upperPct" type="number" min="0" max="100" step="1"> %</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="pool">
@@ -1875,7 +1875,7 @@
       drive: 8,                      // new concrete to the garage
       cage: 16,                      // ~$10 slab + ~$6 turf; no cage
       pool: 180000,
-      upper: 20,                     // 2nd-floor credit: no slab, no roof; less floor framing + stair
+      upperPct: 25,                  // Carrie 2026-10-31: going vertical saves ~25% on the stacked floor
     };
     const loadSpend = () => {
       try {
@@ -2447,13 +2447,13 @@
         drive: { on: driveSf > 0.05, sf: driveSf },
         cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
         pool: { on: !!S.enPool, sf: 0 },
-        upper: { on: false, sf: 0 },
+        upper: { on: false, sf: 0, base: 0 },
       };
     }
 
     function spendCost(key, row) {
       if (!row.on) return 0;
-      if (key === "upper") return -row.sf * Spend.upper;
+      if (key === "upper") return -row.base * Spend.upperPct / 100;
       return key === "pool" ? Spend.pool : row.sf * Spend[key];
     }
 
@@ -2477,8 +2477,9 @@
         const costEl = tr.querySelector("[data-cost]");
         if (key !== "pool") sfEl.textContent = row.on ? Math.round(row.sf).toLocaleString("en-US") : "off";
         costEl.textContent = usd(spendCost(key, row));
-        const inp = el("spend_" + key);
-        if (inp && document.activeElement !== inp) inp.value = Spend[key];
+        const rk = key === "upper" ? "upperPct" : key;
+        const inp = el("spend_" + rk);
+        if (inp && document.activeElement !== inp) inp.value = Spend[rk];
       }
       el("spendTotal").textContent = usd(total);
     }
@@ -5140,7 +5141,7 @@ deck      = ${o(S.enDeck, "deck")}
 fire      = ${o(S.enFire, "fire")}
 mirror    = ${o(S.enMirror, "mirror")}
 barre     = ${o(S.enMirror, "barre")}
-spend     = living ${Spend.living}/sf · ac ${Spend.ac}/sf · noAc ${Spend.noAc}/sf · patio ${Spend.patio}/sf · drive ${Spend.drive}/sf · cage ${Spend.cage}/sf · pool ${Spend.pool} · upper ${Spend.upper}/sf
+spend     = living ${Spend.living}/sf · ac ${Spend.ac}/sf · noAc ${Spend.noAc}/sf · patio ${Spend.patio}/sf · drive ${Spend.drive}/sf · cage ${Spend.cage}/sf · pool ${Spend.pool} · upperPct ${Spend.upperPct}%
 spendTot  = ${Math.round(spendSum())}${isRooms() ? `
 plan      = "rooms"   # x,y ft from garage NW exterior corner; x east, y south; w,h clear
 rooms     = ${JSON.stringify(S.rooms)}
@@ -5217,7 +5218,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
           continue;
         }
         if (key === "spend") {
-          const re = /(living|ac|noAc|patio|drive|court|cage|pool|upper)\s+([\d.]+)/g;
+          const re = /(living|ac|noAc|patio|drive|court|cage|pool|upperPct)\s+([\d.]+)/g;
           let hit;
           while ((hit = re.exec(val))) Spend[hit[1]] = parseFloat(hit[2]);
           saveSpend();
@@ -5886,7 +5887,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     el("spendDlg").addEventListener("click", e => {
       if (e.target === el("spendDlg")) el("spendDlg").close();
     });
-    ["living", "ac", "noAc", "patio", "drive", "cage", "pool", "upper"].forEach(key => {
+    ["living", "ac", "noAc", "patio", "drive", "cage", "pool", "upperPct"].forEach(key => {
       el("spend_" + key).addEventListener("input", e => {
         Spend[key] = parseFloat(e.target.value) || 0;
         saveSpend();
@@ -5969,14 +5970,15 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
 
     function roomsTakeoff() {
       const sum = { liv: 0, ac: 0, noac: 0, cover: 0 };
-      let upper = 0;
+      let upper = 0, upperBase = 0;
+      const rate = { liv: Spend.living, ac: Spend.ac, noac: Spend.noAc };
       for (const r of S.rooms) {
         if (!r.cls || !(r.cls in sum)) continue;
         let a = r.w * r.h;
         for (const c of S.rooms) if (c.in === r.id && c.sub) a -= c.w * c.h;
         a = Math.max(0, a);
         sum[r.cls] += a;
-        if ((r.fl || 1) > 1 && r.cls !== "cover") upper += a;
+        if ((r.fl || 1) > 1 && r.cls in rate) { upper += a; upperBase += a * rate[r.cls]; }
       }
       const driveSf = newDriveSf();
       return {
@@ -5987,7 +5989,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         drive: { on: driveSf > 0.05, sf: driveSf },
         cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
         pool: { on: !!S.enPool, sf: 0 },
-        upper: { on: upper > 0.05, sf: upper },
+        upper: { on: upper > 0.05, sf: upper, base: upperBase },
       };
     }
 
