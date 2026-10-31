@@ -6585,19 +6585,21 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       const lY0 = bY1 + W4, lY1 = lY0 + 32;     // living clear
       const SF = lY1 + W8;                      // south face
       const gymX0 = EF + 10 - W8 - 32;          // gym projects 10′ past the east face
-      const vX1 = gymX0 - W4, vX0 = vX1 - 5, walkX1 = vX0 - W8;
+      const walkX1 = 5.333, vX0 = walkX1 + W8, vX1 = gymX0 - W4;
+      const bathY0 = bY1 - 6;
 
       // ── Floor 1 ──
       R("gar", 1, "Garage", W8, W8, 32, 32, { cls: "noac", wt: wt(W8, W8, W4, W8) });
-      R("sth", 1, "Stair hall", W8, 28.667, 18, 4, { in: "gar", sub: 1, cls: "ac", wt: W4 });
+      R("sth", 1, "Stair", 4.667, 28.667, 14, 4, { in: "gar", sub: 1, cls: "ac", wt: W4 });
+      R("foot", 1, "Stair porch", 0, 28.667, 4.292, 4.375, { in: "gar", sub: 1, kind: "cover", cls: "cover" });
       R("mech", 1, "Mech", 19.042, 28.667, 3.25, 4, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("shop", 1, "Shop 10×6", 22.667, 26.667, 10, 6, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("walk", 1, "Covered walkway", 0, bY0, walkX1, 16, { kind: "cover", cls: "cover" });
-      R("vest", 1, "Gym vestibule", vX0, bY0, 5, 7.625, { cls: "ac", wt: wt(W4, W4, W4, W8) });
-      R("bath", 1, "Bath", vX0, 41.042, 5, 8, { cls: "liv", wt: wt(W4, W4, W4, W8) });
+      R("vest", 1, "Vestibule · W/D", vX0, bY0, vX1 - vX0, bathY0 - W4 - bY0, { cls: "ac", wt: wt(W4, W4, W4, W8) });
+      R("bath", 1, "Bath", vX0, bathY0, vX1 - vX0, 6, { cls: "liv", wt: wt(W4, W4, W4, W8) });
       R("gym", 1, "Gym / dance", gymX0, bY0, 32, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
       R("liv", 1, "Living", W8, lY0, 32, 32, { cls: "liv", wt: wt(W4, W8, W8, W8), ly: 3.6 });
-      R("ent", 1, "Entry", W8, lY0, 5, 4.5, { in: "liv", wt: W4 });
+      R("ent", 1, A ? "Entry · mud" : "Entry · lockers", W8, lY0, 7.083, A ? 4.5 : 5.25, { in: "liv", wt: W4 });
       // "5×8" is her grid count to the outside of the partitions; it is the only
       // reading that closes the east wall (storage, 3 windows, 4′ cab, 8′ F/P, 4′ cab).
       R("sto", 1, "Storage", 25.042, lY0, 7.625, 4.625, { in: "liv", wt: W4 });
@@ -6613,11 +6615,11 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       P("land1", 1, "landing", 14.667, 28.667, 4, 4, { label: "landing" });
       P("bench", 1, "cab", 23.667, 30.667, 8, 2, { label: "Bench" });
       P("mirror", 1, "mirror", 12.75, bY0, 24.5, 0.333, { label: "" });
-      P("cub", 1, "cubby", vX0, 39.167, 3, 1.5, { label: "Cubbies" });
-      P("wd", 1, "wd", vX0 + 3, 38.167, 2, 2.5, { label: "W/D" });
-      P("shw1", 1, "shower", vX0, 46.375, 5, 2.667, { label: "Tub" });
-      P("wc1", 1, "toilet", vX1 - 1.792, 43.5, 1.792, 2, { f: "E" });
-      P("van1", 1, "vanity", vX0, 42.25, 2, 3, { label: "" });
+      P("wFt", 1, "wall", W8, 28.667 - W4, 4.292 - W8, W4, {});
+      P("towel", 1, "cab", vX0, bY0 + 0.25, 1.25, 4.75, { label: "Towels" });
+      P("wd", 1, "wd", 6.917, bY0 + 2.667, 2.5, 2.5, { label: "W/D" });
+      P("wc1", 1, "toilet", vX1 - 1.792, bathY0 + 3.75, 1.792, 2, { f: "E" });
+      P("van1", 1, "vanity", vX1 - 2, bathY0, 2, 3.083, { label: "" });
       P("ridge", 1, "beam", 16.5, lY0, 0.333, 32, { label: "" });
       P("grill", 1, "grill", -3.5, 50.5, 2.75, 2.5, { label: "Grill" });
       P("pl1", 1, "planter", -3.667, 34.083, 3.667, 6, { label: "4×6" });
@@ -6643,23 +6645,28 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       O("shb1", 1, "shop", "N", 0.5, 4, "barn");
       O("shb2", 1, "shop", "N", 5.5, 4, "barn");
       O("mch", 1, "mech", "N", 0.375, 2.5, "door", { sw: "out" });
-      O("sthS", 1, "sth", "S", 0.333, 3, "door", { sw: "in" });
-      O("sthN", 1, "sth", "N", 0.333, 3, "door", { sw: "out" });
-      O("vW", 1, "vest", "W", 1, 3, "door", { sw: "in" });
-      O("vE", 1, "vest", "E", 1, 4, "double", { sw: "out" });
-      O("baN", 1, "bath", "N", 0.708, 2.5, "door", { sw: "in" });
+      O("gWft", 1, "gar", "W", 28, 4, "cased");
+      O("gSft", 1, "gar", "S", 0, 3.625, "cased");
+      O("sthW", 1, "sth", "W", 0, 4, "double", { sw: "out" });
+      O("tlW", 1, "vest", "W", 0.25, 4.75, "cased");
+      O("vW", 1, "vest", "W", 6.333, 3, "door", { sw: "in" });
+      O("vE", 1, "vest", "E", 0.25, 5, "double", { sw: "out" });
+      O("baN", 1, "bath", "N", 0.083, 2.333, "door", { sw: "in" });
+      O("baW", 1, "bath", "W", 1.5, 3, "window");
       O("gN", 1, "gym", "N", 25.667, 4, "window");
       O("gE1", 1, "gym", "E", 3, 3, "window");
       O("gE2", 1, "gym", "E", 6, 3, "window");
       O("gE3", 1, "gym", "E", 9, 3, "window");
-      O("entN", 1, "ent", "N", 0.333, 3, "door", { sw: "in" });
-      O("entE", 1, "ent", "E", 0.75, 3, "cased");
+      P("fr", 1, "fridge", 8.333, lY0, 2.75, 2.5, { label: "F/R" });
 
       if (A) {
-        P("mud", 1, "cubby", 6.042, lY0, 3.25, 1.5, { label: "Mud bench" });
-        P("kc", 1, "counter", 9.5, lY0, 11.75, 2, { label: "Kitchen · sink · DW" });
-        P("fr", 1, "fridge", 21.25, lY0, 3, 2.5, { label: "F/R" });
-        P("isl", 1, "island", 11.5, 55, 8.5, 3, { st: { S: 3 }, label: "Island 8½′" });
+        O("entN", 1, "ent", "N", 0.333, 3, "door", { sw: "out", hg: "b" });
+        O("entS", 1, "ent", "S", 0.25, 4, "cased");
+        P("mshf", 1, "cab", 4.917, lY0, 2.833, 0.917, { label: "Shelves" });
+        P("mud", 1, "cubby", 6.333, lY0 + 0.917, 1.417, 3.583, { label: "Mud" });
+        P("kc", 1, "counter", 11.25, lY0, 10.25, 2, { label: "Kitchen · sink · DW" });
+        P("fr2", 1, "fridge", 21.75, lY0, 2.75, 2.5, { label: "F/R" });
+        P("isl", 1, "island", 12.25, 55.083, 8.5, 2.667, { st: { S: 5 }, label: "Island 8½′" });
         P("games", 1, "rtable", 20.9, 57, 8, 8, { n: 6, label: "Games 5′" });
         P("sw1", 1, "chair", 21, 67.25, 2.75, 2.75, { label: "" });
         P("sw2", 1, "chair", 16.75, 67.25, 2.75, 2.75, { label: "" });
@@ -6675,10 +6682,11 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         for (const [i, at] of [6.5, 11.5, 16.5, 21.5, 26.5].entries()) O("lw" + (i + 1), 1, "liv", "W", at, 4, "window");
         for (const [i, at] of [5.5, 8.5, 11.5].entries()) O("le" + (i + 1), 1, "liv", "E", at, 3, "window");
       } else {
-        P("lock", 1, "cubby", 6.042, lY0, 1.5, 5, { label: "Lockers" });
-        P("fr", 1, "fridge", 8.75, lY0, 2.75, 2.5, { label: "F/R" });
-        P("kc", 1, "counter", 11.5, lY0, 8.292, 2, { label: "Kitchen · sink" });
-        P("bar", 1, "island", 11.75, 55.75, 6.5, 2, { st: { S: 3 }, label: "Bar 6½′" });
+        O("entN", 1, "ent", "N", 0.083, 3, "door", { sw: "in", hg: "b" });
+        O("entS", 1, "ent", "S", 0, 5.333, "cased");
+        P("lock", 1, "cubby", 6, lY0, 1.75, 5.25, { label: "Lockers" });
+        P("kc", 1, "counter", 11.083, lY0, 8.708, 2, { label: "Kitchen · sink · DW" });
+        P("bar", 1, "island", 11.25, 55.167, 6.917, 2.25, { st: { S: 5 }, label: "Bar 7′" });
         P("rug", 1, "rug", 2, 64.5, 12, 15, { label: "" });
         P("sect", 1, "sect", 2.333, 66.5, 10.333, 13, { c: "SW", d: 3.333, label: "Sectional" });
         P("ct", 1, "ctable", 6.75, 69.75, 4.5, 4.5, { label: "Coffee" });
@@ -6704,7 +6712,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("ponyE", 2, "6′ pony wall", 27.417, W8, 5.25, 32, { in: "apt", kind: "pony" });
       R("ponyNW", 2, "low", W8, W8, 4.5, 7, { in: "apt", kind: "pony" });
       R("ponySW", 2, "low", W8, 19.5, 4, 8.792, { in: "apt", kind: "pony" });
-      R("off", 2, "Office / bonus", vX0, bY0, 13.375, 16, { cls: "ac", wt: wt(W4, W4, W8, W8) });
+      R("off", 2, "Office / bonus", vX0, bY0, 18.667 - vX0, 16, { cls: "ac", wt: wt(W4, W4, W8, W8) });
       R("st2a", 2, "Stair", 14.667, bY0, 4, 5, { in: "off", wt: W4 });
       R("ufs", 2, "Unfinished storage", 19.042, bY0, 13.625, 16, { cls: "noac", wt: wt(W4, W8, W8, W4) });
       R("dk2", 2, "Covered deck", walkX1 - 8, bY0, 8, 16, { kind: "cover", cls: "cover" });
@@ -6806,7 +6814,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       "7. East shop, office north",
       "8. Gym+entry gable west",
     ];
-    const BUILTIN_REV = 38;
+    const BUILTIN_REV = 39;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
 name      = "3. Gym entry from patio"
