@@ -6598,8 +6598,10 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("gym", 1, "Gym / dance", gymX0, bY0, 32, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
       R("liv", 1, "Living", W8, lY0, 32, 32, { cls: "liv", wt: wt(W4, W8, W8, W8), ly: 3.6 });
       R("ent", 1, "Entry", W8, lY0, 5, 4.5, { in: "liv", wt: W4 });
-      R("sto", 1, "Storage", 24.667, lY0, 8, 5, { in: "liv", wt: W4 });
-      if (!A) R("pan", 1, "Pantry", 20.167, lY0, 4.125, 5, { in: "liv", wt: W4 });
+      // "5×8" is her grid count to the outside of the partitions; it is the only
+      // reading that closes the east wall (storage, 3 windows, 4′ cab, 8′ F/P, 4′ cab).
+      R("sto", 1, "Storage", 25.042, lY0, 7.625, 4.625, { in: "liv", wt: W4 });
+      if (!A) R("pan", 1, "Pantry", 20.167, lY0, 4.5, 4.625, { in: "liv", wt: W4 });
       R("pav", 1, "Pavilion", -16, SF - 28, 16, 28, { kind: "cover", cls: "cover" });
 
       P("truck", 1, "car", 4.667, 4.917, 20, 8, { label: "Ranch truck 8×20" });
@@ -6669,7 +6671,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         P("pt", 1, "pool", 4.667, 74.083, 7.333, 3.667, { label: "Pool 44×88" });
         P("cue", 1, "cab", 14, 80.917, 2, 0.5, { label: "" });
         P("din", 1, "table", 2.917, 62.333, 3.5, 8, { cs: { E: 4, N: 1, S: 1 }, bench: "W", label: "Dining" });
-        O("stoS", 1, "sto", "S", 1.5, 4, "double", { sw: "out" });
+        O("stoS", 1, "sto", "S", 1.125, 4, "double", { sw: "out" });
         for (const [i, at] of [6.5, 11.5, 16.5, 21.5, 26.5].entries()) O("lw" + (i + 1), 1, "liv", "W", at, 4, "window");
         for (const [i, at] of [5.5, 8.5, 11.5].entries()) O("le" + (i + 1), 1, "liv", "E", at, 3, "window");
       } else {
@@ -6686,11 +6688,11 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         P("din", 1, "table", 21.5, 59.25, 8, 3.5, { cs: { N: 4, E: 1, W: 1 }, bench: "S", label: "Dining" });
         P("games", 1, "rtable", 23.5, 65.25, 5.5, 5.5, { n: 4, sq: 1, label: "Games" });
         P("pt", 1, "pool", 22.25, 72.75, 7.333, 3.667, { label: "Pool 44×88" });
-        O("stoS", 1, "sto", "S", 2.833, 4, "double", { sw: "out" });
+        O("stoS", 1, "sto", "S", 2.458, 4, "double", { sw: "out" });
         O("panS", 1, "pan", "S", 0.8, 2.5, "door", { sw: "out" });
         for (const [i, at] of [6.75, 11.75, 16.75, 21.75, 26.75].entries()) O("le" + (i + 1), 1, "liv", "E", at, 3, "window");
         for (const [i, at] of [7.833, 12.167, 16.5, 20.833, 25.167].entries())
-          O("lw" + (i + 1), 1, "liv", "W", at, 3.75, i === 0 || i === 4 ? "window" : "slider");
+          O("lw" + (i + 1), 1, "liv", "W", at, 3.75, "window");
       }
 
       // ── Floor 2 ──
