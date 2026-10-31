@@ -639,6 +639,12 @@
               <button data-tool="measure" id="tool_measure">measure</button>
             </div>
           </div>
+          <div class="row" id="floorRow" style="display:none"><label>Floor</label>
+            <div class="seg" style="flex:1.4">
+              <button id="floor_1">1st</button>
+              <button id="floor_2">2nd</button>
+            </div>
+          </div>
           <div class="row"><label>Zoom</label>
             <input type="range" id="zoom" min="0.45" max="3.5" step="0.05"><span class="val" id="zoom_v"></span>
           </div>
@@ -653,7 +659,7 @@
           <div class="hint">Double-click a component on plan to edit.</div>
           <div class="comp-list">
             <div class="comp-row" data-edit="shop"><span class="ccheck"></span><span class="cname"
-                id="shopCname">Shop</span><button type="button" class="ebtn" data-edit="shop">Edit</button></div>
+                id="shopCname">Garage</span><button type="button" class="ebtn" data-edit="shop">Edit</button></div>
             <div class="comp-row" data-edit="work"><span class="ccheck"></span><span class="cname" id="workCname">Shop
                 kitchen</span><button type="button" class="ebtn" data-edit="work">Edit</button></div>
             <div class="comp-row" data-edit="gym"><span class="ccheck"></span><span class="cname"
@@ -678,10 +684,12 @@
                 class="cname">Office</span><button type="button" class="ebtn" data-edit="office">Edit</button></div>
             <div class="comp-row" data-edit="closet"><input type="checkbox" id="enCloset"><span class="cname">Pool
                 closet</span><button type="button" class="ebtn" data-edit="closet">Edit</button></div>
-            <div class="comp-row" data-edit="laundry"><input type="checkbox" id="enLaundry"><span class="cname">Laundry
-                / storage</span><button type="button" class="ebtn" data-edit="laundry">Edit</button></div>
+            <div class="comp-row" data-edit="laundry"><input type="checkbox" id="enLaundry"><span
+                class="cname">Entry</span><button type="button" class="ebtn" data-edit="laundry">Edit</button></div>
             <div class="comp-row" data-edit="hall"><input type="checkbox" id="enHall"><span class="cname">Bath entry
                 hall</span><button type="button" class="ebtn" data-edit="hall">Edit</button></div>
+            <div class="comp-row" data-edit="porch"><input type="checkbox" id="enPorch"><span
+                class="cname">Porch</span><button type="button" class="ebtn" data-edit="porch">Edit</button></div>
             <div class="comp-row" data-edit="store"><input type="checkbox" id="enStore"><span class="cname">Garage
                 storage</span><button type="button" class="ebtn" data-edit="store">Edit</button></div>
             <div class="comp-row" data-edit="kitchen"><input type="checkbox" id="enKitchen"><span
@@ -708,6 +716,14 @@
             <div class="comp-row" data-edit="bar"><input type="checkbox" id="enBar"><span
                 class="cname">Bar</span><button type="button" class="ebtn" data-edit="bar">Edit</button></div>
           </div>
+          <div id="roomsBox" style="display:none">
+            <div class="hint" id="roomsHint"></div>
+            <div class="comp-list" id="roomList"></div>
+            <div class="row"><label>Add</label>
+              <select id="rmAddSel" style="flex:1"></select>
+              <button type="button" class="ebtn" id="rmAddBtn">+</button>
+            </div>
+          </div>
         </div>
 
         <dialog id="editDlg">
@@ -722,7 +738,8 @@
             <div class="row"><label>Depth (N–S)</label>
               <input type="range" id="livingD" min="24" max="52" step="0.5"><span class="val" id="livingD_v"></span>
             </div>
-            <div class="hint">The reference bar. Shop and gym flush to <b>this</b> east or west face. Drag the building
+            <div class="hint">The reference bar. Garage and gym flush to <b>this</b> east or west face. Drag the
+              building
               anywhere on the lot — no house-SE stop, no N–S box.</div>
             <div class="subhead">Entry</div>
             <div class="row"><label>Type</label>
@@ -773,8 +790,11 @@
                 <button data-gymflush="W" id="gymFlush_W">west</button>
               </div>
             </div>
-            <div class="hint">East = share living’s east face (narrow gym insets west). West = share living’s west face
-              (narrow gym insets east). C-2 is gym <b>north</b>, both 36′, flush <b>west</b>.</div>
+            <div class="row"><label>Narrow depth</label>
+              <input type="range" id="gymNeckD" min="0" max="24" step="0.5"><span class="val" id="gymNeckD_v"></span>
+            </div>
+            <div class="hint">East = share living’s east face (narrow gym insets west). <b>Narrow depth</b> = first N
+              feet stay living-width; the rest is gym width. One room.</div>
             <div class="row"><label>Mirror + barre</label><input type="checkbox" id="enMirror"></div>
             <div class="row"><label>Mirror wall</label>
               <div class="seg" style="flex:1.4">
@@ -881,8 +901,8 @@
                 <button data-shopflush="W" id="shopFlush_W">west</button>
               </div>
             </div>
-            <div class="hint">East flush = cage wall continuous (extra shop hangs west). West flush = courtyard wall
-              continuous (extra shop hangs east, toward the cage).</div>
+            <div class="hint">East flush = cage wall continuous (extra garage hangs west). West flush = courtyard wall
+              continuous (extra garage hangs east, toward the cage).</div>
             <div class="subhead">Overhead door 1</div>
             <div class="row"><label>On plan</label>
               <button type="button" class="rbtn" id="garATog">shown</button>
@@ -921,6 +941,21 @@
             </div>
             <div class="hint">Carrie draws <b>two singles on the west face</b>, 10′ each, with a 2′ pier between them
               and 3′ to each corner. Sectional — no swing. Drag on the plan to slide.</div>
+            <div class="subhead">Shop area</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="inshopTog">hidden</button>
+            </div>
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="inshop">↻ <span id="face_inshop"></span></button>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="inshopLen" min="8" max="56" step="0.5"><span class="val" id="inshopLen_v"></span>
+            </div>
+            <div class="row"><label>Width</label>
+              <input type="range" id="inshopWid" min="8" max="40" step="0.5"><span class="val" id="inshopWid_v"></span>
+            </div>
+            <div class="hint">Dashed overlay <b>inside the garage</b> — a shop bay without a third volume. Hidden by
+              default. Drag to place. ↻ swaps which way length and width run.</div>
           </div>
           <div class="edit-pane" data-edit="work">
             <div class="row"><label>Width (E–W)</label>
@@ -935,12 +970,14 @@
                 <button data-workflush="W" id="workFlush_W">west</button>
               </div>
             </div>
-            <div class="hint">Band between garage and gym/living. <b>0</b> = none (the three Masters). Carrie’s plan is
-              a
-              14×26 shop, east-flush so its west wall tucks 6′ under the roofline. Prices as non-living A/C.</div>
+            <div class="hint">Band between garage and gym/living. <b>0</b> = none. Always no-A/C (office
+              inside it still prices as A/C).</div>
             <div class="subhead">Door to garage</div>
             <div class="row"><label>On plan</label>
               <button type="button" class="rbtn" id="shopGarTog">shown</button>
+            </div>
+            <div class="row"><label>Leaf</label>
+              <button type="button" class="rbtn" data-leaftog="shopGar">single</button>
             </div>
             <div class="row"><label>Face</label>
               <div class="seg" style="flex:1.4">
@@ -992,6 +1029,9 @@
             <div class="hint">East edge is glued to the living west face (gym and shop join that wall when flush west).
               Drag slides it along that wall; it snaps to zone joints.</div>
           </div>
+          <div class="edit-pane" data-edit="rm">
+            <div id="rmBody"></div>
+          </div>
           <div class="edit-pane" data-edit="cage">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="cage">↻ <span id="face_cage"></span></button>
@@ -1003,7 +1043,8 @@
               <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
             </div>
             <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path). Walk-in through
-              the net — no door.</div>
+              the net — no door. 4×8 practice mound (rubber centered). Distances are plate apex → rubber front:
+              46 / 50 / 60′6″.</div>
           </div>
           <div class="edit-pane" data-edit="deck">
             <div class="row"><label>Width (E–W)</label>
@@ -1037,8 +1078,8 @@
             <div class="row"><label>Depth (N–S)</label>
               <input type="range" id="courtD" min="20" max="70" step="0.5"><span class="val" id="courtD_v"></span>
             </div>
-            <div class="hint">Default 60×30 pad with a 44×20 playing surface. ↻ swaps width/depth. Spend uses the pad
-              area. Drag freely.</div>
+            <div class="hint">Lines on the drive — dotted outline, no coat. ↻ swaps width/depth. Drag freely.
+              New concrete to the garage is a separate fill ($8/sf).</div>
           </div>
           <div class="edit-pane" data-edit="fire">
             <div class="row"><label>Rotate</label>
@@ -1093,7 +1134,7 @@
             </div>
             <div class="hint">Two singles. Hide door B for a solid wall. Drag each leaf on the plan. In / out and hinge
               are toggles, relative to the office.</div>
-            <div class="subhead">Windows</div>
+            <div class="subhead">Window A</div>
             <div class="row"><label>Length</label>
               <input type="range" id="offWinW" min="2.5" max="8" step="0.5"><span class="val" id="offWinW_v"></span>
             </div>
@@ -1108,7 +1149,25 @@
             <div class="row"><label>Along wall</label>
               <input type="range" id="offWinT" min="0" max="100" step="1"><span class="val" id="offWinT_v"></span>
             </div>
-            <div class="hint">Dashed = glass. Drag it on the plan.</div>
+            <div class="subhead">Window B</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="offWin2Tog">shown</button>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="offWin2W" min="2.5" max="8" step="0.5"><span class="val" id="offWin2W_v"></span>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="offWin2:N">N</button>
+                <button type="button" data-openface="offWin2:S">S</button>
+                <button type="button" data-openface="offWin2:E">E</button>
+                <button type="button" data-openface="offWin2:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="offWin2T" min="0" max="100" step="1"><span class="val" id="offWin2T_v"></span>
+            </div>
+            <div class="hint">Dashed = glass. Drag each on the plan. #6’s east 3′-6″ is window B.</div>
           </div>
           <div class="edit-pane" data-edit="closet">
             <div class="row"><label>Rotate</label>
@@ -1119,8 +1178,58 @@
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="laundry">↻ <span id="face_laundry"></span></button>
             </div>
-            <div class="hint">Carrie’s 8×8 laundry / storage sits in the living room’s north-west corner, west of the
-              kitchen run, W/D on its north wall. Drag to move; size comes from the plan.</div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="laundryW" min="6" max="20" step="0.5"><span class="val" id="laundryW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="laundryD" min="6" max="20" step="0.5"><span class="val" id="laundryD_v"></span>
+            </div>
+            <div class="hint">Entry (W/D + cabinets). Drag the room; drag W/D and cabinets on the plan.</div>
+            <div class="subhead">W/D</div>
+            <div class="row"><label>Unit</label>
+              <button type="button" class="rbtn" id="laundryWdStack">pair</button>
+              <button type="button" class="rbtn" id="laundryWdRot">↻</button>
+            </div>
+            <div class="subhead">Cabinet A</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" data-cabtog="cab">shown</button>
+            </div>
+            <div class="row"><label>Wall</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-cabface="cab:N">N</button>
+                <button type="button" data-cabface="cab:S">S</button>
+                <button type="button" data-cabface="cab:E">E</button>
+                <button type="button" data-cabface="cab:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="laundryCabLen" min="2" max="16" step="0.5"><span class="val"
+                id="laundryCabLen_v"></span>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="laundryCabT" min="0" max="100" step="1"><span class="val"
+                id="laundryCabT_v"></span>
+            </div>
+            <div class="subhead">Cabinet B</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" data-cabtog="cab2">shown</button>
+            </div>
+            <div class="row"><label>Wall</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-cabface="cab2:N">N</button>
+                <button type="button" data-cabface="cab2:S">S</button>
+                <button type="button" data-cabface="cab2:E">E</button>
+                <button type="button" data-cabface="cab2:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Length</label>
+              <input type="range" id="laundryCab2Len" min="2" max="16" step="0.5"><span class="val"
+                id="laundryCab2Len_v"></span>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="laundryCab2T" min="0" max="100" step="1"><span class="val"
+                id="laundryCab2T_v"></span>
+            </div>
             <div class="subhead">Door · exterior</div>
             <div class="row"><label>Face</label>
               <div class="seg" style="flex:1.4">
@@ -1138,10 +1247,69 @@
               <button type="button" class="rbtn" data-swingtog="laundryDoor">in</button>
               <button type="button" class="rbtn" data-hingetog="laundryDoor">hinge N</button>
             </div>
+            <div class="subhead">Door · gym</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="laundryGymTog">shown</button>
+            </div>
+            <div class="row"><label>Width</label>
+              <input type="range" id="laundryGymW" min="2.5" max="8" step="0.167"><span class="val"
+                id="laundryGymW_v"></span>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="laundryGym:N">N</button>
+                <button type="button" data-openface="laundryGym:S">S</button>
+                <button type="button" data-openface="laundryGym:E">E</button>
+                <button type="button" data-openface="laundryGym:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="laundryGymT" min="0" max="100" step="1"><span class="val"
+                id="laundryGymT_v"></span>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="laundryGym">in</button>
+              <button type="button" class="rbtn" data-hingetog="laundryGym">hinge N</button>
+            </div>
+            <div class="subhead">To living</div>
+            <div class="row"><label>On plan</label>
+              <button type="button" class="rbtn" id="laundryLivTog">shown</button>
+            </div>
+            <div class="row"><label>Leaf</label>
+              <button type="button" class="rbtn" data-leaftog="laundryLiv">open</button>
+            </div>
+            <div class="row"><label>Width</label>
+              <input type="range" id="laundryLivW" min="2.5" max="10" step="0.167"><span class="val"
+                id="laundryLivW_v"></span>
+            </div>
+            <div class="row"><label>Face</label>
+              <div class="seg" style="flex:1.4">
+                <button type="button" data-openface="laundryLiv:N">N</button>
+                <button type="button" data-openface="laundryLiv:S">S</button>
+                <button type="button" data-openface="laundryLiv:E">E</button>
+                <button type="button" data-openface="laundryLiv:W">W</button>
+              </div>
+            </div>
+            <div class="row"><label>Along wall</label>
+              <input type="range" id="laundryLivT" min="0" max="100" step="1"><span class="val"
+                id="laundryLivT_v"></span>
+            </div>
+            <div class="row"><label>Swing</label>
+              <button type="button" class="rbtn" data-swingtog="laundryLiv">in</button>
+              <button type="button" class="rbtn" data-hingetog="laundryLiv">hinge N</button>
+            </div>
+            <div class="hint">Leaf cycles open (cased walkway) → single → double. No width label — doors aren't labeled.
+            </div>
           </div>
           <div class="edit-pane" data-edit="hall">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="hall">↻ <span id="face_hall"></span></button>
+            </div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="hallW" min="3" max="16" step="0.5"><span class="val" id="hallW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="hallD" min="3" max="12" step="0.5"><span class="val" id="hallD_v"></span>
             </div>
             <div class="hint">The 4′-deep entry hall in Carrie’s plan: living opens into it, the bath door is off it,
               and the bunk door is off it — so the bath is never entered straight from the pool.</div>
@@ -1157,14 +1325,32 @@
             <div class="row"><label>Along wall</label>
               <input type="range" id="hallOpenT" min="0" max="100" step="1"><span class="val" id="hallOpenT_v"></span>
             </div>
-            <div class="hint">Cased opening — no leaf, no swing.</div>
+            <div class="hint">Full-wall open is left unmarked. Shrink it to show a cased opening.</div>
+          </div>
+          <div class="edit-pane" data-edit="porch">
+            <div class="row"><label>Rotate</label>
+              <button class="rbtn" data-rot="porch">↻ <span id="face_porch"></span></button>
+            </div>
+            <div class="row"><label>Width (E–W)</label>
+              <input type="range" id="porchW" min="6" max="24" step="0.5"><span class="val" id="porchW_v"></span>
+            </div>
+            <div class="row"><label>Depth (N–S)</label>
+              <input type="range" id="porchD" min="4" max="16" step="0.5"><span class="val" id="porchD_v"></span>
+            </div>
+            <div class="hint">Open cover — patio rate. #6 takes the old garage-storage bump:
+              <b>16×6</b> on the garage north.
+            </div>
           </div>
           <div class="edit-pane" data-edit="store">
             <div class="row"><label>Rotate</label>
               <button class="rbtn" data-rot="store">↻ <span id="face_store"></span></button>
             </div>
-            <div class="hint">Carrie’s 16×6 storage closet bumped off the <b>north end of the garage</b>, centred on the
-              32′ face. Unconditioned — it prices as no-A/C, not living.</div>
+            <div class="row"><label>Enclosure</label>
+              <button type="button" class="rbtn" id="storeOpenTog">enclosed</button>
+            </div>
+            <div class="hint"><b>Enclosed</b> closet is no-A/C. <b>Open cover</b> prices with patio.
+              Porch is its own component.
+            </div>
             <div class="subhead">Door from the garage</div>
             <div class="row"><label>Face</label>
               <div class="seg" style="flex:1.4">
@@ -1434,38 +1620,37 @@
             </thead>
             <tbody>
               <tr data-spend="living">
-                <td><span class="name">Living</span><span class="sub">fully conditioned · + bunk / bath / hall /
-                    laundry / kitchen (even in the gym band)</span></td>
+                <td><span class="name">High finish A/C</span><span class="sub">living · laundry · bath · bunk ·
+                    hall</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_living" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="ac">
-                <td><span class="name">Non-living A/C</span><span class="sub">gym floor + shop + office ·
-                    mini-split</span>
-                </td>
+                <td><span class="name">Low finish A/C</span><span class="sub">gym · office</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_ac" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="noAc">
-                <td><span class="name">No A/C</span><span class="sub">shop − office/bunk/kitchenette in shop ·
-                    vented</span></td>
+                <td><span class="name">No A/C</span><span class="sub">garage + shop · − office in those bands</span>
+                </td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_noAc" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="patio">
-                <td><span class="name">Covered patio</span><span class="sub">slab + cover + lighting</span></td>
+                <td><span class="name">Covered patio</span><span class="sub">slab + cover + lighting · + open
+                    porch</span></td>
                 <td class="num" data-sf></td>
                 <td class="num"><input id="spend_patio" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
-              <tr data-spend="court">
-                <td><span class="name">Sport court</span><span class="sub">coat, lines, hoop, fence · default $25k on
-                    60×30</span></td>
+              <tr data-spend="drive">
+                <td><span class="name">New driveway</span><span class="sub">concrete to the new garage · pickleball is
+                    paint</span></td>
                 <td class="num" data-sf></td>
-                <td class="num"><input id="spend_court" type="number" min="0" step="0.01"> /sf</td>
+                <td class="num"><input id="spend_drive" type="number" min="0" step="1"> /sf</td>
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="cage">
@@ -1491,10 +1676,10 @@
               </tr>
             </tfoot>
           </table>
-          <p class="spend-note">Planning guesses, not a bid — same living / gym / shop rates as
-            <a href="budget.html" style="color:var(--accent)">budget.html</a>.
-            Patio is slab + a lit cover (~$10 slab + ~$50 structure). Court default is
-            $25,000 ÷ 1,800 sf. Cage is the net pad (no 2′ sides).
+          <p class="spend-note">Planning guesses, not a bid — high finish vs gym/office vs no-A/C.
+            Patio is slab + a lit cover (~$10 slab + ~$50 structure), including an open porch.
+            New drive is concrete only ($8/sf); pickleball is lines on that slab. Cage is the
+            net pad (no 2′ sides).
           </p>
         </dialog>
 
@@ -1537,7 +1722,8 @@
               </svg>
             </button>
           </div>
-          <div class="hint">Masters are shared baselines. Save on a master makes a copy. Re-select to reset.</div>
+          <div class="hint">Masters are shared baselines. Link is <code>?m=6&amp;z=2.2&amp;x=&amp;y=</code>. Re-select
+            to reset.</div>
         </div>
       </div>
 
@@ -1545,12 +1731,14 @@
         <div class="stage">
           <div id="svgHost"></div>
           <div class="legend">
-            <span><b style="color:#6a7a5a">shop</b></span>
+            <span><b style="color:#6a7a5a">garage</b></span>
+            <span><b style="color:#4a6a3a">shop area</b> dotted</span>
             <span><b style="color:#8aa06a">gym</b></span>
             <span><b style="color:#c9b896">living</b></span>
             <span><b style="color:#8a744a">covered patio</b> · snaps west</span>
             <span><b style="color:#3f97b3">cage</b> + 2′ dotted</span>
-            <span><b style="color:#3a6fa8">court</b> 60×30</span>
+            <span><b style="color:#7d8a82">new drive</b></span>
+            <span><b style="color:#3a6fa8">pickleball</b> lines</span>
             <span><b style="color:#2f6f82">pool</b></span>
             <span><b style="color:#2a6a78">hot tub</b></span>
             <span><b style="color:#6a8a72">pool tbl</b></span>
@@ -1673,11 +1861,11 @@
     const SPEND_KEY = "site-studio-spend-v2";
     const SPEND_CAP = 600000;        // owner's 2026-08-29 all-in headline
     const SPEND_DEFAULTS = {
-      living: 175,
-      ac: 90,
+      living: 180,                   // high finish A/C
+      ac: 90,                        // low finish: gym + office
       noAc: 70,
       patio: 60,                     // ~$10 slab + ~$50 cover & lighting
-      court: Math.round((25000 / 1800) * 100) / 100, // $25k / 60×30
+      drive: 8,                      // new concrete to the garage
       cage: 16,                      // ~$10 slab + ~$6 turf; no cage
       pool: 180000,
     };
@@ -1703,6 +1891,10 @@
       shopLabel: "",
       gymLabel: "",
       workLabel: "",
+      storeLabel: "",
+      storeOpen: false,              // open porch → patio; enclosed closet → no-A/C
+      bandD: 0,                      // gap between gym and living (entry/bed band)
+      gymNeckD: 0,                   // north (or far) gym strip at living width; rest is gymW
       eastGap: 28,                   // living east → east fence
       bS0: -10,                      // barndo north (pushed up from −20)
       patioRun: 39.5, patioDep: 15,
@@ -1712,11 +1904,15 @@
       bathAlong: 7.5, bathInto: 10.5,
       bunkLen: 14,
       bunkW: 13, bunkD: 14,
+      laundryW: 10, laundryD: 13,
+      hallW: 6, hallD: 4,
+      porchW: 16, porchD: 6,
       bunkDoorAt: "W",
       bunkDoorSwing: "in",
       bunkHinge: "nook",
       mirrorLen: 14, barreLen: 10,
       danceLen: 30, danceWid: 10,
+      inshopLen: 30, inshopWid: 14,
       deckW: 62.5, deckL: 76.5,
       poolLen: 8,
       diningW: 3.5, diningLen: 11, diningChairs: 5, diningEnds: true,
@@ -1724,15 +1920,26 @@
       mediaCfg: "dualL",
       mediaChairSide: "left",
       enPatio: true, enCage: true, enOffice: true, enCloset: true, enKitchen: false,
-      enLaundry: false, enHall: false, enStore: false,
+      enLaundry: false, enHall: false, enPorch: false, enStore: false,
+      enInshop: false,
       enBath: true, enBunk: true, enMedia: true, enWeights: true, enDance: true,
       enTable: true, enPtable: true, enDining: false, enSit: false,
       enBar: true, enPool: true, enSpa: true, enCourt: true, enFire: true, enMirror: true, enDeck: true,
       tool: "hand",
       zoom: 2.2,
+      viewX: null,
+      viewY: null,
       livEntryKind: "slider",
       opens: null,
       bathFix: null,
+      laundryFix: null,
+      // "bands" = shop/gym/living band model; "rooms" = explicit room/piece plan
+      // (two floors), origin at the garage NW exterior corner.
+      plan: "bands",
+      level: 1,
+      rooms: null,
+      pcs: null,
+      ropens: null,
     };
 
     // Dining clearance (ft): CD = chair depth ~1'-8". sideC/endC are beyond the chair back.
@@ -1753,9 +1960,13 @@
       shopGar: { host: "work", leaf: "single", face: "N", t: 0.12, swing: "in", w: 3.5, on: true, hinge: "start" },
       shopWest: { host: "work", leaf: "single", face: "W", t: 0.12, swing: "out", w: 3.5, ext: true, on: true, hinge: "start" },
       laundryDoor: { host: "laundry", leaf: "single", face: "N", t: 0.7, swing: "in", w: 3, ext: true, hinge: "end" },
+      laundryGym: { host: "laundry", leaf: "single", face: "N", t: 0.35, swing: "in", w: 3, on: false, hinge: "start" },
+      laundryLiv: { host: "laundry", leaf: "open", face: "S", t: 0.5, w: 5, on: false },
       hallOpen: { host: "hall", leaf: "open", face: "N", t: 0.3, w: 3.5 },
       garA: { host: "shop", leaf: "overhead", face: "W", t: 0.72, w: 10, on: false },
       garB: { host: "shop", leaf: "overhead", face: "W", t: 0.28, w: 10, on: false },
+      shopWinN: { host: "shop", leaf: "window", face: "N", t: 0.16, w: 2.8333333333, h: 5.75, on: false },
+      porchWin: { host: "shop", leaf: "window", face: "N", t: 0.66, w: 5.8333333333, h: 5.75, panes: 2, on: false },
       storeDoor: { host: "store", leaf: "double", face: "S", t: 0.5, swing: "out", w: 7, hinge: "start" },
       livEntry: { host: "liv", leaf: "slider", face: "W", t: 0.32, swing: "in", w: 8, hinge: "start" },
       livWin: { host: "liv", leaf: "window", face: "W", t: 0.72, w: 12 },
@@ -1802,11 +2013,67 @@
       for (const k of ["offB", "bathC", "gymWin", "gymCage", "shopGar", "shopWest"]) {
         if (S.opens[k].on == null) S.opens[k].on = true;
       }
+      for (const k of ["laundryGym", "laundryLiv"]) {
+        if (S.opens[k].on == null) S.opens[k].on = false;
+      }
       for (const spec of Object.values(S.opens)) {
-        if (!spec || spec.leaf === "window" || spec.leaf === "slider" || spec.leaf === "pocket") continue;
+        if (!spec || spec.leaf === "window" || spec.leaf === "slider" || spec.leaf === "pocket" || spec.leaf === "open") continue;
         if (spec.hinge !== "end") spec.hinge = "start";
         if (spec.swing !== "out") spec.swing = "in";
       }
+    }
+    const LAUNDRY_WD_PAIR = { w: 5, h: 2.67 };
+    const LAUNDRY_WD_STACK = { w: 2.25, h: 2.67 }; // 27" facade × 32" deep
+    const LAUNDRY_CAB_D = 2.0;
+    const LAUNDRY_CAB_IDS = ["cab", "cab2"];
+    const LAUNDRY_FIX_DEFAULTS = () => ({
+      wd: { lx: 0.35, ly: 0.35, rot: 0, stack: false },
+      cab: { face: "E", t: 0.55, len: 6, on: true },
+      cab2: { face: "N", t: 0.5, len: 4, on: false },
+    });
+    function laundryWdSize() {
+      return (S.laundryFix && S.laundryFix.wd && S.laundryFix.wd.stack) ? LAUNDRY_WD_STACK : LAUNDRY_WD_PAIR;
+    }
+    function laundryWdDim(rot) {
+      const sz = laundryWdSize();
+      return (rot % 180 === 0) ? { w: sz.w, h: sz.h } : { w: sz.h, h: sz.w };
+    }
+    function ensureLaundryFix() {
+      if (!S.laundryFix || typeof S.laundryFix !== "object") S.laundryFix = {};
+      const d = LAUNDRY_FIX_DEFAULTS();
+      S.laundryFix.wd = Object.assign({}, d.wd, S.laundryFix.wd || {});
+      S.laundryFix.wd.rot = ((S.laundryFix.wd.rot % 360) + 360) % 360;
+      S.laundryFix.wd.stack = !!S.laundryFix.wd.stack;
+      for (const id of LAUNDRY_CAB_IDS) {
+        S.laundryFix[id] = Object.assign({}, d[id], S.laundryFix[id] || {});
+        if (!"NSEW".includes(S.laundryFix[id].face)) S.laundryFix[id].face = d[id].face;
+      }
+      clampLaundryFixes();
+    }
+    function clampLaundryFixes() {
+      if (!F.laundry) return;
+      const f = F.laundry, wd = S.laundryFix.wd;
+      const dim = laundryWdDim(wd.rot);
+      wd.lx = clamp(wd.lx, 0, Math.max(0, f.w - dim.w));
+      wd.ly = clamp(wd.ly, 0, Math.max(0, f.h - dim.h));
+      for (const id of LAUNDRY_CAB_IDS) {
+        const cab = S.laundryFix[id];
+        if (!cab) continue;
+        const wall = (cab.face === "N" || cab.face === "S") ? f.w : f.h;
+        cab.len = clamp(cab.len, 2, Math.max(2, wall - 0.2));
+        const half = wall > 0.2 ? (cab.len / 2) / wall : 0.5;
+        cab.t = clamp(cab.t, half, 1 - half);
+      }
+    }
+    function laundryCabBox(id) {
+      const f = F.laundry, cab = S.laundryFix[id || "cab"];
+      const d = LAUNDRY_CAB_D;
+      const L = (cab.face === "N" || cab.face === "S") ? f.w : f.h;
+      const len = cab.len, mid = cab.t * L;
+      if (cab.face === "N") return { e: f.e + mid - len / 2, s: f.s, w: len, h: d };
+      if (cab.face === "S") return { e: f.e + mid - len / 2, s: f.s + f.h - d, w: len, h: d };
+      if (cab.face === "W") return { e: f.e, s: f.s + mid - len / 2, w: d, h: len };
+      return { e: f.e + f.w - d, s: f.s + mid - len / 2, w: d, h: len };
     }
     function ensureBathFix() {
       if (!S.bathFix || typeof S.bathFix !== "object") S.bathFix = {};
@@ -1830,8 +2097,9 @@
 
     function hostBox(host) {
       if (host === "gym") {
-        const z = zones().gym;
-        return { e: z.e0, s: z.s0, w: z.e1 - z.e0, h: z.s1 - z.s0 };
+        const z = zones();
+        const g = z.gymWide || z.gym;
+        return { e: g.e0, s: g.s0, w: g.e1 - g.e0, h: g.s1 - g.s0 };
       }
       if (host === "liv") {
         const z = zones().liv;
@@ -1850,6 +2118,16 @@
     }
     function openWallLen(box, face) {
       return (face === "N" || face === "S") ? box.w : box.h;
+    }
+    function openIsFullFace(box, spec) {
+      if (!box || !spec) return false;
+      return spec.w >= openWallLen(box, spec.face) - 0.15;
+    }
+    function hallSkipFaces() {
+      const spec = S.opens && S.opens.hallOpen;
+      if (!spec || spec.on === false || spec.leaf !== "open") return [];
+      if (!openIsFullFace(F.hall, spec)) return [];
+      return [spec.face];
     }
     function clampOpenT(box, face, w, t) {
       if (!box) return 0.5;
@@ -1962,15 +2240,28 @@
       return Math.max(0, e1 - e0) * Math.max(0, s1 - s0);
     }
 
-    // Cheap / non-living A/C is gym + office only. Hall, bath, laundry,
-    // kitchen, bunk are living-rate even when they sit in the gym/shop band.
+    // A/C splits by finish: high = living + laundry/bath/bunk/hall/kitchen;
+    // low = gym + office. Shop / garage are no-A/C. Open porch → patio.
+    // New drive = court ∪ stub-to-garage, minus existing concrete.
     function inShopSf(key, en) {
       if (!S[en] || !F[key]) return 0;
       return overlapSf(F[key], zones().shop);
     }
+    function gymAreaSf() {
+      const neck = Math.max(0, Math.min(S.gymD, S.gymNeckD || 0));
+      if (neck < 0.05) return S.gymW * S.gymD;
+      return S.livingW * neck + S.gymW * (S.gymD - neck);
+    }
+    function gymPolys() {
+      const z = zones();
+      return z.gymNeck ? [z.gymNeck, z.gymWide] : [z.gym];
+    }
+    function overlapGym(box) {
+      return gymPolys().reduce((n, p) => n + overlapSf(box, p), 0);
+    }
     function inGymSf(key, en) {
       if (!S[en] || !F[key]) return 0;
-      return overlapSf(F[key], zones().gym);
+      return overlapGym(F[key]);
     }
     function inWorkSf(key, en) {
       if (!S[en] || !F[key]) return 0;
@@ -1978,7 +2269,7 @@
     }
     function zoneUnionSf(box) {
       const z = zones();
-      return overlapSf(box, z.shop) + overlapSf(box, z.work) + overlapSf(box, z.gym) + overlapSf(box, z.liv);
+      return overlapSf(box, z.shop) + overlapSf(box, z.work) + overlapGym(box) + overlapSf(box, z.liv);
     }
     // Conditioned rooms hanging outside living/gym/shop (a west bunk wing, an
     // office bump) still have to price. Inside a zone they are already in that
@@ -2003,20 +2294,149 @@
       ["laundry", "enLaundry"], ["kitchen", "enKitchen"],
     ];
 
+    function storeIsOpen() {
+      if (S.storeOpen === true) return true;
+      if (S.storeOpen === false) return false;
+      return /porch/i.test(S.storeLabel || "");
+    }
+    function porchSf() {
+      if (S.enPorch && F.porch) return overhangSf("porch", "enPorch");
+      if (!S.enStore || !storeIsOpen()) return 0;
+      return overhangSf("store", "enStore");
+    }
+    // East roof continues south from an office sitting on the garage's east
+    // face: leftover bay = covered storage (mower / ATV); cage stays under
+    // the same eave, not insulated. Null when the office does not hang east.
+    function eastCover() {
+      if (!S.enOffice || !F.office) return null;
+      const o = F.office;
+      const z = zones();
+      const oe0 = o.e, oe1 = o.e + o.w, os1 = o.s + o.h;
+      if (oe1 <= z.liv.e1 + 0.05) return null;
+      if (Math.abs(oe0 - z.shop.e1) > 0.6) return null;
+      let roofS1 = Math.max(z.liv.s1, z.gym.s1);
+      if (S.enCage && F.cage) roofS1 = Math.max(roofS1, F.cage.s + F.cage.h);
+      if (roofS1 <= os1 + 0.05) return null;
+      const storeS1 = z.shop.s1 > os1 + 0.05 ? z.shop.s1 : os1;
+      const storeW = oe1 - oe0, storeD = storeS1 - os1;
+      const stores = [];
+      if (storeD > 0.05) {
+        stores.push({
+          pts: [[oe0, os1], [oe1, os1], [oe1, storeS1], [oe0, storeS1]],
+          w: storeW, d: storeD, cx: (oe0 + oe1) / 2, cy: (os1 + storeS1) / 2,
+        });
+      }
+      if (S.enCage && F.cage) {
+        const cs1 = F.cage.s + F.cage.h;
+        const seW = oe1 - z.liv.e1, seD = roofS1 - cs1;
+        if (seW > 0.05 && seD > 0.05) {
+          stores.push({
+            pts: [[z.liv.e1, cs1], [oe1, cs1], [oe1, roofS1], [z.liv.e1, roofS1]],
+            w: seW, d: seD, cx: (z.liv.e1 + oe1) / 2, cy: (cs1 + roofS1) / 2,
+          });
+        }
+      }
+      return { e: oe1, s0: os1, s1: roofS1, stores, storeS1 };
+    }
+
+    function zoneArea(z) {
+      return Math.max(0, (z.e1 - z.e0) * (z.s1 - z.s0));
+    }
+    function zoneHit(a, b) {
+      const e0 = Math.max(a.e0, b.e0), e1 = Math.min(a.e1, b.e1);
+      const s0 = Math.max(a.s0, b.s0), s1 = Math.min(a.s1, b.s1);
+      if (e1 <= e0 || s1 <= s0) return null;
+      return { e0, e1, s0, s1 };
+    }
+    function zoneHitSf(a, b) {
+      const h = zoneHit(a, b);
+      return h ? zoneArea(h) : 0;
+    }
+    function existingDriveZones() {
+      return [
+        { e0: HOUSE_E1, e1: DRIVE_E, s0: HOUSE_S0, s1: DRIVE_S1 },
+        { e0: DRIVE_E0, e1: DRIVE_E, s0: DRIVE_TURN_S0, s1: HOUSE_S0 },
+      ];
+    }
+    // Recreational skirt: 8' behind each baseline, 5' outside each sideline
+    // (20×44 lines sit in a 30×60 slab).
+    function courtSlab() {
+      if (!S.enCourt || !F.court) return null;
+      const f = F.court;
+      const longEW = f.w >= f.h;
+      const playW = Math.min(longEW ? 44 : 20, f.w);
+      const playH = Math.min(longEW ? 20 : 44, f.h);
+      const e0 = f.e + (f.w - playW) / 2;
+      const s0 = f.s + (f.h - playH) / 2;
+      const side = 5, base = 8;
+      if (longEW) {
+        return { e0: e0 - base, e1: e0 + playW + base, s0: s0 - side, s1: s0 + playH + side };
+      }
+      return { e0: e0 - side, e1: e0 + playW + side, s0: s0 - base, s1: s0 + playH + base };
+    }
+    function newDriveZones() {
+      const out = [];
+      const slab = courtSlab();
+      if (slab) {
+        out.push(slab);
+        // South of the existing drive, run the pour west until it meets the pad.
+        if (slab.e0 > HOUSE_E1 + 0.05 && slab.s1 > DRIVE_S1 + 0.05) {
+          out.push({
+            e0: HOUSE_E1, e1: slab.e0,
+            s0: Math.max(slab.s0, DRIVE_S1), s1: slab.s1,
+          });
+        }
+      }
+      const shop = zones().shop;
+      if (shop.e0 > DRIVE_E + 0.05) {
+        out.push({ e0: DRIVE_E, e1: shop.e0, s0: shop.s0, s1: shop.s1 });
+      }
+      return out;
+    }
+    function newDriveSf() {
+      const neu = newDriveZones();
+      const old = existingDriveZones();
+      let u = 0;
+      for (let i = 0; i < neu.length; i++) {
+        u += zoneArea(neu[i]);
+        for (let j = 0; j < i; j++) u -= zoneHitSf(neu[i], neu[j]);
+        for (const o of old) u -= zoneHitSf(neu[i], o);
+      }
+      for (let i = 0; i < neu.length; i++) {
+        for (let j = 0; j < i; j++) {
+          const ij = zoneHit(neu[i], neu[j]);
+          if (!ij) continue;
+          for (const o of old) u += zoneHitSf(ij, o);
+        }
+      }
+      return Math.max(0, u);
+    }
+
     function spendTakeoff() {
+      if (isRooms()) return roomsTakeoff();
       const shopSf = S.garageW * S.garageD;
       const officeSf = officeInShopSf();
       const bunkSf = bunkInShopSf();
       const kitchenSf = kitchenInShopSf();
-      const courtSf = (S.enCourt && F.court) ? F.court.w * F.court.h : 0;
       const livingExtra = LIVING_RATE.reduce((n, [k, en]) => n + livingExtraSf(k, en), 0);
-      const acPull = LIVING_RATE.reduce((n, [k, en]) => n + inGymSf(k, en) + inWorkSf(k, en), 0);
+      const workSf = (S.workW || 0) * (S.workD || 0);
+      const officeInWork = inWorkSf("office", "enOffice");
+      const bunkInWork = inWorkSf("bunk", "enBunk");
+      const kitchenInWork = inWorkSf("kitchen", "enKitchen");
+      const acPull = LIVING_RATE.reduce((n, [k, en]) => n + inGymSf(k, en), 0);
+      const shopNoAc = Math.max(0, shopSf - officeSf - bunkSf - kitchenSf);
+      const workNoAc = Math.max(0, workSf - officeInWork - bunkInWork - kitchenInWork);
+      const storeNoAc = storeIsOpen() ? 0 : overhangSf("store", "enStore");
+      const lowSf = gymAreaSf() + officeSf + officeInWork + overhangSf("office", "enOffice") - acPull;
+      const patioBase = S.enPatio ? S.patioRun * S.patioDep : 0;
+      const coverSf = patioBase + porchSf();
+      const driveSf = newDriveSf();
       return {
         living: { on: true, sf: S.livingW * S.livingD + livingExtra },
-        ac: { on: true, sf: S.gymW * S.gymD + (S.workW || 0) * (S.workD || 0) + officeSf + overhangSf("office", "enOffice") - acPull },
-        noAc: { on: true, sf: Math.max(0, shopSf - officeSf - bunkSf - kitchenSf) + overhangSf("store", "enStore") },
-        patio: { on: !!S.enPatio, sf: S.enPatio ? S.patioRun * S.patioDep : 0 },
-        court: { on: !!S.enCourt, sf: courtSf },
+        ac: { on: true, sf: lowSf },
+        noAc: { on: true, sf: shopNoAc + workNoAc + storeNoAc },
+        patio: { on: coverSf > 0.05, sf: coverSf },
+        drive: { on: driveSf > 0.05, sf: driveSf },
         cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
         pool: { on: !!S.enPool, sf: 0 },
       };
@@ -2064,15 +2484,16 @@
       const workS0 = shopS1;
       const workS1 = workS0 + (S.workD || 0);
       let gymS0, gymS1, livS0, livS1;
+      const band = S.bandD || 0;
       if (S.gymSide === "S") {
         livS0 = workS1;
         livS1 = livS0 + S.livingD;
-        gymS0 = livS1;
+        gymS0 = livS1 + band;
         gymS1 = gymS0 + S.gymD;
       } else {
         gymS0 = workS1;
         gymS1 = gymS0 + S.gymD;
-        livS0 = gymS1;
+        livS0 = gymS1 + band;
         livS1 = livS0 + S.livingD;
       }
       const livE1 = EAST_FENCE - S.eastGap;
@@ -2080,10 +2501,24 @@
       const shop = flushToLiving(S.garageW, S.shopFlush, livE0, livE1);
       const gym = flushToLiving(S.gymW, S.gymFlush, livE0, livE1);
       const work = flushToLiving(S.workW || S.livingW, S.workFlush || "W", livE0, livE1);
+      const neckW = flushToLiving(S.livingW, "W", livE0, livE1);
+      const neckD = Math.max(0, Math.min(S.gymD, S.gymNeckD || 0));
+      let gymNeck = null, gymWide = { e0: gym.e0, e1: gym.e1, s0: gymS0, s1: gymS1 };
+      if (neckD > 0.05) {
+        if (S.gymSide === "N") {
+          gymNeck = { e0: neckW.e0, e1: neckW.e1, s0: gymS0, s1: gymS0 + neckD };
+          gymWide = { e0: gym.e0, e1: gym.e1, s0: gymS0 + neckD, s1: gymS1 };
+        } else {
+          gymNeck = { e0: neckW.e0, e1: neckW.e1, s0: gymS1 - neckD, s1: gymS1 };
+          gymWide = { e0: gym.e0, e1: gym.e1, s0: gymS0, s1: gymS1 - neckD };
+        }
+      }
       return {
         shop: { e0: shop.e0, e1: shop.e1, s0: shopS0, s1: shopS1 },
         work: { e0: work.e0, e1: work.e1, s0: workS0, s1: workS1 },
         gym: { e0: gym.e0, e1: gym.e1, s0: gymS0, s1: gymS1 },
+        gymNeck,
+        gymWide,
         liv: { e0: livE0, e1: livE1, s0: livS0, s1: livS1 },
       };
     }
@@ -2126,17 +2561,18 @@
     }
 
     function bbox() {
+      if (isRooms()) return roomsBBox();
       const z = zones();
       let e0 = Math.min(z.shop.e0, z.gym.e0, z.liv.e0, z.work.e0);
       let e1 = Math.max(z.shop.e1, z.gym.e1, z.liv.e1, z.work.e1);
       let s0 = z.shop.s0;
       let s1 = Math.max(z.liv.s1, z.gym.s1);
-      for (const k of ["bunk", "bath", "office", "kitchen", "laundry", "hall", "store"]) {
+      for (const k of ["bunk", "bath", "office", "kitchen", "laundry", "hall", "porch", "store"]) {
         const f = F[k];
         if (!f) continue;
         const en = {
           bunk: "enBunk", bath: "enBath", office: "enOffice", kitchen: "enKitchen",
-          laundry: "enLaundry", hall: "enHall", store: "enStore"
+          laundry: "enLaundry", hall: "enHall", porch: "enPorch", store: "enStore"
         }[k];
         if (!S[en]) continue;
         e0 = Math.min(e0, f.e);
@@ -2213,6 +2649,22 @@
       F.bunk.e = ce - F.bunk.w / 2;
       F.bunk.s = cs - F.bunk.h / 2;
     }
+    function applyRoomSize(key, wKey, dKey) {
+      const f = F[key];
+      if (!f) return;
+      if (S[wKey] == null || S[dKey] == null) {
+        S[wKey] = f.w;
+        S[dKey] = f.h;
+      }
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      f.w = S[wKey];
+      f.h = S[dKey];
+      f.e = ce - f.w / 2;
+      f.s = cs - f.h / 2;
+    }
+    function applyLaundry() { applyRoomSize("laundry", "laundryW", "laundryD"); }
+    function applyHall() { applyRoomSize("hall", "hallW", "hallD"); }
+    function applyPorch() { applyRoomSize("porch", "porchW", "porchD"); }
 
     function applyBath() {
       if (!F.bath) return;
@@ -2271,6 +2723,16 @@
       F.dance.s = cs - F.dance.h / 2;
     }
 
+    function applyInshop() {
+      if (!F.inshop) return;
+      const along = S.inshopLen || 30, across = S.inshopWid || 14;
+      const ce = F.inshop.e + F.inshop.w / 2, cs = F.inshop.s + F.inshop.h / 2;
+      if (F.inshop.face === "N" || F.inshop.face === "S") { F.inshop.w = along; F.inshop.h = across; }
+      else { F.inshop.w = across; F.inshop.h = along; }
+      F.inshop.e = ce - F.inshop.w / 2;
+      F.inshop.s = cs - F.inshop.h / 2;
+    }
+
     function seedDance() {
       const z = zones();
       const along = S.danceLen || 30, across = S.danceWid || 10;
@@ -2283,6 +2745,20 @@
         s: z.gym.s0 + Math.max(0, (gh - h) / 2),
         w, h, face: alongEW ? "N" : "E",
         c: "#d5e4ec", ec: "#2f6f82", tc: "#1a3a48"
+      });
+    }
+
+    function seedInshop() {
+      const z = zones();
+      const along = S.inshopLen || 30, across = S.inshopWid || 14;
+      const gh = z.shop.s1 - z.shop.s0;
+      const w = across, h = Math.min(along, gh);
+      seedModule("inshop", {
+        label: "shop",
+        e: z.shop.e1 - w,
+        s: z.shop.s0 + Math.max(0, (gh - h) / 2),
+        w, h, face: "E",
+        c: "#dce6d4", ec: "#4a6a3a", tc: "#2a3a20"
       });
     }
 
@@ -2436,8 +2912,17 @@
     const MIRROR_INTO = 0.8;
     const BARRE_INTO = 0.9;
 
+    function gymWallBox(face) {
+      const z = zones();
+      if (!z.gymNeck) return z.gym;
+      if (face === "N") return S.gymSide === "N" ? z.gymNeck : z.gymWide;
+      if (face === "S") return S.gymSide === "N" ? z.gymWide : z.gymNeck;
+      const jutWest = S.gymFlush === "E";
+      if (face === "W") return jutWest ? z.gymWide : z.gym;
+      return jutWest ? z.gym : z.gymWide;
+    }
     function gymWallLen(face) {
-      const g = zones().gym;
+      const g = gymWallBox(face);
       return (face === "N" || face === "S") ? g.e1 - g.e0 : g.s1 - g.s0;
     }
 
@@ -2451,7 +2936,7 @@
     }
 
     function placeByFrac(f, frac) {
-      const g = zones().gym;
+      const g = gymWallBox(f.face);
       const t = clamp(frac, 0, 1);
       if (f.face === "N" || f.face === "S") {
         const lo = g.e0, hi = Math.max(lo, g.e1 - f.w);
@@ -2464,7 +2949,7 @@
 
     function glueToGymWall(f, length, into) {
       if (!f) return;
-      const g = zones().gym;
+      const g = gymWallBox(f.face);
       const along = Math.min(length, gymWallLen(f.face));
       if (f.face === "N" || f.face === "S") {
         f.w = along; f.h = into;
@@ -2518,6 +3003,10 @@
       S.shopLabel = "";
       S.gymLabel = "";
       S.workLabel = "";
+      S.storeLabel = "";
+      S.storeOpen = false;
+      S.bandD = 0;
+      S.gymNeckD = 0;
       S.eastGap = 28;
       S.bS0 = -10;
       S.patioRun = 39.5; S.patioDep = 15;
@@ -2527,20 +3016,26 @@
       S.bathAlong = 7.5; S.bathInto = 10.5;
       S.bunkLen = 14;
       S.bunkW = 13; S.bunkD = 14;
+      S.laundryW = 10; S.laundryD = 13;
+      S.hallW = 6; S.hallD = 4;
+      S.porchW = 16; S.porchD = 6;
       S.bunkDoorAt = "W";
       S.bunkDoorSwing = "in";
       S.bunkHinge = "nook";
       S.mirrorLen = 14; S.barreLen = 10;
       S.danceLen = 30; S.danceWid = 10;
+      S.inshopLen = 30; S.inshopWid = 14;
       S.deckW = 62.5; S.deckL = 76.5;
       S.poolLen = 8;
       S.zoom = 2.2;
+      S.viewX = null;
+      S.viewY = null;
       S.diningW = 3.5; S.diningLen = 11; S.diningChairs = 5; S.diningEnds = true;
       S.sitCfg = "love";
       S.mediaCfg = "dualL";
       S.mediaChairSide = "left";
       S.enPatio = true; S.enCage = true; S.enOffice = true; S.enCloset = true; S.enKitchen = false;
-      S.enLaundry = false; S.enHall = false; S.enStore = false;
+      S.enLaundry = false; S.enHall = false; S.enPorch = false; S.enStore = false; S.enInshop = false;
       S.enBath = true; S.enBunk = true; S.enMedia = true; S.enWeights = true; S.enDance = true;
       S.enTable = true; S.enPtable = true; S.enDining = false; S.enSit = false;
       S.enBar = true; S.enPool = true; S.enSpa = true; S.enCourt = true; S.enFire = true; S.enMirror = true; S.enDeck = true;
@@ -2560,6 +3055,10 @@
       seedModule("hall", {
         label: "hall", e: z.gym.e0, s: z.gym.s0, w: 8, h: 4, face: "N",
         c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
+      });
+      seedModule("porch", {
+        label: "porch", e: z.shop.e0 + (S.garageW - 16) / 2, s: z.shop.s0 - 6, w: 16, h: 6, face: "S",
+        c: "#efe7d8", ec: "#8a744a", tc: "#6a5a38"
       });
       seedModule("store", {
         label: "storage", e: z.shop.e0 + 8, s: z.shop.s0 - 6, w: 16, h: 6, face: "S",
@@ -2586,6 +3085,7 @@
         c: "#e4eadc", ec: "#6a7f4a", tc: "#3a4a28"
       });
       seedDance();
+      seedInshop();
       seedModule("table", {
         label: "", e: z.liv.e0 + 1.1, s: z.liv.s0 + 1.01, w: 8.34, h: 8.34, face: "N",
         c: "#e9e2d0", ec: "#8f7a45", tc: "#5a4a20"
@@ -2654,19 +3154,19 @@
     }
 
     function applySized() {
-      applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyDance(); applyTable();
+      applyBar(); applyBath(); applyBunk(); applyMedia(); applyWeights(); applyDance(); applyInshop(); applyTable();
       applyPtable(); applyDining(); applySit();
       applyCage(); applyCourt(); applyPool(); applySpa(); applyPatio(); applyDeck();
       applyMirror(); applyBarre();
     }
 
-    const INTERIOR = ["office", "closet", "kitchen", "laundry", "hall", "store", "bath", "bunk", "media", "weights", "dance", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
+    const INTERIOR = ["office", "closet", "kitchen", "laundry", "hall", "porch", "store", "bath", "bunk", "media", "weights", "dance", "inshop", "table", "ptable", "dining", "sit", "bar", "mirror", "barre"];
     const SITE_MODS = ["patio", "cage", "court", "pool", "spa", "fire", "deck"];
 
     function enabledKeys() {
       const map = {
-        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
-        media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
+        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", porch: "enPorch", store: "enStore", bath: "enBath", bunk: "enBunk",
+        media: "enMedia", weights: "enWeights", dance: "enDance", inshop: "enInshop", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
@@ -2675,10 +3175,13 @@
     }
 
     function shiftInteriors(de, ds) {
+      if (Math.abs(de) < 1e-9 && Math.abs(ds) < 1e-9) return;
       for (const k of INTERIOR) {
         if (!F[k]) continue;
         F[k].e += de; F[k].s += ds;
       }
+      // Cage keeps whatever offset you placed — same delta as the barndo.
+      if (F.cage) { F.cage.e += de; F.cage.s += ds; }
     }
 
     function polyPts(pts) {
@@ -2717,6 +3220,9 @@
       el("livingD_v").textContent = fmtFt(S.livingD);
       el("gymW_v").textContent = fmtFt(S.gymW);
       el("gymD_v").textContent = fmtFt(S.gymD);
+      el("gymNeckD").max = S.gymD;
+      el("gymNeckD").value = S.gymNeckD || 0;
+      el("gymNeckD_v").textContent = fmtFt(S.gymNeckD || 0);
       el("garageW_v").textContent = fmtFt(S.garageW);
       el("garageD_v").textContent = fmtFt(S.garageD);
       el("workW_v").textContent = fmtFt(S.workW || 0);
@@ -2732,10 +3238,18 @@
       el("bathInto_v").textContent = fmtFt(S.bathInto);
       el("bunkW_v").textContent = fmtFt(S.bunkW);
       el("bunkD_v").textContent = fmtFt(S.bunkD);
+      el("laundryW_v").textContent = fmtFt(S.laundryW);
+      el("laundryD_v").textContent = fmtFt(S.laundryD);
+      el("hallW_v").textContent = fmtFt(S.hallW);
+      el("hallD_v").textContent = fmtFt(S.hallD);
+      el("porchW_v").textContent = fmtFt(S.porchW);
+      el("porchD_v").textContent = fmtFt(S.porchD);
       el("mirrorLen_v").textContent = fmtFt(S.mirrorLen);
       el("barreLen_v").textContent = fmtFt(S.barreLen);
       el("danceLen_v").textContent = fmtFt(S.danceLen || 30);
       el("danceWid_v").textContent = fmtFt(S.danceWid || 10);
+      el("inshopLen_v").textContent = fmtFt(S.inshopLen || 30);
+      el("inshopWid_v").textContent = fmtFt(S.inshopWid || 14);
       el("deckW_v").textContent = fmtFt(S.deckW);
       el("deckL_v").textContent = fmtFt(S.deckL);
       el("diningW_v").textContent = fmtFt(S.diningW);
@@ -2751,8 +3265,11 @@
         ["patioRun", "patioRun"], ["patioDep", "patioDep"],
         ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkW", "bunkW"], ["bunkD", "bunkD"],
+        ["laundryW", "laundryW"], ["laundryD", "laundryD"], ["hallW", "hallW"], ["hallD", "hallD"],
+        ["porchW", "porchW"], ["porchD", "porchD"],
         ["mirrorLen", "mirrorLen"], ["barreLen", "barreLen"],
         ["danceLen", "danceLen"], ["danceWid", "danceWid"],
+        ["inshopLen", "inshopLen"], ["inshopWid", "inshopWid"],
         ["deckW", "deckW"], ["deckL", "deckL"],
         ["diningW", "diningW"], ["diningLen", "diningLen"], ["diningChairs", "diningChairs"],
         ["zoom", "zoom"],
@@ -2764,6 +3281,7 @@
       el("enCloset").checked = S.enCloset;
       el("enLaundry").checked = !!S.enLaundry;
       el("enHall").checked = !!S.enHall;
+      el("enPorch").checked = !!S.enPorch;
       el("enStore").checked = !!S.enStore;
       el("enKitchen").checked = !!S.enKitchen;
       el("enBath").checked = S.enBath;
@@ -2771,6 +3289,7 @@
       el("enMedia").checked = S.enMedia;
       el("enWeights").checked = S.enWeights;
       el("enDance").checked = S.enDance;
+      el("inshopTog").textContent = S.enInshop ? "shown" : "hidden";
       el("enTable").checked = S.enTable;
       el("enPtable").checked = S.enPtable;
       el("enDining").checked = S.enDining;
@@ -2808,11 +3327,13 @@
       el("tool_measure").classList.toggle("on", S.tool === "measure");
       el("shopFlush_E").classList.toggle("on", S.shopFlush === "E");
       el("shopFlush_W").classList.toggle("on", S.shopFlush === "W");
-      el("shopCname").textContent = S.shopLabel || "Shop";
+      el("shopCname").textContent = S.shopLabel || "Garage";
       el("gymCname").textContent = S.gymLabel || "Gym";
       el("workCname").textContent = S.workLabel || "Shop kitchen";
       el("workFlush_E").classList.toggle("on", (S.workFlush || "W") === "E");
       el("workFlush_W").classList.toggle("on", (S.workFlush || "W") === "W");
+      el("storeOpenTog").textContent = storeIsOpen() ? "open cover" : "enclosed";
+      el("storeOpenTog").classList.toggle("on", storeIsOpen());
       el("gymFlush_E").classList.toggle("on", S.gymFlush === "E");
       el("gymFlush_W").classList.toggle("on", S.gymFlush === "W");
       el("gymside_N").classList.toggle("on", S.gymSide === "N");
@@ -2834,6 +3355,8 @@
       el("barreWall_v").textContent = OPP_WALL[mirrFace];
       el("danceLen").disabled = !S.enDance;
       el("danceWid").disabled = !S.enDance;
+      el("inshopLen").disabled = !S.enInshop;
+      el("inshopWid").disabled = !S.enInshop;
       syncOpenUi();
 
       applySized();
@@ -2843,18 +3366,19 @@
       const overallW = bb.e1 - bb.e0;
       const overallD = bb.s1 - bb.s0;
       const t = spendTakeoff();
-      const condSf = t.living.sf + t.ac.sf;
+      const acTot = t.living.sf + t.ac.sf;
       el("overallBox").innerHTML =
         `<b>${fmtFt(overallW)} × ${fmtFt(overallD)}</b> overall` +
-        ` · conditioned · ${Math.round(condSf)} sqft (living ${Math.round(t.living.sf)} + A/C ${Math.round(t.ac.sf)})` +
+        ` · A/C · ${Math.round(acTot)} sqft (high ${Math.round(t.living.sf)} · low ${Math.round(t.ac.sf)})` +
         ` · no A/C · ${Math.round(t.noAc.sf)} sqft` +
-        ` · ` + (S.enPatio ? `patio · ${Math.round(t.patio.sf)} sqft` : `patio · off`);
+        ` · ` + (t.patio.on ? `patio · ${Math.round(t.patio.sf)} sqft` : `patio · off`) +
+        ` · ` + (t.drive.on ? `drive · ${Math.round(t.drive.sf)} sqft` : `drive · off`);
       renderSpend();
 
       const faceName = { N: "N", S: "S", W: "W", E: "E" };
       const enKey = {
-        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
-        media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
+        office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", porch: "enPorch", store: "enStore", bath: "enBath", bunk: "enBunk",
+        media: "enMedia", weights: "enWeights", dance: "enDance", inshop: "enInshop", table: "enTable", ptable: "enPtable",
         dining: "enDining", sit: "enSit", bar: "enBar",
         patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
         mirror: "enMirror", barre: "enMirror", deck: "enDeck",
@@ -2875,6 +3399,16 @@
 
       // pasture south of ag / south fence
       g += `<rect x="${fx(CAN_E0)}" y="${fy(SOUTH_FENCE)}" width="${CAN_W * PXFT}" height="${8 * PXFT}" fill="#d4d8c4" stroke="none"/>`;
+
+      // New concrete first (under existing): 30×60 court skirt, the band
+      // from that skirt west to the existing pad, and the stub to the garage.
+      for (const d of newDriveZones()) {
+        g += `<rect x="${fx(d.e0)}" y="${fy(d.s0)}" width="${(d.e1 - d.e0) * PXFT}" height="${(d.s1 - d.s0) * PXFT}" fill="#c5d0c8" stroke="none"/>`;
+      }
+      const stub = newDriveZones().find(d => d.e0 >= DRIVE_E - 0.05);
+      if (stub && stub.e1 - stub.e0 > 2) {
+        g += `<text x="${fx((stub.e0 + stub.e1) / 2)}" y="${fy((stub.s0 + stub.s1) / 2)}" text-anchor="middle" font-size="9" fill="#3a4a42" font-weight="700" ${pe}>NEW DRIVE</text>`;
+      }
 
       // Existing driveway (params.DRIVE): 18' lane, east edge = house SE + 30' = 152.1,
       // south end at s=-20. Widens west to the house east wall. Turnaround at the
@@ -2967,28 +3501,48 @@
       g += `<line x1="${fx(HOUSE_E1)}" y1="${fy(0)}" x2="${fx(EAST_FENCE)}" y2="${fy(0)}" stroke="#6a6358" stroke-width="1.2" stroke-dasharray="5 4" ${pe}/>`;
 
       // building zones (drag the shell)
+      if (!isRooms()) {
       g += `<g data-fx="building" style="cursor:grab">`;
       g += `<rect x="${fx(z.shop.e0)}" y="${fy(z.shop.s0)}" width="${S.garageW * PXFT}" height="${S.garageD * PXFT}" fill="#d8dcd0" stroke="#3a4036" stroke-width="2"/>`;
       if (hasWork()) {
         g += `<rect x="${fx(z.work.e0)}" y="${fy(z.work.s0)}" width="${(S.workW || 0) * PXFT}" height="${S.workD * PXFT}" fill="#ddd8ce" stroke="#3a4036" stroke-width="2"/>`;
       }
-      g += `<rect x="${fx(z.gym.e0)}" y="${fy(z.gym.s0)}" width="${S.gymW * PXFT}" height="${S.gymD * PXFT}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
+      if (z.gymNeck) {
+        const n = z.gymNeck, w = z.gymWide;
+        const pts = S.gymSide === "N"
+          ? [[n.e0, n.s0], [n.e1, n.s0], [n.e1, n.s1], [w.e1, w.s0], [w.e1, w.s1], [w.e0, w.s1], [w.e0, w.s0], [n.e0, n.s1]]
+          : [[w.e0, w.s0], [w.e1, w.s0], [w.e1, w.s1], [n.e1, n.s0], [n.e1, n.s1], [n.e0, n.s1], [n.e0, n.s0], [w.e0, w.s1]];
+        const dedup = pts.filter((p, i, a) => i === 0 || p[0] !== a[i - 1][0] || p[1] !== a[i - 1][1]);
+        g += `<polygon points="${dedup.map(p => `${fx(p[0])},${fy(p[1])}`).join(" ")}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
+      } else {
+        g += `<rect x="${fx(z.gym.e0)}" y="${fy(z.gym.s0)}" width="${S.gymW * PXFT}" height="${S.gymD * PXFT}" fill="#e6e9e3" stroke="#3a4036" stroke-width="2"/>`;
+      }
       g += `<rect x="${fx(z.liv.e0)}" y="${fy(z.liv.s0)}" width="${S.livingW * PXFT}" height="${S.livingD * PXFT}" fill="#f4efe4" stroke="#3a4036" stroke-width="2"/>`;
       g += `</g>`;
 
-      // A work band narrower than its neighbours pulls its wall back under the
-      // eave (Carrie's shop). Dash the envelope face so the covered strip reads.
-      if (hasWork()) {
-        const nb = [z.shop, z.gym, z.liv];
-        const wEnv = Math.min(...nb.map(b => b.e0));
-        const eEnv = Math.max(...nb.map(b => b.e1));
-        const roofLine = (eOut, eIn) => {
-          const cx = (fx(eOut) + fx(eIn)) / 2, cy = fy((z.work.s0 + z.work.s1) / 2);
-          return `<line x1="${fx(eOut)}" y1="${fy(z.work.s0)}" x2="${fx(eOut)}" y2="${fy(z.work.s1)}" stroke="#3a4036" stroke-width="1.2" stroke-dasharray="6 4" ${pe}/>` +
-            `<text x="${cx}" y="${cy}" text-anchor="middle" font-size="7.5" fill="#5a6356" transform="rotate(-90 ${cx} ${cy})" ${pe}>roof line</text>`;
-        };
-        if (z.work.e0 - wEnv > 0.05) g += roofLine(wEnv, z.work.e0);
-        if (eEnv - z.work.e1 > 0.05) g += roofLine(eEnv, z.work.e1);
+      // Dashed eave: office-east continuing south over storage + cage
+      // (cover only — not an enclosed wall).
+      const roofLine = (eOut, eIn, s0, s1, labelS) => {
+        const cx = (fx(eOut) + fx(eIn)) / 2, cy = fy(labelS != null ? labelS : (s0 + s1) / 2);
+        return `<line x1="${fx(eOut)}" y1="${fy(s0)}" x2="${fx(eOut)}" y2="${fy(s1)}" stroke="#3a4036" stroke-width="1.2" stroke-dasharray="6 4" ${pe}/>` +
+          `<text x="${cx}" y="${cy}" text-anchor="middle" font-size="7.5" fill="#5a6356" transform="rotate(-90 ${cx} ${cy})" ${pe}>roof line</text>`;
+      };
+      {
+        const cover = eastCover();
+        if (cover) {
+          for (const st of cover.stores || []) {
+            g += `<polygon points="${st.pts.map(p => `${fx(p[0])},${fy(p[1])}`).join(" ")}" fill="#efe7d8" fill-opacity="0.55" stroke="#8a744a" stroke-width="1.1" stroke-dasharray="5 4" ${pe}/>`;
+            if (st.d < 8) {
+              g += `<text x="${fx(st.cx)}" y="${fy(st.cy) + 3}" text-anchor="middle" font-size="8" fill="#6a5a38" font-weight="700" ${pe}>STORAGE ${areaLine(st.w, st.d)}</text>`;
+            } else {
+              g += `<text x="${fx(st.cx)}" y="${fy(st.cy) - 4}" text-anchor="middle" font-size="9" fill="#6a5a38" font-weight="700" ${pe}>STORAGE</text>`;
+              g += `<text x="${fx(st.cx)}" y="${fy(st.cy) + 8}" text-anchor="middle" font-size="8" fill="#6a5a38" ${pe}>${areaLine(st.w, st.d)}</text>`;
+            }
+          }
+          const labelS = cover.storeS1 + Math.max(8, (cover.s1 - cover.storeS1) * 0.25);
+          g += roofLine(cover.e, z.liv.e1, cover.s0, cover.s1, labelS);
+        }
+      }
       }
 
       // overall dims
@@ -3003,9 +3557,9 @@
 
       // Parking depth: N shop wall → first thing on each of 3 bay centerlines.
       // Labels sit on the west bay's midpoint so the three read as one north row.
-      {
+      if (!isRooms()) {
         const blockers = enabledKeys().filter(k =>
-          INTERIOR.includes(k) && k !== "mirror" && k !== "barre" && k !== "dance" && overlapSf(F[k], z.shop) > 0.05
+          INTERIOR.includes(k) && k !== "mirror" && k !== "barre" && k !== "dance" && k !== "inshop" && overlapSf(F[k], z.shop) > 0.05
         ).map(k => F[k]);
         const bayW = S.garageW / 3;
         const hits = [];
@@ -3027,6 +3581,7 @@
       const acc = { s: g };
 
       if (S.enDance) drawDanceFloor(acc);
+      if (S.enInshop) drawInshop(acc);
       if (S.enPatio) drawPatio(acc);
       if (S.enDeck) drawDeck(acc);
       if (S.enPool) drawPool(acc);
@@ -3037,7 +3592,11 @@
       if (S.enCloset) drawSimple(acc, "closet");
       if (S.enLaundry) drawLaundry(acc);
       if (S.enHall) drawSimple(acc, "hall");
-      if (S.enStore) drawSimple(acc, "store");
+      if (S.enPorch) drawSimple(acc, "porch");
+      if (S.enStore) {
+        if (S.storeLabel) F.store.label = S.storeLabel;
+        drawSimple(acc, "store");
+      }
       if (S.enKitchen) drawKitchen(acc);
       if (S.enBath) drawBath(acc);
       if (S.enBunk) drawBunk(acc);
@@ -3053,7 +3612,8 @@
       if (S.enSit) drawSit(acc);
       if (S.enBar) drawBar(acc);
       if (S.enFire) drawFire(acc);
-      drawOpenings(acc);
+      if (isRooms()) drawRoomsPlan(acc);
+      else drawOpenings(acc);
 
       if (S.enCourt && F.court) {
         const c = F.court;
@@ -3063,8 +3623,8 @@
 
       acc.s += `<g id="dimLayer">${dimBuf}</g>`;
       // Ghost chips back in-zone — high z, low opacity so furniture still reads.
-      const zoneChip = (band, title, w, d) => {
-        const line2 = areaLine(w, d);
+      const zoneChip = (band, title, w, d, sf) => {
+        const line2 = sf != null ? `${fmtNum(w)}×${fmtNum(d)} (${Math.round(sf)} sqft)` : areaLine(w, d);
         const tw = Math.max(title.length, line2.length) * 6.2 + 16;
         const th = 30;
         const cx = fx((band.e0 + band.e1) / 2);
@@ -3075,12 +3635,15 @@
           `<text x="${cx}" y="${cy + 10}" text-anchor="middle" font-size="8" fill="#5a6356" fill-opacity="0.88">${line2}</text>` +
           `</g>`;
       };
+      if (!isRooms()) {
       acc.s += `<g id="zoneLabels">`;
-      acc.s += zoneChip(z.shop, (S.shopLabel || "SHOP").toUpperCase(), S.garageW, S.garageD);
+      acc.s += zoneChip(z.shop, (S.shopLabel || "GARAGE").toUpperCase(), S.garageW, S.garageD);
       if (hasWork()) acc.s += zoneChip(z.work, (S.workLabel || "SHOP").toUpperCase(), S.workW, S.workD);
-      acc.s += zoneChip(z.gym, (S.gymLabel || "GYM").toUpperCase(), S.gymW, S.gymD);
+      acc.s += zoneChip(z.gym, (S.gymLabel || "GYM").toUpperCase(), S.gymW, S.gymD, z.gymNeck ? gymAreaSf() : null);
       acc.s += zoneChip(z.liv, "LIVING", S.livingW, S.livingD);
       acc.s += `</g>`;
+      }
+      syncRoomsUi();
 
       if (S.tool === "measure") {
         MP.e = clamp(MP.e, CAN_E0, CAN_E1);
@@ -3119,8 +3682,24 @@
     function wrapMod(g, key, body, extra) {
       const f = F[key];
       const dash = extra && extra.dash ? ` stroke-dasharray="${extra.dash}"` : "";
+      const skip = (extra && extra.skipFaces) || [];
       g.s += `<g data-fx="${key}" style="cursor:grab">`;
-      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" stroke="${f.ec}" stroke-width="1.4"${dash} fill-opacity="${extra && extra.fillOp || 0.92}"/>`;
+      if (skip.length) {
+        g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" stroke="none" fill-opacity="${extra && extra.fillOp || 0.92}"/>`;
+        const sides = {
+          N: [f.e, f.s, f.e + f.w, f.s],
+          S: [f.e, f.s + f.h, f.e + f.w, f.s + f.h],
+          W: [f.e, f.s, f.e, f.s + f.h],
+          E: [f.e + f.w, f.s, f.e + f.w, f.s + f.h]
+        };
+        for (const face of ["N", "S", "E", "W"]) {
+          if (skip.includes(face)) continue;
+          const [x0, y0, x1, y1] = sides[face];
+          g.s += `<line x1="${fx(x0)}" y1="${fy(y0)}" x2="${fx(x1)}" y2="${fy(y1)}" stroke="${f.ec}" stroke-width="1.4"${dash}/>`;
+        }
+      } else {
+        g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" rx="2" fill="${f.c}" stroke="${f.ec}" stroke-width="1.4"${dash} fill-opacity="${extra && extra.fillOp || 0.92}"/>`;
+      }
       g.s += body;
       if (f.label && !(extra && extra.skipLabel))
         g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 3}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" style="pointer-events:none">${f.label}</text>`;
@@ -3131,31 +3710,44 @@
       const f = F[key];
       const pe = 'style="pointer-events:none"';
       const body = `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + 0.85)}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
-      wrapMod(g, key, body);
+      wrapMod(g, key, body, key === "hall" ? { skipFaces: hallSkipFaces() }
+        : key === "porch" ? { dash: "6 4", fillOp: 0.55 } : undefined);
     }
 
     function drawLaundry(g) {
+      ensureLaundryFix();
       const f = F.laundry;
       const pe = 'style="pointer-events:none"';
-      // W/D pair stands against the face wall at the far end of it; the rest is shelving.
-      const d = 2.67, pair = 5;
-      let wd;
-      if (f.face === "N" || f.face === "S") {
-        const run = Math.min(pair, f.w - 0.8);
-        wd = { e: f.e + f.w - run - 0.35, s: f.face === "N" ? f.s + 0.35 : f.s + f.h - d - 0.35, w: run, h: Math.min(d, f.h - 0.8) };
-      } else {
-        const run = Math.min(pair, f.h - 0.8);
-        wd = { e: f.face === "W" ? f.e + 0.35 : f.e + f.w - d - 0.35, s: f.s + f.h - run - 0.35, w: Math.min(d, f.w - 0.8), h: run };
+      const body =
+        `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 3}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>entry</text>` +
+        `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 15}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      wrapMod(g, "laundry", body, { skipLabel: true, fillOp: 0.85 });
+      for (const id of LAUNDRY_CAB_IDS) {
+        const cab = S.laundryFix[id];
+        if (!cab || cab.on === false) continue;
+        const b = laundryCabBox(id);
+        const ns = cab.face === "N" || cab.face === "S";
+        g.s += `<g data-fx="laundryfix:${id}" style="cursor:grab">`;
+        g.s += `<rect x="${fx(b.e)}" y="${fy(b.s)}" width="${b.w * PXFT}" height="${b.h * PXFT}" fill="#e0d4c4" stroke="#8a6b4a" stroke-width="0.9"/>`;
+        g.s += `<rect x="${fx(b.e + (ns ? 0 : 0.15))}" y="${fy(b.s + (ns ? 0.15 : 0))}" width="${(b.w - (ns ? 0 : 0.3)) * PXFT}" height="${(b.h - (ns ? 0.3 : 0)) * PXFT}" fill="none" stroke="#8a6b4a" stroke-width="0.5" stroke-dasharray="3 2" ${pe}/>`;
+        g.s += `<text x="${fx(b.e + b.w / 2)}" y="${fy(b.s + b.h / 2) + 3}" text-anchor="middle" font-size="7" fill="#5a3f2a" font-weight="700" ${pe}>cab ${fmtFt(cab.len)}</text>`;
+        g.s += `</g>`;
       }
-      const ns = (f.face === "N" || f.face === "S");
-      let body = `<rect x="${fx(wd.e)}" y="${fy(wd.s)}" width="${wd.w * PXFT}" height="${wd.h * PXFT}" rx="1.5" fill="#e8dccf" stroke="#8a6b4a" stroke-width="0.9" ${pe}/>`;
-      const mx = wd.e + (ns ? wd.w / 2 : 0), my = wd.s + (ns ? 0 : wd.h / 2);
-      body += ns
-        ? `<line x1="${fx(mx)}" y1="${fy(wd.s)}" x2="${fx(mx)}" y2="${fy(wd.s + wd.h)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`
-        : `<line x1="${fx(wd.e)}" y1="${fy(my)}" x2="${fx(wd.e + wd.w)}" y2="${fy(my)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`;
-      body += `<text x="${fx(wd.e + wd.w / 2)}" y="${fy(wd.s + wd.h / 2) + 3}" text-anchor="middle" font-size="7" fill="#5a3f2a" font-weight="700" ${pe}>W/D</text>`;
-      body += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h - 0.9)}" text-anchor="middle" font-size="8" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
-      wrapMod(g, "laundry", body, { fillOp: 0.85 });
+      const bit = S.laundryFix.wd;
+      const dim = laundryWdDim(bit.rot);
+      const e = f.e + bit.lx, s = f.s + bit.ly;
+      const ns = (bit.rot % 180 === 0);
+      g.s += `<g data-fx="laundryfix:wd" style="cursor:grab">`;
+      g.s += `<rect x="${fx(e)}" y="${fy(s)}" width="${dim.w * PXFT}" height="${dim.h * PXFT}" rx="1.5" fill="#e8dccf" stroke="#8a6b4a" stroke-width="0.9"/>`;
+      if (!bit.stack) {
+        if (ns) {
+          g.s += `<line x1="${fx(e + dim.w / 2)}" y1="${fy(s)}" x2="${fx(e + dim.w / 2)}" y2="${fy(s + dim.h)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`;
+        } else {
+          g.s += `<line x1="${fx(e)}" y1="${fy(s + dim.h / 2)}" x2="${fx(e + dim.w)}" y2="${fy(s + dim.h / 2)}" stroke="#8a6b4a" stroke-width="0.7" ${pe}/>`;
+        }
+      }
+      g.s += `<text x="${fx(e + dim.w / 2)}" y="${fy(s + dim.h / 2) + 3}" text-anchor="middle" font-size="7" fill="#5a3f2a" font-weight="700" ${pe}>W/D</text>`;
+      g.s += `</g>`;
     }
 
     function drawKitchen(g) {
@@ -3548,6 +4140,18 @@
       g.s += `</g>`;
     }
 
+    function drawInshop(g) {
+      const f = F.inshop;
+      if (!f) return;
+      const pe = 'style="pointer-events:none"';
+      const ce = f.e + f.w / 2, cs = f.s + f.h / 2;
+      const dash = Math.max(5, 0.85 * PXFT);
+      g.s += `<g data-fx="inshop" style="cursor:grab">`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.20" stroke="${f.ec}" stroke-width="2.2" stroke-dasharray="${dash} ${dash * 0.65}"/>`;
+      g.s += `<text x="${fx(ce)}" y="${fy(cs) + 3}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>shop ${fmtFt(f.w)}×${fmtFt(f.h)}</text>`;
+      g.s += `</g>`;
+    }
+
     function drawDanceStrip(g, key, title) {
       const f = F[key];
       if (!f) return;
@@ -3597,17 +4201,25 @@
       }
       if (spec.leaf === "window") {
         const inn = openInward(spec.face);
-        const ox = inn[0] * 0.35, oy = inn[1] * 0.35;
+        // Label sits outside the wall so the height is readable on the elevation.
+        const ox = -inn[0] * 0.9, oy = -inn[1] * 0.9;
         g.s += `<line x1="${fx(seg.x0 + ox)}" y1="${fy(seg.y0 + oy)}" x2="${fx(seg.x1 + ox)}" y2="${fy(seg.y1 + oy)}" stroke="${col}" stroke-width="1.4" stroke-dasharray="4 2" ${pe}/>`;
+        if (spec.panes === 2) {
+          const cx = (seg.x0 + seg.x1) / 2, cy = (seg.y0 + seg.y1) / 2;
+          g.s += `<line x1="${fx(cx)}" y1="${fy(cy)}" x2="${fx(cx + inn[0] * 0.7)}" y2="${fy(cy + inn[1] * 0.7)}" stroke="${col}" stroke-width="1.6" ${pe}/>`;
+        }
         const mx = (seg.x0 + seg.x1) / 2 + ox * 2, my = (seg.y0 + seg.y1) / 2 + oy * 2;
-        g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>${fmtFt(spec.w)}</text>`;
+        const label = spec.h ? `${fmtFt(spec.w)} × ${fmtFt(spec.h)}` : fmtFt(spec.w);
+        g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>${label}</text>`;
       } else if (spec.leaf === "overhead") {
         g.s += overheadMarks(seg.x0, seg.y0, spec.w, spec.face, col);
       } else if (isOpen) {
-        // Cased opening: no leaf, no swing — just the gap and its width.
-        const inn = openInward(spec.face);
-        const mx = (seg.x0 + seg.x1) / 2 + inn[0] * 1.1, my = (seg.y0 + seg.y1) / 2 + inn[1] * 1.1;
-        g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>open ${fmtFt(spec.w)}</text>`;
+        // Cased opening: gap only. Doors aren't labeled; laundryLiv is the entry door.
+        if (id !== "laundryLiv") {
+          const inn = openInward(spec.face);
+          const mx = (seg.x0 + seg.x1) / 2 + inn[0] * 1.1, my = (seg.y0 + seg.y1) / 2 + inn[1] * 1.1;
+          g.s += `<text x="${fx(mx)}" y="${fy(my) + 3}" text-anchor="middle" font-size="7" fill="${col}" font-weight="700" ${pe}>open ${fmtFt(spec.w)}</text>`;
+        }
       } else if (spec.leaf === "slider" || isPocket) {
         const inn = openInward(spec.face);
         const along = ns ? [1, 0] : [0, 1];
@@ -3658,15 +4270,25 @@
       ensureOpens();
       placeLivWin();
       const order = ["gymEntry", "gymCage", "gymWin", "livEntry", "livWin", "offA", "offB", "offWin", "offWin2", "bunkEg",
-        "bathA", "bathB", "bathC", "shopGar", "shopWest", "laundryDoor", "hallOpen",
-        "garA", "garB", "storeDoor"];
+        "bathA", "bathB", "bathC", "shopGar", "shopWest", "laundryDoor", "laundryGym", "laundryLiv", "hallOpen",
+        "garA", "garB", "shopWinN", "porchWin", "storeDoor"];
       for (const id of order) {
         if (id === "offA" || id === "offB" || id === "offWin" || id === "offWin2") { if (!S.enOffice) continue; }
         if (id === "bunkEg") { if (!S.enBunk) continue; }
         if (id.startsWith("bath")) { if (!S.enBath) continue; }
         if (id === "shopGar" || id === "shopWest") { if (!hasWork()) continue; }
-        if (id === "laundryDoor") { if (!S.enLaundry) continue; }
-        if (id === "hallOpen") { if (!S.enHall) continue; }
+        if (id === "laundryDoor" || id === "laundryGym" || id === "laundryLiv") { if (!S.enLaundry) continue; }
+        if (id === "hallOpen") {
+          if (!S.enHall) continue;
+          const spec = S.opens.hallOpen;
+          const box = spec && hostBox(spec.host);
+          if (spec && spec.leaf === "open" && openIsFullFace(box, spec)) {
+            const seg = openSeg(box, spec.face, 0.5, openWallLen(box, spec.face));
+            const fill = (F.hall && F.hall.c) || "#eae4d6";
+            g.s += `<line x1="${fx(seg.x0)}" y1="${fy(seg.y0)}" x2="${fx(seg.x1)}" y2="${fy(seg.y1)}" stroke="${fill}" stroke-width="3" style="pointer-events:none"/>`;
+            continue;
+          }
+        }
         if (id === "storeDoor") { if (!S.enStore) continue; }
         if (S.opens[id].on === false) continue;
         drawOpening(g, id);
@@ -3860,11 +4482,75 @@
       const longNS = (f.face === "N" || f.face === "S");
       const sideE = longNS ? CAGE_SIDE : 0;
       const sideS = longNS ? 0 : CAGE_SIDE;
+      const along = longNS ? f.h : f.w;
       g.s += `<g data-fx="cage" style="cursor:grab">`;
       g.s += `<rect x="${fx(f.e - sideE)}" y="${fy(f.s - sideS)}" width="${(f.w + 2 * sideE) * PXFT}" height="${(f.h + 2 * sideS) * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
       g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.35" stroke="${f.ec}" stroke-width="1.4"/>`;
-      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) - 6}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>CAGE</text>`;
-      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 8}" text-anchor="middle" font-size="9" fill="${f.tc}" ${pe}>${areaLine(S.cageWid, S.cageLen)}</text>`;
+      // Mound at the end farther from the gym door (walk in at the batter).
+      // Plates stacked on the centerline at real distances.
+      const PLATES = [46, 50, 60.5];
+      let moundAtStart = !longNS;
+      const spec = S.opens && S.opens.gymCage;
+      if (spec && spec.on !== false) {
+        const box = hostBox(spec.host);
+        if (box) {
+          const seg = openSeg(box, spec.face, spec.t, spec.w);
+          const ds = (seg.y0 + seg.y1) / 2, de = (seg.x0 + seg.x1) / 2;
+          if (longNS) moundAtStart = ds > f.s + f.h / 2;
+          else moundAtStart = de > f.e + f.w / 2;
+        }
+      }
+      // Beacon ProModel: 4×8 turf. Rubber on the rear table (2′ from the
+      // back edge, centered across). Distance = plate apex → rubber front.
+      const moundAlong = 8, moundAcross = 4;
+      const rubberW = 2, rubberD = 0.5, rubberFromBack = 2;
+      const endPad = 1;
+      const rubberCenterD = endPad + moundAlong / 2;
+      const rubberFrontD = rubberCenterD + rubberD / 2;
+      const moundCenterD = rubberCenterD + (moundAlong / 2 - rubberFromBack);
+      const alongPt = d => {
+        if (longNS) {
+          const s = moundAtStart ? f.s + d : f.s + f.h - d;
+          return [f.e + f.w / 2, s];
+        }
+        const e = moundAtStart ? f.e + d : f.e + f.w - d;
+        return [e, f.s + f.h / 2];
+      };
+      const dir = longNS
+        ? [0, moundAtStart ? 1 : -1]
+        : [moundAtStart ? 1 : -1, 0];
+      const perp = [-dir[1], dir[0]];
+      const [mce, mcs] = alongPt(moundCenterD);
+      const [re, rs] = alongPt(rubberCenterD);
+      const mE0 = mce - (longNS ? moundAcross : moundAlong) / 2;
+      const mS0 = mcs - (longNS ? moundAlong : moundAcross) / 2;
+      g.s += `<rect x="${fx(mE0)}" y="${fy(mS0)}" width="${(longNS ? moundAcross : moundAlong) * PXFT}" height="${(longNS ? moundAlong : moundAcross) * PXFT}" fill="#3d6b3a" fill-opacity="0.88" stroke="#2a4a28" stroke-width="0.9" ${pe}/>`;
+      const rE0 = re - (longNS ? rubberW : rubberD) / 2;
+      const rS0 = rs - (longNS ? rubberD : rubberW) / 2;
+      g.s += `<rect x="${fx(rE0)}" y="${fy(rS0)}" width="${(longNS ? rubberW : rubberD) * PXFT}" height="${(longNS ? rubberD : rubberW) * PXFT}" fill="#5a4a32" stroke="#3a3020" stroke-width="0.6" ${pe}/>`;
+      g.s += `<text x="${fx(mce + perp[0] * (moundAcross / 2 + 1.3))}" y="${fy(mcs + perp[1] * (moundAcross / 2 + 1.3)) + 3}" text-anchor="middle" font-size="7" fill="#2a4a28" font-weight="700" ${pe}>mound</text>`;
+      const platePoly = (ae, as) => {
+        const half = 8.5 / 12, mid = 8.5 / 12, tip = 17 / 12;
+        const front = [ae - dir[0] * tip, as - dir[1] * tip];
+        const pts = [
+          [ae, as],
+          [front[0] - perp[0] * half + dir[0] * mid, front[1] - perp[1] * half + dir[1] * mid],
+          [front[0] - perp[0] * half, front[1] - perp[1] * half],
+          [front[0] + perp[0] * half, front[1] + perp[1] * half],
+          [front[0] + perp[0] * half + dir[0] * mid, front[1] + perp[1] * half + dir[1] * mid],
+        ];
+        return pts.map(p => `${fx(p[0])},${fy(p[1])}`).join(" ");
+      };
+      for (const d of PLATES) {
+        if (rubberFrontD + d + 0.5 > along) continue;
+        const [ae, as] = alongPt(rubberFrontD + d);
+        g.s += `<polygon points="${platePoly(ae, as)}" fill="#f4efe8" stroke="#3a3020" stroke-width="0.8" ${pe}/>`;
+        const lbl = d === 60.5 ? "60'6\"" : `${d}'`;
+        g.s += `<text x="${fx(ae + perp[0] * 2.2)}" y="${fy(as + perp[1] * 2.2) + 3}" text-anchor="middle" font-size="7" fill="#3a3020" font-weight="700" ${pe}>${lbl}</text>`;
+      }
+      const [le, ls] = alongPt(rubberFrontD + 20);
+      g.s += `<text x="${fx(le)}" y="${fy(ls) - 6}" text-anchor="middle" font-size="10" fill="${f.tc}" font-weight="700" ${pe}>CAGE</text>`;
+      g.s += `<text x="${fx(le)}" y="${fy(ls) + 8}" text-anchor="middle" font-size="9" fill="${f.tc}" ${pe}>${areaLine(S.cageWid, S.cageLen)}</text>`;
       g.s += `</g>`;
     }
 
@@ -3876,21 +4562,21 @@
       const playH = Math.min(longEW ? 20 : 44, f.h);
       const pe0 = f.e + (f.w - playW) / 2, ps0 = f.s + (f.h - playH) / 2;
       g.s += `<g data-fx="court" style="cursor:grab">`;
-      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.55" stroke="${f.ec}" stroke-width="1.6"/>`;
-      g.s += `<rect x="${fx(pe0)}" y="${fy(ps0)}" width="${playW * PXFT}" height="${playH * PXFT}" fill="none" stroke="#f4f7fb" stroke-width="1.2" ${pe}/>`;
+      g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="transparent" stroke="#3a6fa8" stroke-width="1.6" stroke-dasharray="6 4"/>`;
+      g.s += `<rect x="${fx(pe0)}" y="${fy(ps0)}" width="${playW * PXFT}" height="${playH * PXFT}" fill="none" stroke="#3a6fa8" stroke-width="1" stroke-dasharray="4 3" ${pe}/>`;
       if (longEW) {
         const mid = pe0 + playW / 2;
-        g.s += `<line x1="${fx(mid)}" y1="${fy(ps0)}" x2="${fx(mid)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="1.4" ${pe}/>`;
-        g.s += `<line x1="${fx(mid - 7)}" y1="${fy(ps0)}" x2="${fx(mid - 7)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
-        g.s += `<line x1="${fx(mid + 7)}" y1="${fy(ps0)}" x2="${fx(mid + 7)}" y2="${fy(ps0 + playH)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+        g.s += `<line x1="${fx(mid)}" y1="${fy(ps0)}" x2="${fx(mid)}" y2="${fy(ps0 + playH)}" stroke="#3a6fa8" stroke-width="1.1" stroke-dasharray="4 3" ${pe}/>`;
+        g.s += `<line x1="${fx(mid - 7)}" y1="${fy(ps0)}" x2="${fx(mid - 7)}" y2="${fy(ps0 + playH)}" stroke="#3a6fa8" stroke-width="0.8" stroke-dasharray="3 3" ${pe}/>`;
+        g.s += `<line x1="${fx(mid + 7)}" y1="${fy(ps0)}" x2="${fx(mid + 7)}" y2="${fy(ps0 + playH)}" stroke="#3a6fa8" stroke-width="0.8" stroke-dasharray="3 3" ${pe}/>`;
       } else {
         const mid = ps0 + playH / 2;
-        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid)}" x2="${fx(pe0 + playW)}" y2="${fy(mid)}" stroke="#f4f7fb" stroke-width="1.4" ${pe}/>`;
-        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid - 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid - 7)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
-        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid + 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid + 7)}" stroke="#f4f7fb" stroke-width="0.8" ${pe}/>`;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid)}" x2="${fx(pe0 + playW)}" y2="${fy(mid)}" stroke="#3a6fa8" stroke-width="1.1" stroke-dasharray="4 3" ${pe}/>`;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid - 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid - 7)}" stroke="#3a6fa8" stroke-width="0.8" stroke-dasharray="3 3" ${pe}/>`;
+        g.s += `<line x1="${fx(pe0)}" y1="${fy(mid + 7)}" x2="${fx(pe0 + playW)}" y2="${fy(mid + 7)}" stroke="#3a6fa8" stroke-width="0.8" stroke-dasharray="3 3" ${pe}/>`;
       }
-      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) - 4}" text-anchor="middle" font-size="11" fill="${f.tc}" font-weight="700" ${pe}>PICKLEBALL</text>`;
-      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 10}" text-anchor="middle" font-size="10" fill="${f.tc}" ${pe}>${areaLine(f.w, f.h)}</text>`;
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) - 4}" text-anchor="middle" font-size="11" fill="#3a6fa8" font-weight="700" ${pe}>PICKLEBALL</text>`;
+      g.s += `<text x="${fx(f.e + f.w / 2)}" y="${fy(f.s + f.h / 2) + 10}" text-anchor="middle" font-size="10" fill="#3a6fa8" ${pe}>${areaLine(f.w, f.h)}</text>`;
       g.s += `</g>`;
     }
 
@@ -4009,6 +4695,7 @@
     function syncOpenUi() {
       ensureOpens();
       ensureBathFix();
+      ensureLaundryFix();
       placeLivWin();
       document.querySelectorAll("[data-openface]").forEach(b => {
         const [id, face] = b.dataset.openface.split(":");
@@ -4029,7 +4716,8 @@
         const spec = S.opens[b.dataset.leaftog];
         b.textContent = spec && spec.leaf === "double" ? "double"
           : spec && spec.leaf === "pocket" ? "pocket"
-            : spec && spec.leaf === "slider" ? "slider" : "single";
+            : spec && spec.leaf === "slider" ? "slider"
+              : spec && spec.leaf === "open" ? "open" : "single";
       });
       el("livEntry_door").classList.toggle("on", S.livEntryKind === "door");
       el("livEntry_slider").classList.toggle("on", S.livEntryKind === "slider");
@@ -4046,6 +4734,7 @@
       setT("offAT", "offA");
       setT("offBT", "offB");
       setT("offWinT", "offWin");
+      setT("offWin2T", "offWin2");
       setT("bunkEgT", "bunkEg");
       setT("bathAT", "bathA");
       setT("bathBT", "bathB");
@@ -4053,6 +4742,8 @@
       setT("shopGarT", "shopGar");
       setT("shopWestT", "shopWest");
       setT("laundryDoorT", "laundryDoor");
+      setT("laundryGymT", "laundryGym");
+      setT("laundryLivT", "laundryLiv");
       setT("hallOpenT", "hallOpen");
       setT("garAT", "garA");
       setT("garBT", "garB");
@@ -4063,9 +4754,35 @@
       el("garBW_v").textContent = fmtFt(S.opens.garB.w);
       for (const [btn, specId] of [["gymCageTog", "gymCage"], ["gymWinTog", "gymWin"],
       ["shopGarTog", "shopGar"], ["shopWestTog", "shopWest"], ["bathBTog", "bathB"],
-      ["garATog", "garA"], ["garBTog", "garB"]]) {
+      ["garATog", "garA"], ["garBTog", "garB"],
+      ["laundryGymTog", "laundryGym"], ["laundryLivTog", "laundryLiv"],
+      ["offWin2Tog", "offWin2"]]) {
         el(btn).textContent = S.opens[specId].on === false ? "hidden" : "shown";
       }
+      el("laundryGymW").value = S.opens.laundryGym.w;
+      el("laundryGymW_v").textContent = fmtFt(S.opens.laundryGym.w);
+      el("laundryLivW").value = S.opens.laundryLiv.w;
+      el("laundryLivW_v").textContent = fmtFt(S.opens.laundryLiv.w);
+      document.querySelectorAll("[data-cabtog]").forEach(b => {
+        const cab = S.laundryFix[b.dataset.cabtog];
+        b.textContent = cab && cab.on === false ? "hidden" : "shown";
+      });
+      document.querySelectorAll("[data-cabface]").forEach(b => {
+        const [id, face] = b.dataset.cabface.split(":");
+        const cab = S.laundryFix[id];
+        b.classList.toggle("on", !!(cab && cab.face === face));
+      });
+      const syncCab = (id, lenEl, tEl) => {
+        const cab = S.laundryFix[id];
+        if (!cab) return;
+        el(lenEl).value = cab.len;
+        el(lenEl + "_v").textContent = fmtFt(cab.len);
+        el(tEl).value = Math.round(cab.t * 100);
+        el(tEl + "_v").textContent = Math.round(cab.t * 100) + "%";
+      };
+      syncCab("cab", "laundryCabLen", "laundryCabT");
+      syncCab("cab2", "laundryCab2Len", "laundryCab2T");
+      el("laundryWdStack").textContent = S.laundryFix.wd.stack ? "stacked" : "pair";
       el("bathWdTog").textContent = S.bathFix.wd.off ? "hidden" : "shown";
       el("livWinW").value = S.opens.livWin.w;
       el("livWinW").max = 25 - S.opens.livEntry.w;
@@ -4083,6 +4800,8 @@
       el("gymWinW_v").textContent = fmtFt(S.opens.gymWin.w);
       el("offWinW").value = S.opens.offWin.w;
       el("offWinW_v").textContent = fmtFt(S.opens.offWin.w);
+      el("offWin2W").value = S.opens.offWin2.w;
+      el("offWin2W_v").textContent = fmtFt(S.opens.offWin2.w);
       const sh = S.bathFix.shower;
       el("showerW").value = sh.w;
       el("showerW_v").textContent = fmtFt(sh.w);
@@ -4110,12 +4829,22 @@
           const p = ptFt(e); if (!p) return;
           if (k === "building") {
             drag = { type: "bldg", oe: S.eastGap, os: S.bS0, pe: p.e, ps: p.s };
+          } else if (k.startsWith("pc:")) {
+            const pc = rFind(S.pcs, k.slice(3)), a = rAbs(pc);
+            drag = { type: "pc", id: pc.id, oe: p.e - a.e, os: p.s - a.s };
+          } else if (k.startsWith("ro:")) {
+            drag = { type: "ro", id: k.slice(3) };
           } else if (k.startsWith("open:")) {
             drag = { type: "open", id: k.slice(5) };
           } else if (k.startsWith("bathfix:")) {
             const id = k.slice(8);
             const f = F.bath, bit = S.bathFix[id];
             drag = { type: "bathfix", id, oe: p.e - (f.e + bit.lx), os: p.s - (f.s + bit.ly) };
+          } else if (k === "laundryfix:wd") {
+            const f = F.laundry, bit = S.laundryFix.wd;
+            drag = { type: "laundrywd", oe: p.e - (f.e + bit.lx), os: p.s - (f.s + bit.ly) };
+          } else if (k === "laundryfix:cab" || k === "laundryfix:cab2") {
+            drag = { type: "laundrycab", id: k.slice("laundryfix:".length) };
           } else {
             const f = F[k];
             drag = { type: "fx", key: k, oe: p.e - f.e, os: p.s - f.s };
@@ -4125,7 +4854,12 @@
         gEl.addEventListener("dblclick", e => {
           const k = gEl.getAttribute("data-fx");
           const p = ptFt(e) || { e: 0, s: 0 };
-          openEdit(editIdFromFx(k, p));
+          if (k.startsWith("pc:")) openRm("pc", k.slice(3));
+          else if (k.startsWith("ro:")) openRm("ro", k.slice(3));
+          else if (k === "building" && isRooms()) {
+            const r = roomAt(p);
+            if (r) openRm("room", r.id);
+          } else openEdit(editIdFromFx(k, p));
           e.preventDefault(); e.stopPropagation();
         });
       });
@@ -4158,6 +4892,20 @@
         alignCourtToGarage();
         draw(); return;
       }
+      if (drag.type === "pc") {
+        const pc = rFind(S.pcs, drag.id), o = rOrigin();
+        pc.x = snapIn(p.e - drag.oe - o.e);
+        pc.y = snapIn(p.s - drag.os - o.s);
+        draw(); return;
+      }
+      if (drag.type === "ro") {
+        const op = rFind(S.ropens, drag.id), host = rFind(S.rooms, op.host);
+        if (!host) return;
+        const a = rAbs(host), ns = op.face === "N" || op.face === "S";
+        const t = ns ? p.e - a.e : p.s - a.s;
+        op.at = clamp(snapIn(t - op.w / 2), 0, Math.max(0, (ns ? host.w : host.h) - op.w));
+        draw(); return;
+      }
       if (drag.type === "open") {
         const spec = S.opens[drag.id];
         const box = hostBox(spec.host);
@@ -4174,6 +4922,23 @@
         const dim = bathFixDim(drag.id, S.bathFix[drag.id].rot);
         S.bathFix[drag.id].lx = clamp(Math.round((p.e - f.e - drag.oe) * 100) / 100, 0, Math.max(0, f.w - dim.w));
         S.bathFix[drag.id].ly = clamp(Math.round((p.s - f.s - drag.os) * 100) / 100, 0, Math.max(0, f.h - dim.h));
+        draw(); return;
+      }
+      if (drag.type === "laundrywd") {
+        const f = F.laundry;
+        const dim = laundryWdDim(S.laundryFix.wd.rot);
+        S.laundryFix.wd.lx = clamp(Math.round((p.e - f.e - drag.oe) * 100) / 100, 0, Math.max(0, f.w - dim.w));
+        S.laundryFix.wd.ly = clamp(Math.round((p.s - f.s - drag.os) * 100) / 100, 0, Math.max(0, f.h - dim.h));
+        draw(); return;
+      }
+      if (drag.type === "laundrycab") {
+        const f = F.laundry, cab = S.laundryFix[drag.id || "cab"];
+        const t = (cab.face === "N" || cab.face === "S")
+          ? (p.e - f.e) / f.w
+          : (p.s - f.s) / f.h;
+        const wall = (cab.face === "N" || cab.face === "S") ? f.w : f.h;
+        const half = wall > 0.2 ? (cab.len / 2) / wall : 0.5;
+        cab.t = clamp(t, half, 1 - half);
         draw(); return;
       }
       const f = F[drag.key];
@@ -4213,6 +4978,18 @@
         const t = S.bunkW; S.bunkW = S.bunkD; S.bunkD = t;
         applyBunk();
       }
+      else if (k === "laundry") {
+        const t = S.laundryW; S.laundryW = S.laundryD; S.laundryD = t;
+        applyLaundry();
+      }
+      else if (k === "hall") {
+        const t = S.hallW; S.hallW = S.hallD; S.hallD = t;
+        applyHall();
+      }
+      else if (k === "porch") {
+        const t = S.porchW; S.porchW = S.porchD; S.porchD = t;
+        applyPorch();
+      }
       else if (k === "court") {
         const t = S.courtW; S.courtW = S.courtD; S.courtD = t;
         applyCourt();
@@ -4220,6 +4997,7 @@
       else if (k === "media") applyMedia();
       else if (k === "weights") applyWeights();
       else if (k === "dance") applyDance();
+      else if (k === "inshop") applyInshop();
       else if (k === "table") applyTable();
       else if (k === "ptable") applyPtable();
       else if (k === "dining") applyDining();
@@ -4238,6 +5016,7 @@
         f.e = ce - f.w / 2;
         f.s = cs - f.h / 2;
       }
+      if (k === "laundry") { ensureLaundryFix(); clampLaundryFixes(); }
       draw();
     }
 
@@ -4268,6 +5047,10 @@ workFlush = "${S.workFlush || "W"}"
 shopLabel = ${JSON.stringify(S.shopLabel || "")}
 gymLabel  = ${JSON.stringify(S.gymLabel || "")}
 workLabel = ${JSON.stringify(S.workLabel || "")}
+storeLabel = ${JSON.stringify(S.storeLabel || "")}
+storeOpen = ${storeIsOpen()}
+bandD     = ${S.bandD || 0}
+gymNeckD  = ${S.gymNeckD || 0}
 eastGap   = ${S.eastGap}     # living east → east fence
 bS0       = ${S.bS0}
 overall   = ${(bb.e1 - bb.e0).toFixed(2)} × ${(bb.s1 - bb.s0).toFixed(2)}${isL() ? "  # L" : ""}
@@ -4288,6 +5071,12 @@ bathInto  = ${S.bathInto}
 bunkLen   = ${S.bunkD}
 bunkW     = ${S.bunkW}
 bunkD     = ${S.bunkD}
+laundryW  = ${S.laundryW}
+laundryD  = ${S.laundryD}
+hallW     = ${S.hallW}
+hallD     = ${S.hallD}
+porchW    = ${S.porchW}
+porchD    = ${S.porchD}
 bunkDoorAt = "${S.bunkDoorAt || "W"}"
 bunkDoorSwing = "${S.bunkDoorSwing || "in"}"
 bunkHinge = "${S.bunkHinge || "nook"}"
@@ -4295,6 +5084,8 @@ mirrorLen = ${S.mirrorLen}
 barreLen  = ${S.barreLen}
 danceLen  = ${S.danceLen}
 danceWid  = ${S.danceWid}
+inshopLen = ${S.inshopLen}
+inshopWid = ${S.inshopWid}
 deckW     = ${S.deckW}
 deckL     = ${S.deckL}
 poolLen   = ${S.poolLen}
@@ -4306,12 +5097,17 @@ sitCfg    = "${S.sitCfg}"
 mediaCfg  = "${S.mediaCfg}"
 mediaChairSide = "${S.mediaChairSide}"
 livEntryKind = "${S.livEntryKind}"
+zoom      = ${(+S.zoom).toFixed(2)}
+viewX     = ${S.viewX == null ? "off" : (+S.viewX).toFixed(1)}
+viewY     = ${S.viewY == null ? "off" : (+S.viewY).toFixed(1)}
 opens     = ${JSON.stringify(S.opens)}
 bathFix   = ${JSON.stringify(S.bathFix)}
+laundryFix = ${JSON.stringify(S.laundryFix)}
 office    = ${o(S.enOffice, "office")}
 closet    = ${o(S.enCloset, "closet")}
 laundry   = ${o(S.enLaundry, "laundry")}
 hall      = ${o(S.enHall, "hall")}
+porch     = ${o(S.enPorch, "porch")}
 store     = ${o(S.enStore, "store")}
 kitchen   = ${o(S.enKitchen, "kitchen")}
 bath      = ${o(S.enBath, "bath")}
@@ -4319,6 +5115,7 @@ bunk      = ${o(S.enBunk, "bunk")}
 media     = ${o(S.enMedia, "media")}
 weights   = ${o(S.enWeights, "weights")}
 dance     = ${o(S.enDance, "dance")}
+inshop    = ${o(S.enInshop, "inshop")}
 table     = ${o(S.enTable, "table")}
 ptable    = ${o(S.enPtable, "ptable")}
 dining    = ${o(S.enDining, "dining")}
@@ -4333,20 +5130,24 @@ deck      = ${o(S.enDeck, "deck")}
 fire      = ${o(S.enFire, "fire")}
 mirror    = ${o(S.enMirror, "mirror")}
 barre     = ${o(S.enMirror, "barre")}
-spend     = living ${Spend.living}/sf · ac ${Spend.ac}/sf · noAc ${Spend.noAc}/sf · patio ${Spend.patio}/sf · court ${Spend.court}/sf · cage ${Spend.cage}/sf · pool ${Spend.pool}
-spendTot  = ${Math.round(spendSum())}`;
+spend     = living ${Spend.living}/sf · ac ${Spend.ac}/sf · noAc ${Spend.noAc}/sf · patio ${Spend.patio}/sf · drive ${Spend.drive}/sf · cage ${Spend.cage}/sf · pool ${Spend.pool}
+spendTot  = ${Math.round(spendSum())}${isRooms() ? `
+plan      = "rooms"   # x,y ft from garage NW exterior corner; x east, y south; w,h clear
+rooms     = ${JSON.stringify(S.rooms)}
+pcs       = ${JSON.stringify(S.pcs)}
+ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     }
 
     const PARAM_MOD = {
-      office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", store: "enStore", bath: "enBath", bunk: "enBunk",
-      media: "enMedia", weights: "enWeights", dance: "enDance", table: "enTable", ptable: "enPtable",
+      office: "enOffice", closet: "enCloset", kitchen: "enKitchen", laundry: "enLaundry", hall: "enHall", porch: "enPorch", store: "enStore", bath: "enBath", bunk: "enBunk",
+      media: "enMedia", weights: "enWeights", dance: "enDance", inshop: "enInshop", table: "enTable", ptable: "enPtable",
       dining: "enDining", sit: "enSit", bar: "enBar",
       patio: "enPatio", cage: "enCage", court: "enCourt", pool: "enPool", spa: "enSpa", fire: "enFire",
       mirror: "enMirror", barre: "enMirror", deck: "enDeck",
     };
     const PARAM_SKIP = { overall: 1, shop: 1, work: 1, gym: 1, living: 1, spendTot: 1 };
     const PARAM_INT = { poolLen: 1, stools: 1, diningChairs: 1 };
-    const PARAM_STR = { gymSide: 1, shopFlush: 1, gymFlush: 1, workFlush: 1, shopLabel: 1, gymLabel: 1, workLabel: 1, sitCfg: 1, mediaCfg: 1, mediaChairSide: 1, bunkDoorAt: 1, bunkDoorSwing: 1, bunkHinge: 1, livEntryKind: 1 };
+    const PARAM_STR = { plan: 1, gymSide: 1, shopFlush: 1, gymFlush: 1, workFlush: 1, shopLabel: 1, gymLabel: 1, workLabel: 1, storeLabel: 1, sitCfg: 1, mediaCfg: 1, mediaChairSide: 1, bunkDoorAt: 1, bunkDoorSwing: 1, bunkHinge: 1, livEntryKind: 1 };
 
     function looksLikeParams(text) {
       return /(?:^|\n)\s*(?:#\s*site-studio params|livingW\s*=|garageW\s*=)/.test(text);
@@ -4358,11 +5159,21 @@ spendTot  = ${Math.round(spendSum())}`;
       S.workD = 0;
       S.workFlush = "W";
       S.enLaundry = false;
+      S.laundryFix = null;
       S.enHall = false;
+      S.enPorch = false;
       S.enStore = false;
+      S.enInshop = false;
       S.shopLabel = "";
       S.gymLabel = "";
       S.workLabel = "";
+      S.storeLabel = "";
+      S.storeOpen = null;
+      S.bandD = 0;
+      S.gymNeckD = 0;
+      S.plan = "bands";
+      S.level = 1;
+      S.rooms = S.pcs = S.ropens = null;
       const tuple = /^\(\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.-]+),\s*"([NSEW])"\s*\)/;
       let pastedName = "";
       const stripComment = raw => {
@@ -4385,13 +5196,18 @@ spendTot  = ${Math.round(spendSum())}`;
           pastedName = (pastedName || "").trim();
           continue;
         }
+        if (key === "viewX" || key === "viewY") {
+          S[key] = val === "off" ? null : parseFloat(val);
+          if (Number.isNaN(S[key])) S[key] = null;
+          continue;
+        }
         if (PARAM_SKIP[key]) continue;
-        if (key === "opens" || key === "bathFix") {
+        if (key === "opens" || key === "bathFix" || key === "laundryFix" || key === "rooms" || key === "pcs" || key === "ropens") {
           try { S[key] = JSON.parse(val); } catch (_) { /* keep */ }
           continue;
         }
         if (key === "spend") {
-          const re = /(living|ac|noAc|patio|court|cage|pool)\s+([\d.]+)/g;
+          const re = /(living|ac|noAc|patio|drive|court|cage|pool)\s+([\d.]+)/g;
           let hit;
           while ((hit = re.exec(val))) Spend[hit[1]] = parseFloat(hit[2]);
           saveSpend();
@@ -4433,9 +5249,27 @@ spendTot  = ${Math.round(spendSum())}`;
         S.danceLen = ns ? F.dance.w : F.dance.h;
         S.danceWid = ns ? F.dance.h : F.dance.w;
       }
+      if (S.enInshop && F.inshop) {
+        const ns = F.inshop.face === "N" || F.inshop.face === "S";
+        S.inshopLen = ns ? F.inshop.w : F.inshop.h;
+        S.inshopWid = ns ? F.inshop.h : F.inshop.w;
+      }
+      if (!S.enInshop) seedInshop();
       if (F.bunk) {
         S.bunkW = F.bunk.w;
         S.bunkD = F.bunk.h;
+      }
+      if (F.laundry) {
+        S.laundryW = F.laundry.w;
+        S.laundryD = F.laundry.h;
+      }
+      if (F.hall) {
+        S.hallW = F.hall.w;
+        S.hallD = F.hall.h;
+      }
+      if (F.porch) {
+        S.porchW = F.porch.w;
+        S.porchD = F.porch.h;
       }
       if (F.court) {
         S.courtW = F.court.w;
@@ -4460,25 +5294,41 @@ spendTot  = ${Math.round(spendSum())}`;
           c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
         });
       }
+      if (!F.porch) {
+        seedModule("porch", {
+          label: "porch", e: 0, s: 0, w: 16, h: 6, face: "S",
+          c: "#efe7d8", ec: "#8a744a", tc: "#6a5a38"
+        });
+      }
       if (!F.store) {
         seedModule("store", {
           label: "storage", e: 0, s: 0, w: 16, h: 6, face: "S",
           c: "#dcd9cf", ec: "#6a6a5a", tc: "#3a3a2c"
         });
       }
+      if (!F.inshop) seedInshop();
       if (S.enLaundry == null) S.enLaundry = false;
       if (S.enHall == null) S.enHall = false;
+      if (S.enPorch == null) S.enPorch = false;
       if (S.enStore == null) S.enStore = false;
+      if (S.enInshop == null) S.enInshop = false;
       if (S.shopLabel == null) S.shopLabel = "";
       if (S.gymLabel == null) S.gymLabel = "";
       if (S.workLabel == null) S.workLabel = "";
+      if (S.storeLabel == null) S.storeLabel = "";
+      if (S.storeOpen == null) S.storeOpen = /porch/i.test(S.storeLabel || "");
+      if (S.bandD == null) S.bandD = 0;
+      if (S.gymNeckD == null) S.gymNeckD = 0;
       if (S.workW == null) S.workW = S.livingW;
       if (S.workD == null) S.workD = 0;
       if (!S.workFlush) S.workFlush = "W";
       if (S.courtW == null) S.courtW = 60;
       if (S.courtD == null) S.courtD = 30;
+      if (S.inshopLen == null) S.inshopLen = 30;
+      if (S.inshopWid == null) S.inshopWid = 14;
       ensureOpens();
       ensureBathFix();
+      ensureLaundryFix();
       draw();
       return { name: pastedName };
     }
@@ -4546,8 +5396,14 @@ spendTot  = ${Math.round(spendSum())}`;
       } else {
         S.gymD = parseFloat(e.target.value);
       }
+      S.gymNeckD = Math.min(S.gymNeckD || 0, S.gymD);
       applyPatio(); draw();
     });
+    el("gymNeckD").addEventListener("input", e => {
+      S.gymNeckD = clamp(parseFloat(e.target.value), 0, S.gymD);
+      draw();
+    });
+    el("storeOpenTog").addEventListener("click", () => { S.storeOpen = !storeIsOpen(); draw(); });
     el("garageW").addEventListener("input", e => { S.garageW = parseFloat(e.target.value); clampEastGap(); applyPatio(); draw(); });
     el("garageD").addEventListener("input", e => {
       const cut = zones().shop.s1;
@@ -4573,6 +5429,12 @@ spendTot  = ${Math.round(spendSum())}`;
     el("bathInto").addEventListener("input", e => { S.bathInto = parseFloat(e.target.value); applyBath(); draw(); });
     el("bunkW").addEventListener("input", e => { S.bunkW = parseFloat(e.target.value); applyBunk(); draw(); });
     el("bunkD").addEventListener("input", e => { S.bunkD = parseFloat(e.target.value); applyBunk(); draw(); });
+    el("laundryW").addEventListener("input", e => { S.laundryW = parseFloat(e.target.value); applyLaundry(); draw(); });
+    el("laundryD").addEventListener("input", e => { S.laundryD = parseFloat(e.target.value); applyLaundry(); draw(); });
+    el("hallW").addEventListener("input", e => { S.hallW = parseFloat(e.target.value); applyHall(); draw(); });
+    el("hallD").addEventListener("input", e => { S.hallD = parseFloat(e.target.value); applyHall(); draw(); });
+    el("porchW").addEventListener("input", e => { S.porchW = parseFloat(e.target.value); applyPorch(); draw(); });
+    el("porchD").addEventListener("input", e => { S.porchD = parseFloat(e.target.value); applyPorch(); draw(); });
     document.querySelectorAll("[data-bunkdoor]").forEach(b => b.addEventListener("click", () => {
       if (b.disabled) return;
       S.bunkDoorAt = b.dataset.bunkdoor;
@@ -4593,11 +5455,44 @@ spendTot  = ${Math.round(spendSum())}`;
     el("barreLen").addEventListener("input", e => { S.barreLen = parseFloat(e.target.value); applyBarre(); draw(); });
     el("danceLen").addEventListener("input", e => { S.danceLen = parseFloat(e.target.value); applyDance(); draw(); });
     el("danceWid").addEventListener("input", e => { S.danceWid = parseFloat(e.target.value); applyDance(); draw(); });
+    el("inshopLen").addEventListener("input", e => { S.inshopLen = parseFloat(e.target.value); applyInshop(); draw(); });
+    el("inshopWid").addEventListener("input", e => { S.inshopWid = parseFloat(e.target.value); applyInshop(); draw(); });
+    el("inshopTog").addEventListener("click", () => { S.enInshop = !S.enInshop; draw(); });
     el("deckW").addEventListener("input", e => { S.deckW = parseFloat(e.target.value); applyDeck(); draw(); });
     el("deckL").addEventListener("input", e => { S.deckL = parseFloat(e.target.value); applyDeck(); draw(); });
     function canvasHost() { return el("svgHost"); }
 
-    function setZoom(z, origin) {
+    let viewSkip = false;
+    let viewHold = 0;
+    function hostReady(host) {
+      return !!(host && host.clientWidth >= 8 && host.clientHeight >= 8);
+    }
+    function viewCenterFt() {
+      const host = canvasHost();
+      if (!hostReady(host)) return { x: S.viewX, y: S.viewY };
+      return {
+        x: (host.scrollLeft + host.clientWidth / 2 - M) / PXFT + CAN_E0,
+        y: (host.scrollTop + host.clientHeight / 2 - M) / PXFT + CAN_S0,
+      };
+    }
+    function captureView() {
+      const v = viewCenterFt();
+      if (v.x == null || v.y == null) return;
+      S.viewX = Math.round(v.x * 10) / 10;
+      S.viewY = Math.round(v.y * 10) / 10;
+    }
+    function applyViewScroll() {
+      const host = canvasHost();
+      if (!hostReady(host) || S.viewX == null || S.viewY == null) return false;
+      viewSkip = true;
+      viewHold = Date.now();
+      host.scrollLeft = Math.max(0, fx(S.viewX) - host.clientWidth / 2);
+      host.scrollTop = Math.max(0, fy(S.viewY) - host.clientHeight / 2);
+      requestAnimationFrame(() => { viewSkip = false; });
+      return true;
+    }
+
+    function setZoom(z, origin, silent) {
       const host = canvasHost();
       const prev = S.zoom;
       const ox = origin ? origin.x : (host ? host.clientWidth / 2 : 0);
@@ -4611,6 +5506,7 @@ spendTot  = ${Math.round(spendSum())}`;
         host.scrollLeft = cx * k - ox;
         host.scrollTop = cy * k - oy;
       }
+      if (!silent) writePresetUrl(el("presetSel").value);
     }
 
     function fitSite() {
@@ -4628,8 +5524,11 @@ spendTot  = ${Math.round(spendSum())}`;
       const z = zones();
       const cx = fx(z.liv.e0 + S.livingW / 2);
       const cy = fy(z.liv.s0 + S.livingD / 2);
+      viewSkip = true;
+      viewHold = Date.now();
       host.scrollLeft = Math.max(0, cx - host.clientWidth / 2);
       host.scrollTop = Math.max(0, cy - host.clientHeight / 2);
+      requestAnimationFrame(() => { viewSkip = false; });
     }
 
     el("zoom").addEventListener("input", e => { setZoom(parseFloat(e.target.value)); });
@@ -4638,8 +5537,34 @@ spendTot  = ${Math.round(spendSum())}`;
       draw();
       const host = canvasHost();
       if (host) { host.scrollLeft = 0; host.scrollTop = 0; }
+      writePresetUrl(el("presetSel").value);
     });
-    el("zoomWork").addEventListener("click", () => { setZoom(2.2); scrollToLiving(); });
+    el("zoomWork").addEventListener("click", () => {
+      setZoom(2.2);
+      scrollToLiving();
+      writePresetUrl(el("presetSel").value);
+    });
+    {
+      let viewT;
+      el("svgHost").addEventListener("scroll", () => {
+        if (viewSkip || Date.now() - viewHold < 280) return;
+        clearTimeout(viewT);
+        viewT = setTimeout(() => writePresetUrl(el("presetSel").value), 120);
+      }, { passive: true });
+      if (window.ResizeObserver) {
+        let lastW = 0, lastH = 0, resizeT;
+        new ResizeObserver(() => {
+          const host = canvasHost();
+          if (!hostReady(host)) return;
+          if (host.clientWidth === lastW && host.clientHeight === lastH) return;
+          lastW = host.clientWidth;
+          lastH = host.clientHeight;
+          if (S.viewX == null || S.viewY == null) return;
+          clearTimeout(resizeT);
+          resizeT = setTimeout(() => applyViewScroll(), 40);
+        }).observe(el("svgHost"));
+      }
+    }
     el("diningW").addEventListener("input", e => { S.diningW = parseFloat(e.target.value); applyDining(); draw(); });
     el("diningLen").addEventListener("input", e => { S.diningLen = parseFloat(e.target.value); applyDining(); draw(); });
     el("diningChairs").addEventListener("input", e => { S.diningChairs = parseInt(e.target.value, 10); applyDining(); draw(); });
@@ -4684,7 +5609,7 @@ spendTot  = ${Math.round(spendSum())}`;
     }));
 
     [["enPatio", "enPatio"], ["enCage", "enCage"], ["enOffice", "enOffice"],
-    ["enCloset", "enCloset"], ["enKitchen", "enKitchen"], ["enLaundry", "enLaundry"], ["enHall", "enHall"], ["enStore", "enStore"],
+    ["enCloset", "enCloset"], ["enKitchen", "enKitchen"], ["enLaundry", "enLaundry"], ["enHall", "enHall"], ["enPorch", "enPorch"], ["enStore", "enStore"],
     ["enBath", "enBath"], ["enBunk", "enBunk"],
     ["enMedia", "enMedia"], ["enWeights", "enWeights"], ["enDance", "enDance"], ["enTable", "enTable"],
     ["enPtable", "enPtable"], ["enDining", "enDining"], ["enSit", "enSit"],
@@ -4722,6 +5647,10 @@ spendTot  = ${Math.round(spendSum())}`;
         if (spec.leaf === "pocket") { spec.leaf = "double"; spec.w = 6; }
         else if (spec.leaf === "double") { spec.leaf = "single"; spec.w = 3; }
         else { spec.leaf = "pocket"; spec.w = 12; }
+      } else if (id === "laundryLiv") {
+        if (spec.leaf === "open") { spec.leaf = "single"; spec.w = 3; }
+        else if (spec.leaf === "single") { spec.leaf = "double"; spec.w = 6; }
+        else { spec.leaf = "open"; spec.w = 5; }
       } else {
         spec.leaf = spec.leaf === "double" ? "single" : "double";
         spec.w = spec.leaf === "double" ? 6 : 3;
@@ -4748,11 +5677,12 @@ spendTot  = ${Math.round(spendSum())}`;
     }));
     [
       ["livEntryT", "livEntry"], ["gymEntryT", "gymEntry"], ["gymCageT", "gymCage"],
-      ["gymWinT", "gymWin"], ["offAT", "offA"], ["offBT", "offB"], ["offWinT", "offWin"],
+      ["gymWinT", "gymWin"], ["offAT", "offA"], ["offBT", "offB"], ["offWinT", "offWin"], ["offWin2T", "offWin2"],
       ["bunkEgT", "bunkEg"],
       ["bathAT", "bathA"], ["bathBT", "bathB"], ["bathCT", "bathC"],
       ["shopGarT", "shopGar"], ["shopWestT", "shopWest"],
-      ["laundryDoorT", "laundryDoor"], ["hallOpenT", "hallOpen"],
+      ["laundryDoorT", "laundryDoor"], ["laundryGymT", "laundryGym"], ["laundryLivT", "laundryLiv"],
+      ["hallOpenT", "hallOpen"],
       ["garAT", "garA"], ["garBT", "garB"], ["storeDoorT", "storeDoor"],
     ].forEach(([id, specId]) => {
       el(id).addEventListener("input", e => {
@@ -4784,20 +5714,69 @@ spendTot  = ${Math.round(spendSum())}`;
     });
     for (const [btn, specId] of [["gymCageTog", "gymCage"], ["gymWinTog", "gymWin"],
     ["shopGarTog", "shopGar"], ["shopWestTog", "shopWest"], ["bathBTog", "bathB"],
-    ["garATog", "garA"], ["garBTog", "garB"]]) {
+    ["garATog", "garA"], ["garBTog", "garB"],
+    ["laundryGymTog", "laundryGym"], ["laundryLivTog", "laundryLiv"],
+    ["offWin2Tog", "offWin2"]]) {
       el(btn).addEventListener("click", () => {
         ensureOpens();
         S.opens[specId].on = S.opens[specId].on === false;
         draw();
       });
     }
-    for (const [id, specId] of [["garAW", "garA"], ["garBW", "garB"]]) {
+    for (const [id, specId] of [["garAW", "garA"], ["garBW", "garB"],
+    ["laundryGymW", "laundryGym"], ["laundryLivW", "laundryLiv"]]) {
       el(id).addEventListener("input", e => {
         ensureOpens();
         S.opens[specId].w = parseFloat(e.target.value);
         draw();
       });
     }
+    function recenterLaundryWd(mut) {
+      ensureLaundryFix();
+      const f = F.laundry, bit = S.laundryFix.wd;
+      const before = laundryWdDim(bit.rot);
+      mut(bit);
+      const after = laundryWdDim(bit.rot);
+      bit.lx = clamp(bit.lx + (before.w - after.w) / 2, 0, Math.max(0, f.w - after.w));
+      bit.ly = clamp(bit.ly + (before.h - after.h) / 2, 0, Math.max(0, f.h - after.h));
+      draw();
+    }
+    el("laundryWdStack").addEventListener("click", () => {
+      recenterLaundryWd(bit => { bit.stack = !bit.stack; });
+    });
+    el("laundryWdRot").addEventListener("click", () => {
+      recenterLaundryWd(bit => { bit.rot = (bit.rot + 90) % 360; });
+    });
+    document.querySelectorAll("[data-cabtog]").forEach(b => b.addEventListener("click", () => {
+      ensureLaundryFix();
+      const cab = S.laundryFix[b.dataset.cabtog];
+      if (!cab) return;
+      cab.on = cab.on === false;
+      draw();
+    }));
+    document.querySelectorAll("[data-cabface]").forEach(b => b.addEventListener("click", () => {
+      ensureLaundryFix();
+      const [id, face] = b.dataset.cabface.split(":");
+      if (S.laundryFix[id]) S.laundryFix[id].face = face;
+      clampLaundryFixes();
+      draw();
+    }));
+    [["laundryCabLen", "cab"], ["laundryCab2Len", "cab2"]].forEach(([eid, id]) => {
+      el(eid).addEventListener("input", e => {
+        ensureLaundryFix();
+        S.laundryFix[id].len = parseFloat(e.target.value);
+        clampLaundryFixes();
+        draw();
+      });
+    });
+    [["laundryCabT", "cab"], ["laundryCab2T", "cab2"]].forEach(([eid, id]) => {
+      el(eid).addEventListener("input", e => {
+        ensureLaundryFix();
+        S.laundryFix[id].t = parseFloat(e.target.value) / 100;
+        clampLaundryFixes();
+        draw();
+      });
+    });
     el("bathWdTog").addEventListener("click", () => {
       ensureBathFix();
       S.bathFix.wd.off = !S.bathFix.wd.off;
@@ -4816,6 +5795,11 @@ spendTot  = ${Math.round(spendSum())}`;
     el("offWinW").addEventListener("input", e => {
       ensureOpens();
       S.opens.offWin.w = parseFloat(e.target.value);
+      draw();
+    });
+    el("offWin2W").addEventListener("input", e => {
+      ensureOpens();
+      S.opens.offWin2.w = parseFloat(e.target.value);
       draw();
     });
     function clampShowerInBath() {
@@ -4838,10 +5822,10 @@ spendTot  = ${Math.round(spendSum())}`;
     });
 
     const EDIT_TITLES = {
-      living: "Living", gym: "Gym", shop: "Shop", work: "Shop kitchen", patio: "Patio", cage: "Batting cage",
+      living: "Living", gym: "Gym", shop: "Garage", work: "Shop kitchen", patio: "Patio", cage: "Batting cage",
       deck: "Pool deck", pool: "Pool", spa: "Hot tub", court: "Pickleball", fire: "Fire pit",
       office: "Office", closet: "Pool closet", kitchen: "Kitchenette", bath: "Bathroom", bunk: "Bunk",
-      laundry: "Laundry / storage", hall: "Bath entry hall", store: "Garage storage",
+      laundry: "Entry", hall: "Bath entry hall", porch: "Porch", store: "Garage storage",
       media: "Media", weights: "Weights", dance: "Dance floor", table: "Game table", ptable: "Pool table",
       dining: "Dining", sit: "Sitting", bar: "Bar",
     };
@@ -4855,12 +5839,15 @@ spendTot  = ${Math.round(spendSum())}`;
         return host || "living";
       }
       if (k.startsWith("bathfix:")) return "bath";
+      if (k.startsWith("laundryfix:")) return "laundry";
       if (k === "mirror" || k === "barre" || k === "dance") return "gym";
+      if (k === "inshop") return "shop";
       if (k === "building") {
         const z = zones();
         if (p.e >= z.shop.e0 && p.e <= z.shop.e1 && p.s >= z.shop.s0 && p.s <= z.shop.s1) return "shop";
         if (hasWork() && p.e >= z.work.e0 && p.e <= z.work.e1 && p.s >= z.work.s0 && p.s <= z.work.s1) return "work";
-        if (p.e >= z.gym.e0 && p.e <= z.gym.e1 && p.s >= z.gym.s0 && p.s <= z.gym.s1) return "gym";
+        const inZ = b => b && p.e >= b.e0 && p.e <= b.e1 && p.s >= b.s0 && p.s <= b.s1;
+        if (z.gymNeck ? (inZ(z.gymNeck) || inZ(z.gymWide)) : inZ(z.gym)) return "gym";
         return "living";
       }
       return k;
@@ -4889,7 +5876,7 @@ spendTot  = ${Math.round(spendSum())}`;
     el("spendDlg").addEventListener("click", e => {
       if (e.target === el("spendDlg")) el("spendDlg").close();
     });
-    ["living", "ac", "noAc", "patio", "court", "cage", "pool"].forEach(key => {
+    ["living", "ac", "noAc", "patio", "drive", "cage", "pool"].forEach(key => {
       el("spend_" + key).addEventListener("input", e => {
         Spend[key] = parseFloat(e.target.value) || 0;
         saveSpend();
@@ -4907,10 +5894,14 @@ spendTot  = ${Math.round(spendSum())}`;
       if (isNamedPreset(el("presetSel").value)) {
         pendingName = "";
         loadPreset();
+        setZoom(S.zoom, null, true);
+        if (S.viewX != null && S.viewY != null) applyViewScroll();
+        writePresetUrl(el("presetSel").value, { capture: false });
       } else {
         pendingName = "";
         el("presetName").value = "";
         el("presetName").focus();
+        writePresetUrl(el("presetSel").value);
       }
       syncPresetNameRow();
       syncPresetBtns();
@@ -4933,19 +5924,893 @@ spendTot  = ${Math.round(spendSum())}`;
     });
     el("pasteCancel").addEventListener("click", () => el("pasteDlg").close());
 
+    // ── Rooms plan (explicit rooms + pieces, two floors) ───────────────────
+    // Local frame: x east, y south, ft from the garage NW exterior corner.
+    // Room x,y,w,h are CLEAR (interior) dims; walls grow outward by wt
+    // (number or [N,E,S,W]). Band params are kept in sync so zones() — and
+    // with it the drive stub, court alignment, and the building drag — still
+    // work: origin = (living west face, bS0).
+    function isRooms() { return S.plan === "rooms" && Array.isArray(S.rooms); }
+    const snapIn = v => Math.round(v * 12) / 12;
+    const r3 = v => Math.round(v * 1000) / 1000;
+    const rFind = (arr, id) => (arr || []).find(o => o.id === id);
+    const fmtIn = ft => fmtFt(Math.round(ft * 12) / 12);
+    function rOrigin() { return { e: zones().liv.e0, s: S.bS0 }; }
+    function rAbs(o) { const O = rOrigin(); return { e: O.e + o.x, s: O.s + o.y, w: o.w, h: o.h }; }
+    const R_KIND_WALLED = { room: 1 };
+    const R_FILL = { liv: "#f4efe4", ac: "#e6e9e3", noac: "#d8dcd0", cover: "#efe7d8" };
+    const R_SIDES = ["N", "E", "S", "W"];
+    function rWt(r, face) {
+      if (!R_KIND_WALLED[r.kind || "room"]) return 0;
+      const w = r.wt == null ? 0 : r.wt;
+      return Array.isArray(w) ? w[R_SIDES.indexOf(face)] : w;
+    }
+    function rDepth(r) {
+      let d = 0, p = r;
+      while (p && p.in && d < 6) { p = rFind(S.rooms, p.in); d++; }
+      return d;
+    }
+    function rFill(r) {
+      if (r.cls && R_FILL[r.cls]) return R_FILL[r.cls];
+      const p = r.in && rFind(S.rooms, r.in);
+      return p ? rFill(p) : "#f4efe4";
+    }
+    function roomsOn(fl) { return (S.rooms || []).filter(r => (r.fl || 1) === fl); }
+
+    function roomsTakeoff() {
+      const sum = { liv: 0, ac: 0, noac: 0, cover: 0 };
+      for (const r of S.rooms) {
+        if (!r.cls || !(r.cls in sum)) continue;
+        let a = r.w * r.h;
+        for (const c of S.rooms) if (c.in === r.id && c.sub) a -= c.w * c.h;
+        sum[r.cls] += Math.max(0, a);
+      }
+      const driveSf = newDriveSf();
+      return {
+        living: { on: true, sf: sum.liv },
+        ac: { on: true, sf: sum.ac },
+        noAc: { on: true, sf: sum.noac },
+        patio: { on: sum.cover > 0.05, sf: sum.cover },
+        drive: { on: driveSf > 0.05, sf: driveSf },
+        cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
+        pool: { on: !!S.enPool, sf: 0 },
+      };
+    }
+
+    function roomsBBox() {
+      let e0 = Infinity, e1 = -Infinity, s0 = Infinity, s1 = -Infinity;
+      for (const r of S.rooms) {
+        const k = r.kind || "room";
+        if (k !== "room" && k !== "cover") continue;
+        const a = rAbs(r);
+        e0 = Math.min(e0, a.e - rWt(r, "W")); e1 = Math.max(e1, a.e + a.w + rWt(r, "E"));
+        s0 = Math.min(s0, a.s - rWt(r, "N")); s1 = Math.max(s1, a.s + a.h + rWt(r, "S"));
+      }
+      if (!Number.isFinite(e0)) { const z = zones(); return { e0: z.liv.e0, e1: z.liv.e1, s0: z.liv.s0, s1: z.liv.s1 }; }
+      return { e0, e1, s0, s1 };
+    }
+
+    function roomAt(p) {
+      let best = null, bd = -1;
+      for (const r of roomsOn(S.level)) {
+        const a = rAbs(r);
+        if (p.e < a.e || p.e > a.e + a.w || p.s < a.s || p.s > a.s + a.h) continue;
+        const d = rDepth(r) * 10 + ((r.kind || "room") === "room" ? 1 : 0);
+        if (d > bd) { bd = d; best = r; }
+      }
+      return best;
+    }
+
+    function rHatch(id, col) {
+      return `<pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">` +
+        `<line x1="0" y1="0" x2="0" y2="8" stroke="${col}" stroke-width="1.2" stroke-opacity="0.55"/></pattern>`;
+    }
+
+    function drawRoomsPlan(acc) {
+      const pe = 'style="pointer-events:none"';
+      const lvl = S.level || 1;
+      let g = `<defs>${rHatch("rhPony", "#7a6a4a")}${rHatch("rhVoid", "#3a4036")}${rHatch("rhRoof", "#5a6a8a")}</defs>`;
+      const rect = (a, extra) => `<rect x="${fx(a.e)}" y="${fy(a.s)}" width="${a.w * PXFT}" height="${a.h * PXFT}" ${extra}/>`;
+      const grow = r => {
+        const a = rAbs(r);
+        const n = rWt(r, "N"), e = rWt(r, "E"), s = rWt(r, "S"), w = rWt(r, "W");
+        return { e: a.e - w, s: a.s - n, w: a.w + w + e, h: a.h + n + s };
+      };
+      if (lvl === 2) {
+        for (const r of roomsOn(1)) {
+          const k = r.kind || "room";
+          if (r.in || (k !== "room" && k !== "cover")) continue;
+          g += rect(grow(r), `fill="#cfd2c8" fill-opacity="0.45" stroke="#8a9086" stroke-width="1" stroke-dasharray="${k === "cover" ? "5 4" : "0"}" ${pe}`);
+        }
+      }
+      const mine = roomsOn(lvl);
+      const maxD = mine.reduce((m, r) => Math.max(m, rDepth(r)), 0);
+      g += `<g data-fx="building" style="cursor:grab">`;
+      for (let d = 0; d <= maxD; d++) {
+        const at = mine.filter(r => rDepth(r) === d);
+        for (const r of at) if (r.kind === "cover") {
+          g += rect(rAbs(r), `fill="${R_FILL.cover}" fill-opacity="0.85" stroke="#8a744a" stroke-width="1.2" stroke-dasharray="6 4"`);
+        }
+        for (const r of at) if ((r.kind || "room") === "room") g += rect(grow(r), `fill="#3a4036" stroke="none"`);
+        for (const r of at) if ((r.kind || "room") === "room") g += rect(rAbs(r), `fill="${rFill(r)}" stroke="none"`);
+      }
+      g += `</g>`;
+      for (const r of mine) {
+        const k = r.kind;
+        if (k === "pony") g += rect(rAbs(r), `fill="url(#rhPony)" stroke="#7a6a4a" stroke-width="0.8" stroke-dasharray="3 3" ${pe}`);
+        if (k === "void") g += rect(rAbs(r), `fill="url(#rhVoid)" stroke="#3a4036" stroke-width="1.4" ${pe}`);
+      }
+      acc.s += g;
+      drawPieces(acc, lvl);
+      g = "";
+      for (const r of mine) if (r.kind === "roof") {
+        g += rect(rAbs(r), `fill="url(#rhRoof)" fill-opacity="0.6" stroke="#5a6a8a" stroke-width="1.2" stroke-dasharray="8 4" ${pe}`);
+      }
+      acc.s += g;
+      drawROpens(acc, lvl);
+      g = "";
+      for (const r of mine) g += roomLabel(r);
+      acc.s += `<g pointer-events="none">${g}</g>`;
+    }
+
+    function roomLabel(r) {
+      const a = rAbs(r), k = r.kind || "room";
+      const cx = fx(a.e + a.w / 2);
+      const small = Math.min(a.w, a.h) < 7;
+      let sf = r.w * r.h;
+      for (const c of S.rooms) if (c.in === r.id && c.sub) sf -= c.w * c.h;
+      const dims = `${fmtIn(r.w)} × ${fmtIn(r.h)}` + (r.cls ? ` · ${Math.round(sf)} sf` : "");
+      const col = k === "roof" ? "#3a4a6a" : k === "pony" ? "#6a5a38" : "#2a3026";
+      const style = 'style="paint-order:stroke;stroke:#fffef8;stroke-width:3px"';
+      const vertical = a.h > a.w * 2.2 && a.w < 7;
+      const cy = r.ly != null ? fy(a.s + r.ly) : vertical ? fy(a.s + a.h / 2) : fy(a.s) + (small ? Math.min(a.h * PXFT / 2, 14) : 15);
+      const rot = vertical ? ` transform="rotate(-90 ${cx} ${cy})"` : "";
+      const fs = small ? 8 : 10;
+      return `<text x="${cx}" y="${cy}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="${col}"${rot} ${style}>${escapeOpt(r.name || "")}</text>` +
+        (k === "room" || k === "cover" ? `<text x="${cx}" y="${cy + fs + 1}" text-anchor="middle" font-size="${fs - 1.5}" fill="${col}"${rot} ${style}>${dims}</text>` : "");
+    }
+
+    const PC_STY = {
+      sofa: ["#cdbda2", "#6a5a40"], sect: ["#cdbda2", "#6a5a40"], chair: ["#dccdb4", "#6a5a40"], ottoman: ["#dccdb4", "#6a5a40"],
+      ctable: ["#c8a878", "#6a4a28"], table: ["#c8a878", "#6a4a28"], rtable: ["#c8a878", "#6a4a28"], desk: ["#c8a878", "#6a4a28"],
+      pool: ["#6aa078", "#2f4a34"], island: ["#e8e0d0", "#6a6050"], counter: ["#e8e0d0", "#6a6050"], fridge: ["#dfe4e8", "#4a5560"],
+      bed: ["#eef0f4", "#5a6070"], bunk: ["#eef0f4", "#5a6070"], shower: ["#dfeef4", "#3a6a7a"], toilet: ["#ffffff", "#3a6a7a"],
+      vanity: ["#e8e0d0", "#3a6a7a"], car: ["#c9ced6", "#4a5260"], mower: ["#d8dcc8", "#4a5a38"], fp: ["#b8aca0", "#4a3f36"],
+      cab: ["#e2dccf", "#6a6050"], stair: ["#f3eee2", "#3a4036"], landing: ["#f3eee2", "#3a4036"], planter: ["#b9cf9c", "#4a6a38"],
+      grill: ["#a8a8a8", "#3a3a3a"], cubby: ["#e2dccf", "#6a6050"], wd: ["#dfe4e8", "#4a5560"], mirror: ["#cfe3ec", "#3a6a7a"],
+      wall: ["#3a4036", "#3a4036"], beam: ["none", "#6a5a40"], rug: ["#e9dcc4", "#a08a60"],
+    };
+    const PC_KINDS = {
+      sofa: "Sofa", sect: "L sectional", chair: "Chair", ottoman: "Ottoman", ctable: "Coffee table", table: "Table + chairs",
+      rtable: "Round table", desk: "Desk", pool: "Pool table", island: "Island", counter: "Counter", fridge: "Fridge",
+      bed: "Bed", bunk: "Bunk bed", shower: "Tub / shower", toilet: "Toilet", vanity: "Vanity", car: "Vehicle", mower: "Mower",
+      fp: "Fireplace", cab: "Cabinet", stair: "Stair flight", landing: "Landing", planter: "Planter", grill: "Grill",
+      cubby: "Cubbies / lockers", wd: "Washer / dryer", mirror: "Mirror", wall: "Partition wall", beam: "Beam", rug: "Rug",
+    };
+    const PC_DEF = {
+      sofa: [7, 3], sect: [10, 10], chair: [2.5, 2.5], ottoman: [3, 3], ctable: [4, 2], table: [6, 3], rtable: [7, 7], desk: [5, 2.5],
+      pool: [7.333, 3.667], island: [8, 3], counter: [8, 2], fridge: [3, 2.5], bed: [5, 6.667], bunk: [3.25, 6.667], shower: [5, 2.5],
+      toilet: [1.75, 2.25], vanity: [4, 2], car: [16, 7], mower: [5, 5], fp: [6, 2], cab: [4, 2], stair: [3.5, 10], landing: [4, 4],
+      planter: [4, 6], grill: [2.5, 2.5], cubby: [4, 1.5], wd: [2.5, 2.5], mirror: [12, 0.333], wall: [6, 0.375], beam: [0.333, 20], rug: [8, 10],
+    };
+
+    function drawPieces(acc, lvl) {
+      const pcs = (S.pcs || []).filter(p => (p.fl || 1) === lvl);
+      const order = k => (k === "rug" ? 0 : k === "beam" ? 2 : 1);
+      pcs.sort((a, b) => order(a.k) - order(b.k));
+      let g = "";
+      for (const p of pcs) g += `<g data-fx="pc:${p.id}" style="cursor:grab">${pieceSvg(p)}</g>`;
+      acc.s += g;
+    }
+
+    function pieceSvg(p) {
+      const a = rAbs(p);
+      const [fill, line] = PC_STY[p.k] || ["#e2dccf", "#6a6050"];
+      const X = fx(a.e), Y = fy(a.s), W = a.w * PXFT, H = a.h * PXFT;
+      const box = (e, s, w, h, f, l, x) => `<rect x="${fx(e)}" y="${fy(s)}" width="${w * PXFT}" height="${h * PXFT}" fill="${f}" stroke="${l}" stroke-width="1" ${x || ""}/>`;
+      const circ = (e, s, r, f, l) => `<circle cx="${fx(e)}" cy="${fy(s)}" r="${r * PXFT}" fill="${f}" stroke="${l}" stroke-width="1"/>`;
+      const ln = (e1, s1, e2, s2, l, wd, x) => `<line x1="${fx(e1)}" y1="${fy(s1)}" x2="${fx(e2)}" y2="${fy(s2)}" stroke="${l}" stroke-width="${wd || 1}" ${x || ""}/>`;
+      let s = "";
+      const chairsOn = (side, n, cd, cw) => {
+        let out = "";
+        for (let i = 0; i < n; i++) {
+          if (side === "N" || side === "S") {
+            const step = a.w / n, ce = a.e + step * (i + 0.5);
+            const sy = side === "N" ? a.s - cd - 0.1 : a.s + a.h + 0.1;
+            out += box(ce - cw / 2, sy, cw, cd, "#dccdb4", "#6a5a40", 'rx="2"');
+          } else {
+            const step = a.h / n, cs = a.s + step * (i + 0.5);
+            const sx = side === "W" ? a.e - cd - 0.1 : a.e + a.w + 0.1;
+            out += box(sx, cs - cw / 2, cd, cw, "#dccdb4", "#6a5a40", 'rx="2"');
+          }
+        }
+        return out;
+      };
+      const bench = side => {
+        const d = 1.25;
+        if (side === "N") return box(a.e + 0.3, a.s - d - 0.1, a.w - 0.6, d, "#c8a878", "#6a4a28");
+        if (side === "S") return box(a.e + 0.3, a.s + a.h + 0.1, a.w - 0.6, d, "#c8a878", "#6a4a28");
+        if (side === "W") return box(a.e - d - 0.1, a.s + 0.3, d, a.h - 0.6, "#c8a878", "#6a4a28");
+        return box(a.e + a.w + 0.1, a.s + 0.3, d, a.h - 0.6, "#c8a878", "#6a4a28");
+      };
+      switch (p.k) {
+        case "rug":
+          s += `<rect x="${X}" y="${Y}" width="${W}" height="${H}" fill="${fill}" fill-opacity="0.55" stroke="${line}" stroke-width="1" stroke-dasharray="4 3"/>`;
+          break;
+        case "beam":
+          if (a.w < a.h) s += ln(a.e + a.w / 2, a.s, a.e + a.w / 2, a.s + a.h, line, 2, 'stroke-dasharray="10 4 2 4"');
+          else s += ln(a.e, a.s + a.h / 2, a.e + a.w, a.s + a.h / 2, line, 2, 'stroke-dasharray="10 4 2 4"');
+          s += `<rect x="${X}" y="${Y}" width="${Math.max(W, 6)}" height="${Math.max(H, 6)}" fill="transparent"/>`;
+          break;
+        case "sect": {
+          const d = p.d || 3.333, c = p.c || "SW";
+          const nS = c[0] === "N", wE = c[1] === "W";
+          s += box(wE ? a.e : a.e + a.w - d, a.s, d, a.h, fill, line, 'rx="3"');
+          s += box(a.e, nS ? a.s : a.s + a.h - d, a.w, d, fill, line, 'rx="3"');
+          break;
+        }
+        case "table":
+          for (const side of R_SIDES) if (p.cs && p.cs[side]) s += chairsOn(side, p.cs[side], 1.5, 1.5);
+          if (p.bench) s += bench(p.bench);
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          break;
+        case "rtable": {
+          const cx = a.e + a.w / 2, cy = a.s + a.h / 2, n = p.n || 4;
+          const tr = Math.min(a.w, a.h) / 2 - 1.5;
+          for (let i = 0; i < n; i++) {
+            const t = (i / n) * Math.PI * 2 + (p.sq ? Math.PI / 4 : 0);
+            s += circ(cx + Math.cos(t) * (tr + 0.75), cy + Math.sin(t) * (tr + 0.75), 0.7, "#dccdb4", "#6a5a40");
+          }
+          if (p.sq) {
+            const h = tr / Math.SQRT2;
+            s += `<rect x="${fx(cx - h)}" y="${fy(cy - h)}" width="${2 * h * PXFT}" height="${2 * h * PXFT}" fill="${fill}" stroke="${line}" stroke-width="1" transform="rotate(45 ${fx(cx)} ${fy(cy)})"/>`;
+          } else s += circ(cx, cy, tr, fill, line);
+          break;
+        }
+        case "island":
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          for (const side of R_SIDES) {
+            const n = p.st && p.st[side];
+            if (!n) continue;
+            for (let i = 0; i < n; i++) {
+              const ns = side === "N" || side === "S";
+              const t = ((ns ? a.w : a.h) / n) * (i + 0.5);
+              const ce = ns ? a.e + t : side === "W" ? a.e - 0.9 : a.e + a.w + 0.9;
+              const cs = ns ? (side === "N" ? a.s - 0.9 : a.s + a.h + 0.9) : a.s + t;
+              s += circ(ce, cs, 0.6, "#dccdb4", "#6a5a40");
+            }
+          }
+          break;
+        case "pool":
+          s += box(a.e, a.s, a.w, a.h, "#8a6a48", "#4a3a28", 'rx="2"');
+          s += box(a.e + 0.4, a.s + 0.4, a.w - 0.8, a.h - 0.8, fill, line);
+          for (const fe of [0.4, 0.5, 0.6].map(f => f === 0.5 ? a.e + a.w / 2 : f === 0.4 ? a.e + 0.4 : a.e + a.w - 0.4))
+            for (const fs of [a.s + 0.4, a.s + a.h - 0.4]) s += circ(fe, fs, 0.22, "#2a2a2a", "none");
+          break;
+        case "bed": case "bunk": {
+          s += box(a.e, a.s, a.w, a.h, fill, line, 'rx="2"');
+          const f = p.f || "N", ns = f === "N" || f === "S";
+          const pd = 1.3;
+          if (ns) {
+            const ps = f === "N" ? a.s + 0.3 : a.s + a.h - 0.3 - pd;
+            s += box(a.e + 0.3, ps, a.w - 0.6, pd, "#ffffff", line, 'rx="2"');
+          } else {
+            const pe0 = f === "W" ? a.e + 0.3 : a.e + a.w - 0.3 - pd;
+            s += box(pe0, a.s + 0.3, pd, a.h - 0.6, "#ffffff", line, 'rx="2"');
+          }
+          if (p.k === "bunk") s += ln(a.e, a.s, a.e + a.w, a.s + a.h, line, 0.8);
+          break;
+        }
+        case "shower":
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          s += box(a.e + 0.3, a.s + 0.3, a.w - 0.6, a.h - 0.6, "none", line, 'rx="4"');
+          break;
+        case "toilet": {
+          const f = p.f || "N";
+          const tk = 0.7;
+          let t, cx, cy, rx, ry;
+          if (f === "N" || f === "S") {
+            t = box(a.e + 0.1, f === "N" ? a.s : a.s + a.h - tk, a.w - 0.2, tk, fill, line);
+            cx = a.e + a.w / 2; cy = f === "N" ? a.s + tk + (a.h - tk) / 2 : a.s + (a.h - tk) / 2;
+            rx = a.w / 2 - 0.15; ry = (a.h - tk) / 2;
+          } else {
+            t = box(f === "W" ? a.e : a.e + a.w - tk, a.s + 0.1, tk, a.h - 0.2, fill, line);
+            cy = a.s + a.h / 2; cx = f === "W" ? a.e + tk + (a.w - tk) / 2 : a.e + (a.w - tk) / 2;
+            ry = a.h / 2 - 0.15; rx = (a.w - tk) / 2;
+          }
+          s += t + `<ellipse cx="${fx(cx)}" cy="${fy(cy)}" rx="${rx * PXFT}" ry="${ry * PXFT}" fill="${fill}" stroke="${line}" stroke-width="1"/>`;
+          break;
+        }
+        case "vanity":
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          s += `<ellipse cx="${fx(a.e + a.w / 2)}" cy="${fy(a.s + a.h / 2)}" rx="${Math.min(a.w, a.h) * 0.3 * PXFT}" ry="${Math.min(a.w, a.h) * 0.22 * PXFT}" fill="#fff" stroke="${line}" stroke-width="0.8"/>`;
+          break;
+        case "car":
+          s += box(a.e, a.s, a.w, a.h, fill, line, 'rx="8"');
+          break;
+        case "mower":
+          s += box(a.e, a.s, a.w, a.h, fill, line, 'stroke-dasharray="4 3"');
+          break;
+        case "stair": case "landing": {
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          if (p.k === "landing") break;
+          const f = p.f || "N", ns = f === "N" || f === "S";
+          const len = ns ? a.h : a.w, n = Math.max(2, Math.round(len / 0.833));
+          for (let i = 1; i < n; i++) {
+            const t = (len / n) * i;
+            if (ns) s += ln(a.e, a.s + t, a.e + a.w, a.s + t, line, 0.8);
+            else s += ln(a.e + t, a.s, a.e + t, a.s + a.h, line, 0.8);
+          }
+          const c0 = ns ? [a.e + a.w / 2, f === "S" ? a.s + 0.4 : a.s + a.h - 0.4] : [f === "E" ? a.e + 0.4 : a.e + a.w - 0.4, a.s + a.h / 2];
+          const c1 = ns ? [a.e + a.w / 2, f === "S" ? a.s + a.h - 0.6 : a.s + 0.6] : [f === "E" ? a.e + a.w - 0.6 : a.e + 0.6, a.s + a.h / 2];
+          s += ln(c0[0], c0[1], c1[0], c1[1], "#c0392b", 1.4);
+          const dx = Math.sign(c1[0] - c0[0]), dy = Math.sign(c1[1] - c0[1]);
+          const tip = c1, b1 = [tip[0] - dx * 0.6 - dy * 0.4, tip[1] - dy * 0.6 - dx * 0.4], b2 = [tip[0] - dx * 0.6 + dy * 0.4, tip[1] - dy * 0.6 + dx * 0.4];
+          s += `<polygon points="${fx(tip[0])},${fy(tip[1])} ${fx(b1[0])},${fy(b1[1])} ${fx(b2[0])},${fy(b2[1])}" fill="#c0392b"/>`;
+          break;
+        }
+        case "planter":
+          s += box(a.e, a.s, a.w, a.h, fill, line, 'rx="3"');
+          break;
+        case "wall":
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          break;
+        case "fp":
+          s += box(a.e, a.s, a.w, a.h, fill, line);
+          s += box(a.e + Math.min(a.w, a.h) * 0.2, a.s + Math.min(a.w, a.h) * 0.2, a.w - Math.min(a.w, a.h) * 0.4, a.h - Math.min(a.w, a.h) * 0.4, "#6a5a4a", "none", 'fill-opacity="0.45"');
+          break;
+        default:
+          s += box(a.e, a.s, a.w, a.h, fill, line, p.k === "chair" || p.k === "ottoman" || p.k === "sofa" ? 'rx="3"' : "");
+          if (p.k === "sofa") {
+            const f = p.f || "N", bd = 0.75;
+            if (f === "N") s += box(a.e, a.s, a.w, bd, line, line, 'fill-opacity="0.35"');
+            if (f === "S") s += box(a.e, a.s + a.h - bd, a.w, bd, line, line, 'fill-opacity="0.35"');
+            if (f === "W") s += box(a.e, a.s, bd, a.h, line, line, 'fill-opacity="0.35"');
+            if (f === "E") s += box(a.e + a.w - bd, a.s, bd, a.h, line, line, 'fill-opacity="0.35"');
+          }
+      }
+      if (p.label && p.k !== "wall") {
+        const vert = a.h > a.w * 1.6 && a.w <= 4.5;
+        let lx = a.e + a.w / 2, ly = a.s + a.h / 2;
+        if (p.k === "sect") ly = (p.c || "SW")[0] === "N" ? a.s + (p.d || 3.333) / 2 : a.s + a.h - (p.d || 3.333) / 2;
+        const cx = fx(lx), cy = fy(ly) + (vert ? 0 : 3);
+        const fs = Math.max(6.5, Math.min(9, Math.min(a.w, a.h) * PXFT * 0.5));
+        s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="${vert ? "middle" : "auto"}" font-size="${fs}" font-weight="700" fill="#2a2620"${vert ? ` transform="rotate(-90 ${cx} ${cy})"` : ""} style="pointer-events:none;paint-order:stroke;stroke:#fffef8;stroke-width:2.5px">${escapeOpt(p.label)}</text>`;
+      }
+      return s;
+    }
+
+    // Openings live on a host room's face. at = ft from the N or W end of
+    // that face (clear dims) to the opening start. Wall depth comes from the
+    // host's wt on that face.
+    function roGeom(op) {
+      const r = rFind(S.rooms, op.host);
+      if (!r) return null;
+      const a = rAbs(r), f = op.face, ns = f === "N" || f === "S";
+      const out = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] }[f];
+      const along = ns ? [1, 0] : [0, 1];
+      const x0 = ns ? a.e + op.at : (f === "W" ? a.e : a.e + a.w);
+      const y0 = ns ? (f === "N" ? a.s : a.s + a.h) : a.s + op.at;
+      const wt = Math.max(rWt(r, f), 0.333);
+      return { r, a, f, ns, out, along, x0, y0, wt };
+    }
+
+    function drawROpens(acc, lvl) {
+      const col = "#3a4036";
+      let g = "";
+      for (const op of (S.ropens || [])) {
+        if ((op.fl || 1) !== lvl) continue;
+        const G = roGeom(op);
+        if (!G) continue;
+        const { out, along, x0, y0, wt, ns } = G, w = op.w;
+        const x1 = x0 + along[0] * w, y1 = y0 + along[1] * w;
+        const ox = x0 + out[0] * wt, oy = y0 + out[1] * wt;
+        const re = Math.min(x0, x1, ox, ox + along[0] * w), rs = Math.min(y0, y1, oy, oy + along[1] * w);
+        const rw = ns ? w : wt, rh = ns ? wt : w;
+        const glass = op.leaf === "window" || op.leaf === "slider";
+        let s = `<rect x="${fx(re)}" y="${fy(rs)}" width="${rw * PXFT}" height="${rh * PXFT}" fill="${glass ? "#dfeef4" : "#f6f2ea"}" stroke="none"/>`;
+        const L = (ax, ay, bx, by, wd, x) => `<line x1="${fx(ax)}" y1="${fy(ay)}" x2="${fx(bx)}" y2="${fy(by)}" stroke="${col}" stroke-width="${wd}" ${x || ""}/>`;
+        const mid = t => [x0 + out[0] * wt * t, y0 + out[1] * wt * t];
+        if (op.leaf === "window") {
+          for (const t of [0.15, 0.5, 0.85]) { const [mx, my] = mid(t); s += L(mx, my, mx + along[0] * w, my + along[1] * w, t === 0.5 ? 1.2 : 0.7); }
+        } else if (op.leaf === "slider") {
+          const [ax, ay] = mid(0.35), [bx, by] = mid(0.65);
+          s += L(ax, ay, ax + along[0] * w * 0.55, ay + along[1] * w * 0.55, 1.6);
+          s += L(bx + along[0] * w * 0.45, by + along[1] * w * 0.45, bx + along[0] * w, by + along[1] * w, 1.6);
+        } else if (op.leaf === "overhead") {
+          s += overheadMarks(x0, y0, w, G.f, col);
+        } else if (op.leaf === "barn") {
+          const inn = [-out[0], -out[1]];
+          const bx = x0 + inn[0] * 0.35 - along[0] * w * 0.15, by = y0 + inn[1] * 0.35 - along[1] * w * 0.15;
+          s += L(bx, by, bx + along[0] * w, by + along[1] * w, 2.4);
+        } else if (op.leaf === "door" || op.leaf === "double") {
+          const inn = op.sw === "out" ? out : [-out[0], -out[1]];
+          const bx0 = op.sw === "out" ? ox : x0, by0 = op.sw === "out" ? oy : y0;
+          const leaf = (hx, hy, dirSign, lw) => {
+            const tx = hx + inn[0] * lw, ty = hy + inn[1] * lw;
+            const ex = hx + along[0] * dirSign * lw, ey = hy + along[1] * dirSign * lw;
+            const v1 = [tx - hx, ty - hy], v2 = [ex - hx, ey - hy];
+            const sweep = v1[0] * v2[1] - v1[1] * v2[0] > 0 ? 1 : 0;
+            return L(hx, hy, tx, ty, 1.4) +
+              `<path d="M ${fx(tx)} ${fy(ty)} A ${lw * PXFT} ${lw * PXFT} 0 0 ${sweep} ${fx(ex)} ${fy(ey)}" fill="none" stroke="${col}" stroke-width="0.7" stroke-dasharray="3 2"/>`;
+          };
+          if (op.leaf === "double") {
+            s += leaf(bx0, by0, 1, w / 2);
+            s += leaf(bx0 + along[0] * w, by0 + along[1] * w, -1, w / 2);
+          } else {
+            const atEnd = op.hg === "b";
+            s += leaf(atEnd ? bx0 + along[0] * w : bx0, atEnd ? by0 + along[1] * w : by0, atEnd ? -1 : 1, w);
+          }
+        }
+        const hx = re - 0.4, hy = rs - 0.4;
+        s += `<rect x="${fx(hx)}" y="${fy(hy)}" width="${(rw + 0.8) * PXFT}" height="${(rh + 0.8) * PXFT}" fill="transparent"/>`;
+        g += `<g data-fx="ro:${op.id}" style="cursor:${ns ? "ew-resize" : "ns-resize"}">${s}</g>`;
+      }
+      acc.s += g;
+    }
+
+    // ── Rooms UI: floor switch, room list, edit pane ──
+    const RM_KEEP_ROWS = { cage: 1, deck: 1, pool: 1, spa: 1, court: 1, fire: 1 };
+    let roomListSig = "";
+    function syncRoomsUi() {
+      const on = isRooms();
+      el("floorRow").style.display = on ? "" : "none";
+      el("roomsBox").style.display = on ? "" : "none";
+      document.querySelectorAll(".panel-comps .comp-list:not(#roomList) > .comp-row").forEach(row => {
+        row.style.display = !on || RM_KEEP_ROWS[row.dataset.edit] ? "" : "none";
+      });
+      if (!on) { roomListSig = ""; return; }
+      el("floor_1").classList.toggle("on", S.level === 1);
+      el("floor_2").classList.toggle("on", S.level === 2);
+      const mine = roomsOn(S.level).slice().sort((a, b) => {
+        const ka = (a.kind || "room") === "room" || a.kind === "cover" ? 0 : 1;
+        const kb = (b.kind || "room") === "room" || b.kind === "cover" ? 0 : 1;
+        return ka - kb;
+      });
+      const rows = mine.map(r => {
+        const pad = rDepth(r) ? "&nbsp;&nbsp;↳ " : "";
+        return `<div class="comp-row" data-rm="${r.id}"><span class="ccheck"></span><span class="cname">${pad}${escapeOpt(r.name || r.id)}</span>` +
+          `<span class="val" style="min-width:0;margin-right:4px">${fmtIn(r.w)}×${fmtIn(r.h)}</span><button type="button" class="ebtn">Edit</button></div>`;
+      }).join("");
+      const sig = S.level + rows;
+      if (sig !== roomListSig) { el("roomList").innerHTML = rows; roomListSig = sig; }
+      el("roomsHint").textContent = `Floor ${S.level}: drag a room to move the whole building; drag furniture / doors directly. Double-click to edit (dims are clear, to the inch).`;
+    }
+
+    function rmAddOptions() {
+      const o = [`<option value="room:room">Room (walled)</option>`, `<option value="room:cover">Covered area</option>`,
+        `<option value="room:pony">Low-ceiling zone</option>`, `<option value="room:roof">Roof outline</option>`,
+        `<option value="ro:door">Door</option>`, `<option value="ro:window">Window</option>`];
+      for (const k of Object.keys(PC_KINDS)) o.push(`<option value="pc:${k}">${PC_KINDS[k]}</option>`);
+      el("rmAddSel").innerHTML = o.join("");
+    }
+
+    function rNewId(pre) {
+      const all = [...(S.rooms || []), ...(S.pcs || []), ...(S.ropens || [])].map(o => o.id);
+      let i = 1;
+      while (all.includes(pre + i)) i++;
+      return pre + i;
+    }
+
+    function rmAdd() {
+      const [type, k] = el("rmAddSel").value.split(":");
+      const fl = S.level;
+      const host = roomsOn(fl).find(r => (r.kind || "room") === "room" && !r.in) || roomsOn(fl)[0];
+      const bx = host ? host.x + 2 : 2, by = host ? host.y + 2 : 2;
+      if (type === "room") {
+        const r = { id: rNewId("rm"), fl, name: k === "room" ? "New room" : k === "cover" ? "Covered" : k === "pony" ? "Low ceiling" : "Roof", x: bx, y: by, w: 10, h: 10 };
+        if (k === "room") { r.wt = 4.5 / 12; if (host) r.in = host.id; }
+        else r.kind = k;
+        if (k === "cover") r.cls = "cover";
+        S.rooms.push(r);
+        draw(); openRm("room", r.id);
+      } else if (type === "ro") {
+        if (!host) return;
+        const op = { id: rNewId("op"), fl, host: host.id, face: "S", at: 1, w: 3, leaf: k, sw: "in" };
+        S.ropens.push(op);
+        draw(); openRm("ro", op.id);
+      } else {
+        const [w, h] = PC_DEF[k] || [3, 3];
+        const p = { id: rNewId(k), fl, k, x: bx, y: by, w, h, label: PC_KINDS[k] };
+        if (k === "table") p.cs = { N: 2, S: 2 };
+        if (k === "rtable") p.n = 4;
+        if (k === "island") p.st = { S: 3 };
+        if (k === "sect") { p.c = "SW"; p.d = 3.333; }
+        if (k === "bed" || k === "bunk" || k === "stair" || k === "sofa") p.f = "N";
+        S.pcs.push(p);
+        draw(); openRm("pc", p.id);
+      }
+    }
+
+    const ROT_SIDE = { N: "E", E: "S", S: "W", W: "N" };
+    const ROT_CORNER = { NW: "NE", NE: "SE", SE: "SW", SW: "NW" };
+    function rotatePiece(p) {
+      const cx = p.x + p.w / 2, cy = p.y + p.h / 2;
+      [p.w, p.h] = [p.h, p.w];
+      p.x = snapIn(cx - p.w / 2); p.y = snapIn(cy - p.h / 2);
+      if (p.f) p.f = ROT_SIDE[p.f];
+      if (p.bench) p.bench = ROT_SIDE[p.bench];
+      if (p.c) p.c = ROT_CORNER[p.c];
+      for (const key of ["cs", "st"]) {
+        if (!p[key]) continue;
+        const n = {};
+        for (const sd of R_SIDES) if (p[key][sd]) n[ROT_SIDE[sd]] = p[key][sd];
+        p[key] = n;
+      }
+    }
+
+    let rmEdit = null;
+    function openRm(type, id) {
+      const arr = type === "room" ? S.rooms : type === "pc" ? S.pcs : S.ropens;
+      const o = rFind(arr, id);
+      if (!o) return;
+      rmEdit = { type, id };
+      renderRmPane();
+      document.querySelectorAll(".edit-pane").forEach(p => p.classList.toggle("on", p.dataset.edit === "rm"));
+      el("editTitle").textContent = type === "room" ? (o.name || "Room") : type === "pc" ? (o.label || PC_KINDS[o.k] || "Piece") : "Opening";
+      const dlg = el("editDlg");
+      if (!dlg.open) dlg.showModal();
+    }
+
+    function renderRmPane() {
+      if (!rmEdit) return;
+      const { type, id } = rmEdit;
+      const arr = type === "room" ? S.rooms : type === "pc" ? S.pcs : S.ropens;
+      const o = rFind(arr, id);
+      if (!o) { el("rmBody").innerHTML = ""; return; }
+      const num = (k, label, v) => `<div class="row"><label>${label}</label><input type="number" step="0.0833" data-rk="${k}" value="${r3(v)}" style="flex:1;min-width:0"><span class="val">${fmtIn(v)}</span></div>`;
+      const txt = (k, label, v) => `<div class="row"><label>${label}</label><input type="text" data-rk="${k}" value="${escapeOpt(v || "")}" style="flex:1;min-width:0"></div>`;
+      const sel = (k, label, v, opts) => `<div class="row"><label>${label}</label><select data-rk="${k}" style="flex:1">${opts.map(([val, t]) => `<option value="${val}"${String(v) === val ? " selected" : ""}>${t}</option>`).join("")}</select></div>`;
+      const btn = (act, t) => `<button type="button" class="ebtn" data-ract="${act}">${t}</button>`;
+      let h = "";
+      if (type === "room") {
+        h += txt("name", "Name", o.name);
+        h += num("w", "Width (E–W)", o.w) + num("h", "Depth (N–S)", o.h);
+        h += num("x", "x from NW", o.x) + num("y", "y from NW", o.y);
+        h += sel("cls", "Spend as", o.cls || "", [["liv", "Living (high A/C)"], ["ac", "Low A/C"], ["noac", "No A/C"], ["cover", "Covered patio"], ["", "— (part of parent)"]]);
+        if ((o.kind || "room") === "room") {
+          const w = Array.isArray(o.wt) ? o.wt : [o.wt || 0, o.wt || 0, o.wt || 0, o.wt || 0];
+          h += `<div class="row"><label>Walls N/E/S/W (in)</label><input type="text" data-rk="wtIn" value="${w.map(v => r3(v * 12)).join(", ")}" style="flex:1;min-width:0"></div>`;
+        }
+        const kids = (S.ropens || []).filter(op => op.host === o.id);
+        if (kids.length) h += `<div class="hint">Openings: ${kids.map(op => `<a href="#" data-ropen="${op.id}">${op.leaf} ${fmtIn(op.w)} ${op.face}</a>`).join(" · ")}</div>`;
+        h += `<div class="row">${btn("addDoor", "+ door")}${btn("addWin", "+ window")}${btn("del", "Delete room")}</div>`;
+        h += `<div class="hint">Clear (interior) dims. x/y = ft from the garage NW exterior corner. Walls grow outward.</div>`;
+      } else if (type === "pc") {
+        h += txt("label", "Label", o.label);
+        h += num("w", "Width (E–W)", o.w) + num("h", "Depth (N–S)", o.h);
+        h += num("x", "x from NW", o.x) + num("y", "y from NW", o.y);
+        h += `<div class="row">${btn("rot", "↻ Rotate")}${btn("dup", "Duplicate")}${btn("del", "Delete")}</div>`;
+      } else {
+        const host = rFind(S.rooms, o.host);
+        h += sel("leaf", "Type", o.leaf, [["door", "Door"], ["double", "Double door"], ["slider", "Slider"], ["window", "Window"], ["overhead", "Overhead"], ["barn", "Barn"], ["cased", "Cased opening"]]);
+        h += num("w", "Width", o.w) + num("at", `From ${o.face === "N" || o.face === "S" ? "W" : "N"} corner`, o.at);
+        h += sel("face", "Wall", o.face, R_SIDES.map(f => [f, f]));
+        if (o.leaf === "door" || o.leaf === "double") {
+          h += sel("sw", "Swing", o.sw || "in", [["in", `into ${host ? host.name : "room"}`], ["out", "away"]]);
+          if (o.leaf === "door") h += sel("hg", "Hinge", o.hg || "a", [["a", o.face === "N" || o.face === "S" ? "W jamb" : "N jamb"], ["b", o.face === "N" || o.face === "S" ? "E jamb" : "S jamb"]]);
+        }
+        h += `<div class="row">${btn("del", "Delete")}</div>`;
+        h += `<div class="hint">Host: ${escapeOpt(host ? host.name : o.host)}. Drag along the wall on plan.</div>`;
+      }
+      el("rmBody").innerHTML = h;
+    }
+
+    function rmField(e) {
+      const k = e.target.dataset.rk;
+      if (!k || !rmEdit) return;
+      const arr = rmEdit.type === "room" ? S.rooms : rmEdit.type === "pc" ? S.pcs : S.ropens;
+      const o = rFind(arr, rmEdit.id);
+      if (!o) return;
+      const v = e.target.value;
+      if (k === "wtIn") {
+        const parts = v.split(/[,\s]+/).filter(Boolean).map(n => parseFloat(n) / 12).filter(n => Number.isFinite(n));
+        if (parts.length === 1) o.wt = r3(parts[0]);
+        else if (parts.length === 4) o.wt = parts.map(r3);
+      } else if (["w", "h", "x", "y", "at"].includes(k)) {
+        const n = parseFloat(v);
+        if (!Number.isFinite(n)) return;
+        o[k] = r3(n);
+        const sp = e.target.parentElement.querySelector(".val");
+        if (sp) sp.textContent = fmtIn(n);
+      } else if (k === "cls") {
+        if (v) o.cls = v; else delete o.cls;
+      } else o[k] = v;
+      if (k === "name" || k === "label") el("editTitle").textContent = v;
+      draw();
+      if (k === "leaf" || k === "face") renderRmPane();
+    }
+
+    function rmAction(act) {
+      if (!rmEdit) return;
+      const { type, id } = rmEdit;
+      const key = type === "room" ? "rooms" : type === "pc" ? "pcs" : "ropens";
+      const o = rFind(S[key], id);
+      if (!o) return;
+      if (act === "del") {
+        S[key] = S[key].filter(x => x.id !== id);
+        if (type === "room") {
+          S.ropens = S.ropens.filter(op => op.host !== id);
+          for (const r of S.rooms) if (r.in === id) r.in = o.in || undefined;
+        }
+        el("editDlg").close();
+        rmEdit = null;
+      } else if (act === "rot") {
+        rotatePiece(o);
+      } else if (act === "dup") {
+        const c = clone(o);
+        c.id = rNewId(o.k || "pc");
+        c.x = r3(o.x + 1); c.y = r3(o.y + 1);
+        S.pcs.push(c);
+        draw(); openRm("pc", c.id); return;
+      } else if (act === "addDoor" || act === "addWin") {
+        const op = { id: rNewId("op"), fl: o.fl || 1, host: o.id, face: "S", at: 1, w: 3, leaf: act === "addDoor" ? "door" : "window", sw: "in" };
+        S.ropens.push(op);
+        draw(); openRm("ro", op.id); return;
+      }
+      draw();
+      renderRmPane();
+    }
+
+    el("rmBody").addEventListener("change", rmField);
+    el("rmBody").addEventListener("click", e => {
+      const b = e.target.closest("[data-ract]");
+      if (b) { rmAction(b.dataset.ract); return; }
+      const a = e.target.closest("[data-ropen]");
+      if (a) { e.preventDefault(); openRm("ro", a.dataset.ropen); }
+    });
+    el("roomList").addEventListener("click", e => {
+      const row = e.target.closest("[data-rm]");
+      if (row) openRm("room", row.dataset.rm);
+    });
+    for (const n of [1, 2]) el("floor_" + n).addEventListener("click", () => { S.level = n; draw(); });
+    el("rmAddBtn").addEventListener("click", rmAdd);
+    rmAddOptions();
+
+    // ── Carrie 10/9 two-story plans (Masters 1 & 2) ──
+    // Measured off references/designer/2026-10-09_carrie-* — see
+    // design/notes/07-carrie-2026-10-09-read.md. Interior dims are hers;
+    // exterior walls 8″, interior 4½″.
+    function carrieLayout(variant) {
+      const W8 = 8 / 12, W4 = 4.5 / 12;
+      const rooms = [], pcs = [], ropens = [];
+      const R = (id, fl, name, x, y, w, h, o) => rooms.push(Object.assign({ id, fl, name, x: r3(x), y: r3(y), w: r3(w), h: r3(h) }, o || {}));
+      const P = (id, fl, k, x, y, w, h, o) => pcs.push(Object.assign({ id, fl, k, x: r3(x), y: r3(y), w: r3(w), h: r3(h) }, o || {}));
+      const O = (id, fl, host, face, at, w, leaf, o) => ropens.push(Object.assign({ id, fl, host, face, at: r3(at), w: r3(w), leaf }, o || {}));
+      const wt = (n, e, s, w) => [n, e, s, w].map(r3);
+      const A = variant === "A";
+
+      const EF = W8 + 32 + W8;                 // garage / living east face 33′-4″
+      const bY0 = W8 + 32 + W4, bY1 = bY0 + 16; // gym band clear
+      const lY0 = bY1 + W4, lY1 = lY0 + 32;     // living clear
+      const SF = lY1 + W8;                      // south face
+      const gymX0 = EF + 10 - W8 - 32;          // gym projects 10′ past the east face
+      const vX1 = gymX0 - W4, vX0 = vX1 - 5, walkX1 = vX0 - W8;
+
+      // ── Floor 1 ──
+      R("gar", 1, "Garage", W8, W8, 32, 32, { cls: "noac", wt: wt(W8, W8, W4, W8) });
+      R("sth", 1, "Stair hall", W8, 28.667, 18, 4, { in: "gar", sub: 1, cls: "ac", wt: W4 });
+      R("mech", 1, "Mech", 19.042, 28.667, 3.25, 4, { in: "gar", sub: 1, cls: "noac", wt: W4 });
+      R("shop", 1, "Shop 10×6", 22.667, 26.667, 10, 6, { in: "gar", sub: 1, cls: "noac", wt: W4 });
+      R("walk", 1, "Covered walkway", 0, bY0, walkX1, 16, { kind: "cover", cls: "cover" });
+      R("vest", 1, "Gym vestibule", vX0, bY0, 5, 7.625, { cls: "ac", wt: wt(W4, W4, W4, W8) });
+      R("bath", 1, "Bath", vX0, 41.042, 5, 8, { cls: "liv", wt: wt(W4, W4, W4, W8) });
+      R("gym", 1, "Gym / dance", gymX0, bY0, 32, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
+      R("liv", 1, "Living", W8, lY0, 32, 32, { cls: "liv", wt: wt(W4, W8, W8, W8), ly: 3.6 });
+      R("ent", 1, "Entry", W8, lY0, 5, 4.5, { in: "liv", wt: W4 });
+      R("sto", 1, "Storage", 24.667, lY0, 8, 5, { in: "liv", wt: W4 });
+      if (!A) R("pan", 1, "Pantry", 20.167, lY0, 4.125, 5, { in: "liv", wt: W4 });
+      R("pav", 1, "Pavilion", -16, SF - 28, 16, 28, { kind: "cover", cls: "cover" });
+
+      P("truck", 1, "car", 4.667, 4.917, 20, 8, { label: "Ranch truck 8×20" });
+      P("car", 1, "car", 6.667, 16.5, 16, 9, { label: "Car 9×16" });
+      P("mower", 1, "mower", 27, 1.25, 5, 5, { label: "Mower" });
+      P("gcab", 1, "cab", 30.667, 11, 2, 11.5, { label: "Storage" });
+      P("fl1", 1, "stair", 4.667, 28.667, 10, 4, { f: "E", label: "UP to 7′" });
+      P("land1", 1, "landing", 14.667, 28.667, 4, 4, { label: "landing" });
+      P("bench", 1, "cab", 23.667, 30.667, 8, 2, { label: "Bench" });
+      P("mirror", 1, "mirror", 12.75, bY0, 24.5, 0.333, { label: "" });
+      P("cub", 1, "cubby", vX0, 39.167, 3, 1.5, { label: "Cubbies" });
+      P("wd", 1, "wd", vX0 + 3, 38.167, 2, 2.5, { label: "W/D" });
+      P("shw1", 1, "shower", vX0, 46.375, 5, 2.667, { label: "Tub" });
+      P("wc1", 1, "toilet", vX1 - 1.792, 43.5, 1.792, 2, { f: "E" });
+      P("van1", 1, "vanity", vX0, 42.25, 2, 3, { label: "" });
+      P("ridge", 1, "beam", 16.5, lY0, 0.333, 32, { label: "" });
+      P("grill", 1, "grill", -3.5, 50.5, 2.75, 2.5, { label: "Grill" });
+      P("pl1", 1, "planter", -3.667, 34.083, 3.667, 6, { label: "4×6" });
+      P("pl2", 1, "planter", -3.667, 43, 3.667, 6.5, { label: "" });
+      P("pl3", 1, "planter", -11.417, 34.25, 4, 6, { label: "" });
+      P("pl4", 1, "planter", -11.25, 43.25, 3.75, 9.25, { label: "" });
+      P("pdin", 1, "table", -13.333, 57.5, 8, 3.5, { cs: { N: 4, S: 4 }, label: "Outdoor dining" });
+      P("psofa1", 1, "sofa", -11.25, 67.333, 8, 3, { f: "N", label: "Couch" });
+      P("psofa2", 1, "sofa", -11.25, 77.75, 8, 3, { f: "S", label: "Couch" });
+      P("pct", 1, "ctable", -10.25, 72, 6, 3, { label: "" });
+      P("pch1", 1, "chair", -2.75, 71.25, 2.5, 2.5, {});
+      P("pch2", 1, "chair", -2.75, 74.5, 2.5, 2.5, {});
+      P("pch3", 1, "chair", -15.5, 71.25, 2.5, 2.5, {});
+      P("pch4", 1, "chair", -15.5, 74.5, 2.5, 2.5, {});
+
+      O("ohA", 1, "gar", "W", 2.833, 10, "overhead");
+      O("ohB", 1, "gar", "W", 16.833, 10, "overhead");
+      O("gwn1", 1, "gar", "N", 2.833, 4, "window");
+      O("gdn", 1, "gar", "N", 12, 8, "double", { sw: "out" });
+      O("gwn2", 1, "gar", "N", 25.167, 4, "window");
+      O("gwe1", 1, "gar", "E", 4.833, 4, "window");
+      O("gwe2", 1, "gar", "E", 17.5, 4, "window");
+      O("shb1", 1, "shop", "N", 0.5, 4, "barn");
+      O("shb2", 1, "shop", "N", 5.5, 4, "barn");
+      O("mch", 1, "mech", "N", 0.375, 2.5, "door", { sw: "out" });
+      O("sthS", 1, "sth", "S", 0.333, 3, "door", { sw: "in" });
+      O("sthN", 1, "sth", "N", 0.333, 3, "door", { sw: "out" });
+      O("vW", 1, "vest", "W", 1, 3, "door", { sw: "in" });
+      O("vE", 1, "vest", "E", 1, 4, "double", { sw: "out" });
+      O("baN", 1, "bath", "N", 0.708, 2.5, "door", { sw: "in" });
+      O("gN", 1, "gym", "N", 25.667, 4, "window");
+      O("gE1", 1, "gym", "E", 1.5, 3.667, "window");
+      O("gE2", 1, "gym", "E", 6.167, 3.667, "window");
+      O("gE3", 1, "gym", "E", 10.833, 3.667, "window");
+      O("entN", 1, "ent", "N", 0.333, 3, "door", { sw: "in" });
+      O("entE", 1, "ent", "E", 0.75, 3, "cased");
+
+      if (A) {
+        P("mud", 1, "cubby", 6.042, lY0, 3.25, 1.5, { label: "Mud bench" });
+        P("kc", 1, "counter", 9.5, lY0, 11.75, 2, { label: "Kitchen · sink · DW" });
+        P("fr", 1, "fridge", 21.25, lY0, 3, 2.5, { label: "F/R" });
+        P("isl", 1, "island", 11.5, 55, 8.5, 3, { st: { S: 3 }, label: "Island 8½′" });
+        P("games", 1, "rtable", 20.9, 57, 8, 8, { n: 6, label: "Games 5′" });
+        P("sw1", 1, "chair", 21, 67.25, 2.75, 2.75, { label: "" });
+        P("sw2", 1, "chair", 16.75, 67.25, 2.75, 2.75, { label: "" });
+        P("sect", 1, "sect", 16.417, 70.417, 11, 11, { c: "SW", d: 3.333, label: "Sectional 11×11" });
+        P("ott", 1, "ottoman", 21.25, 71.25, 5, 5, { label: "Ottoman" });
+        P("fp", 1, "fp", 30.667, 69.417, 2, 8, { label: "F/P · TV" });
+        P("fcab1", 1, "cab", 30.667, 65.417, 2, 4, { label: "" });
+        P("fcab2", 1, "cab", 30.667, 77.417, 2, 4, { label: "" });
+        P("pt", 1, "pool", 4.667, 74.083, 7.333, 3.667, { label: "Pool 44×88" });
+        P("cue", 1, "cab", 14, 80.917, 2, 0.5, { label: "" });
+        P("din", 1, "table", 2.917, 62.333, 3.5, 8, { cs: { E: 4, N: 1, S: 1 }, bench: "W", label: "Dining" });
+        O("stoS", 1, "sto", "S", 1, 3, "door", { sw: "out" });
+        for (const [i, at] of [7, 12, 17, 22, 27].entries()) O("lw" + (i + 1), 1, "liv", "W", at, 4, "window");
+        O("le1", 1, "liv", "E", 5.417, 3.667, "window");
+        O("le2", 1, "liv", "E", 9.333, 3.417, "window");
+        O("le3", 1, "liv", "E", 13, 3, "window");
+      } else {
+        P("lock", 1, "cubby", 6.042, lY0, 1.5, 5, { label: "Lockers" });
+        P("fr", 1, "fridge", 8.75, lY0, 2.75, 2.5, { label: "F/R" });
+        P("kc", 1, "counter", 11.5, lY0, 8.292, 2, { label: "Kitchen · sink" });
+        P("bar", 1, "island", 11.75, 55.75, 6.5, 2, { st: { S: 3 }, label: "Bar 6½′" });
+        P("rug", 1, "rug", 2, 64.5, 12, 15, { label: "" });
+        P("sect", 1, "sect", 2.333, 66.5, 10.333, 13, { c: "SW", d: 3.333, label: "Sectional" });
+        P("ct", 1, "ctable", 6.75, 69.75, 4.5, 4.5, { label: "Coffee" });
+        P("sw1", 1, "chair", 5.75, 62.75, 2.75, 2.75, { label: "" });
+        P("sw2", 1, "chair", 9.5, 62.75, 2.75, 2.75, { label: "" });
+        P("fp", 1, "fp", 14.667, 65.417, 4, 12, { label: "F/P 12′ · two-sided shelves" });
+        P("din", 1, "table", 21.5, 59.25, 8, 3.5, { cs: { N: 4, E: 1, W: 1 }, bench: "S", label: "Dining" });
+        P("games", 1, "rtable", 23.5, 65.25, 5.5, 5.5, { n: 4, sq: 1, label: "Games" });
+        P("pt", 1, "pool", 22.25, 72.75, 7.333, 3.667, { label: "Pool 44×88" });
+        O("stoS", 1, "sto", "S", 2.833, 4, "double", { sw: "out" });
+        O("panS", 1, "pan", "S", 0.8, 2.5, "door", { sw: "out" });
+        for (const [i, at] of [6.5, 11.5, 16.5, 21.5, 26.5].entries()) O("le" + (i + 1), 1, "liv", "E", at, 3, "window");
+        O("lw1", 1, "liv", "W", 12, 4.75, "window");
+        O("lw2", 1, "liv", "W", 17, 4.75, "slider");
+        O("lw3", 1, "liv", "W", 22, 4.75, "slider");
+        O("lw4", 1, "liv", "W", 27, 4.75, "window");
+      }
+
+      // ── Floor 2 ──
+      R("apt", 2, "Apartment", W8, W8, 32, 32, { cls: "liv", wt: wt(W8, W8, W4, W8) });
+      R("void", 2, "Open to stair", W8, 28.667, 14, 4, { in: "apt", sub: 1, kind: "void" });
+      R("st2", 2, "Stair", 14.667, 23.667, 4, 9, { in: "apt", wt: W4 });
+      R("clo", 2, "Closet", 19.042, 28.667, 8, 4, { in: "apt", wt: W4 });
+      R("ba2", 2, "Bath", 19.042, 21, 8, 7.292, { in: "apt", wt: W4 });
+      R("ponyE", 2, "6′ pony wall", 27.417, W8, 5.25, 32, { in: "apt", kind: "pony" });
+      R("ponyNW", 2, "low", W8, W8, 4.5, 7, { in: "apt", kind: "pony" });
+      R("ponySW", 2, "low", W8, 19.5, 4, 8.792, { in: "apt", kind: "pony" });
+      R("off", 2, "Office / bonus", vX0, bY0, 13.375, 16, { cls: "ac", wt: wt(W4, W4, W8, W8) });
+      R("st2a", 2, "Stair", 14.667, bY0, 4, 5, { in: "off", wt: W4 });
+      R("ufs", 2, "Unfinished storage", 19.042, bY0, 13.625, 16, { cls: "noac", wt: wt(W4, W8, W8, W4) });
+      R("dk2", 2, "Covered deck", walkX1 - 8, bY0, 8, 16, { kind: "cover", cls: "cover" });
+      R("shed", 2, "Gym shed roof", EF, bY0 - W8, 10, 16 + W8 + W8, { kind: "roof" });
+      R("cgr", 2, "Cage shed roof · 12′ eave", EF, bY1 + W8, 16, 70, { kind: "roof" });
+
+      P("fl2b", 2, "stair", 14.667, 23.667, 4, 5, { f: "N", label: "UP" });
+      P("land2", 2, "landing", 14.667, 28.667, 4, 4, { label: "7′ landing" });
+      P("fl2a", 2, "stair", 14.667, bY0, 4, 5, { f: "S", label: "UP" });
+      P("kit2", 2, "counter", 4.667, 26.292, 9.625, 2, { label: "Range · sink · F/R" });
+      P("pan2", 2, "cab", 4.667, 20, 1.5, 4, { label: "" });
+      P("t4", 2, "table", 8.5, 20.5, 3, 3, { cs: { N: 1, S: 1, E: 1, W: 1 }, label: "" });
+      P("sofa2", 2, "sofa", W8, 9.5, 3, 7.5, { f: "W", label: "Sofa" });
+      P("ct2", 2, "ctable", 5, 11.25, 2, 4, { label: "" });
+      P("ch2a", 2, "chair", 8, 10.5, 2.5, 2.5, {});
+      P("ch2b", 2, "chair", 8, 13.75, 2.5, 2.5, {});
+      P("qbed", 2, "bed", 22.417, W8, 5, 6.667, { f: "N", label: "Queen" });
+      P("wQ", 2, "wall", 22.042, 7.667, 5.375, W4, {});
+      P("bunk", 2, "bunk", 5.917, W8, 3.25, 6.667, { f: "N", label: "Bunk" });
+      P("wB", 2, "wall", W8, 7.667, 8.958, W4, {});
+      P("wB2", 2, "wall", 5.167, W8, W4, 7, {});
+      P("kbed", 2, "bed", 20.75, 11, 6.667, 6.333, { f: "E", label: "King" });
+      P("ns1", 2, "cab", 25.917, 9.333, 1.5, 1.5, { label: "" });
+      P("ns2", 2, "cab", 25.917, 17.5, 1.5, 1.5, { label: "" });
+      P("shw2", 2, "shower", 19.042, 23.292, 2.5, 5, { label: "30×60" });
+      P("lin2", 2, "cab", 19.042, 21, 2, 2.25, { label: "Lin" });
+      P("van2", 2, "vanity", 25.042, 21.5, 2, 3.5, { label: "" });
+      P("wc2", 2, "toilet", 24.75, 26.5, 2, 1.792, { f: "S" });
+      P("desk", 2, "desk", 8, 46.542, 6, 2.5, { label: "Desk" });
+      P("dch1", 2, "chair", -2.5, 38, 2.5, 2.5, {});
+      P("dch2", 2, "chair", -2.5, 42, 2.5, 2.5, {});
+
+      O("s2W", 2, "st2", "W", 5, 4, "cased");
+      O("s2S", 2, "st2", "S", 0, 4, "cased");
+      O("s2N", 2, "st2", "N", 0.5, 3, "door", { sw: "out" });
+      O("s2aS", 2, "st2a", "S", 0.5, 3, "door", { sw: "out" });
+      O("cloN", 2, "clo", "N", 2.708, 4, "slider");
+      O("ba2N", 2, "ba2", "N", 2.708, 2.5, "door", { sw: "in" });
+      O("offW1", 2, "off", "W", 4.25, 3, "door", { sw: "out" });
+      O("offW2", 2, "off", "W", 12, 3, "door", { sw: "out" });
+      O("ufsW", 2, "ufs", "W", 12, 3, "door", { sw: "in" });
+      for (const [i, at] of [7.833, 11.333, 14.833].entries()) O("dw" + (i + 1), 2, "apt", "W", at, 3, "window");
+      O("gw2", 2, "apt", "N", 14, 4, "window");
+      return { rooms, pcs, ropens };
+    }
+
+    // Site + spend come from Master 8 (garage at the court, cage on the east
+    // fence); the building is Carrie's.
+    function carrieText(variant) {
+      const base = builtinText("8. Gym+entry gable west") || "";
+      const keep = /^(deckW|deckL|poolLen|courtW|courtD|deck|pool|spa|court|fire|spend)\s*=/;
+      const L = carrieLayout(variant);
+      const W8 = 8 / 12;
+      const livingW = r3(32 + 2 * W8);
+      const eastGap = 18;
+      const oE = EAST_FENCE - eastGap - livingW, oS = -41;
+      const gymS0 = 32 + W8 + 4.5 / 12;
+      const off = ["office", "closet", "laundry", "hall", "porch", "store", "kitchen", "bath", "bunk", "media", "weights",
+        "dance", "inshop", "table", "ptable", "dining", "sit", "bar", "patio", "mirror", "barre"];
+      const name = variant === "A" ? "1. Carrie 10/9 · fireplace east wall" : "2. Carrie 10/9 · fireplace center";
+      return [
+        "# site-studio params  (estate ft: e east, s south; house rear = 0)",
+        `name      = ${JSON.stringify(name)}`,
+        `livingW   = ${livingW}`,
+        `livingD   = ${r3(82.083 - gymS0 - 16 - 4.5 / 12 + 4.5 / 12)}`,
+        `gymW      = ${r3(livingW + 10)}`,
+        `gymD      = ${r3(16 + 4.5 / 12)}`,
+        `gymSide   = "N"`,
+        `garageW   = ${livingW}`,
+        `garageD   = ${r3(gymS0)}`,
+        `shopFlush = "W"`,
+        `gymFlush  = "W"`,
+        `workD     = 0`,
+        `eastGap   = ${eastGap}`,
+        `bS0       = ${oS}`,
+        `cageLen   = 70`,
+        `cageWid   = 12`,
+        `zoom      = 3.00`,
+        ...base.split("\n").filter(l => keep.test(l)),
+        ...off.map(k => `${k} = off`),
+        `cage      = (12.00, 70.00, ${(oE + livingW + 2).toFixed(2)}, ${(oS + 32 + W8 + 4.5 / 12 + 16 + W8).toFixed(2)}, "N")  # w,h,e,s,face`,
+        `plan      = "rooms"`,
+        `rooms     = ${JSON.stringify(L.rooms)}`,
+        `pcs       = ${JSON.stringify(L.pcs)}`,
+        `ropens    = ${JSON.stringify(L.ropens)}`,
+      ].join("\n");
+    }
+
     const PRESET_KEY = "site-studio-presets-v1";
     const NEW_PRESET = "__new__";
-    const DEFAULT_PRESET = "Gym entry from patio";
+    const DEFAULT_PRESET = "1. Carrie 10/9 · fireplace east wall";
     const BUILTIN_ORDER = [
-      "Gym entry from patio",
-      "N/S Gym @ South End",
-      "Media Nook + Middle Gym",
-      "Shop kitchen · west bunk",
+      "1. Carrie 10/9 · fireplace east wall",
+      "2. Carrie 10/9 · fireplace center",
+      "3. Gym entry from patio",
+      "4. N/S Gym @ South End",
+      "5. Media Nook + Middle Gym",
+      "6. Shop kitchen · west bunk",
+      "7. East shop, office north",
+      "8. Gym+entry gable west",
     ];
-    const BUILTIN_REV = 14;
+    const BUILTIN_REV = 38;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "Gym entry from patio"
+name      = "3. Gym entry from patio"
 livingW   = 23
 livingD   = 52
 gymW      = 34
@@ -4999,6 +6864,7 @@ bunk      = (14.50, 13.00, 149.44, 59.02, "E")  # w,h,e,s,face
 media     = (18.00, 13.50, 143.05, 20.01, "N")  # w,h,e,s,face
 weights   = (7.50, 8.00, 155.65, 78.84, "S")  # w,h,e,s,face
 dance     = (30.00, 10.00, 130.34, 73.11, "N")  # w,h,e,s,face
+inshop    = off
 table     = (8.34, 8.34, 154.53, 36.12, "N")  # w,h,e,s,face
 ptable    = (13.00, 18.00, 141.05, 40.79, "W")  # w,h,e,s,face
 dining    = off
@@ -5016,7 +6882,7 @@ barre     = (12.00, 0.90, 136.83, 72.00, "N")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599762`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "N/S Gym @ South End"
+name      = "4. N/S Gym @ South End"
 livingW   = 25.5
 livingD   = 42
 gymW      = 18
@@ -5070,6 +6936,7 @@ bunk      = (13.50, 13.00, 151.84, 16.06, "W")  # w,h,e,s,face
 media     = (18.00, 13.50, 143.50, 48.47, "S")  # w,h,e,s,face
 weights   = (8.00, 7.50, 149.81, 62.23, "E")  # w,h,e,s,face
 dance     = (10.00, 30.00, 143.85, 62.00, "E")  # w,h,e,s,face
+inshop    = off
 table     = (8.34, 8.34, 156.96, 29.02, "N")  # w,h,e,s,face
 ptable    = (13.00, 18.00, 141.07, 29.93, "W")  # w,h,e,s,face
 dining    = off
@@ -5087,7 +6954,7 @@ barre     = (0.90, 10.00, 156.95, 79.98, "E")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 588963`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "Media Nook + Middle Gym"
+name      = "5. Media Nook + Middle Gym"
 livingW   = 36
 livingD   = 32
 gymW      = 36
@@ -5141,6 +7008,7 @@ bunk      = (13.50, 14.00, 165.59, 56.03, "E")  # w,h,e,s,face
 media     = (13.50, 18.00, 165.60, 38.00, "E")  # w,h,e,s,face
 weights   = (8.00, 7.50, 143.07, 19.93, "W")  # w,h,e,s,face
 dance     = (30.00, 10.00, 148.95, 23.64, "N")  # w,h,e,s,face
+inshop    = off
 table     = (8.34, 8.34, 143.42, 38.30, "N")  # w,h,e,s,face
 ptable    = (13.00, 18.00, 143.11, 52.00, "W")  # w,h,e,s,face
 dining    = off
@@ -5158,7 +7026,7 @@ barre     = (10.00, 0.90, 166.68, 37.10, "S")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599912`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "Shop kitchen · west bunk"
+name      = "6. Shop kitchen · west bunk"
 livingW   = 32
 livingD   = 40
 gymW      = 32
@@ -5225,6 +7093,7 @@ bunk      = (16.00, 16.00, 144.85, 52.00, "E")  # w,h,e,s,face
 media     = (13.50, 18.00, 179.35, 30.00, "E")  # w,h,e,s,face
 weights   = (8.00, 7.50, 184.85, 59.50, "E")  # w,h,e,s,face
 dance     = off
+inshop    = off
 table     = off
 ptable    = off
 dining    = off
@@ -5241,12 +7110,234 @@ mirror    = off
 barre     = off
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 670743`,
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "7. East shop, office north"
+livingW   = 23
+livingD   = 52
+gymW      = 34
+gymD      = 15
+gymSide   = "S"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 39
+garageD   = 30
+shopFlush = "W"
+gymFlush  = "E"
+eastGap   = 43.25     # living east → east fence
+bS0       = -10
+overall   = 50.00 × 97.00  # L
+shop      = e 140.85…179.85  s -10.00…20.00
+gym       = e 129.85…163.85  s 72.00…87.00
+living    = e 140.85…163.85  s 20.00…72.00
+patioRun  = 40
+patioDep  = 14
+cageLen   = 70
+cageWid   = 14
+barLen    = 12.5
+stools    = 4
+bathAlong = 13
+bathInto  = 8.5
+bunkLen   = 13
+bunkW     = 14.5
+bunkD     = 13
+bunkDoorAt = "N"
+bunkDoorSwing = "in"
+bunkHinge = "nook"
+mirrorLen = 18
+barreLen  = 12
+danceLen  = 30
+danceWid  = 10
+inshopLen = 30
+inshopWid = 14
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "converse"
+mediaChairSide = "left"
+livEntryKind = "door"
+opens     = {"gymEntry":{"host":"gym","leaf":"double","face":"N","t":0.1,"swing":"in","w":6,"hinge":"start"},"gymCage":{"host":"gym","leaf":"single","face":"E","t":0.27,"swing":"in","w":3,"hinge":"start"},"livEntry":{"host":"liv","leaf":"single","face":"W","t":0.3254744393140217,"swing":"in","w":3,"hinge":"start"},"livWin":{"host":"liv","leaf":"window","face":"W","t":0.5254744393140217,"w":17},"offA":{"host":"office","leaf":"single","face":"N","t":0.5,"swing":"out","w":3,"hinge":"start"},"offB":{"host":"office","leaf":"single","face":"S","t":0.5,"swing":"in","w":3,"on":true,"hinge":"start"},"offWin":{"host":"office","leaf":"window","face":"N","t":0.125,"w":3.5},"offWin2":{"host":"office","leaf":"window","face":"N","t":0.875,"w":3.5,"on":true},"bunkEg":{"host":"bunk","leaf":"window","face":"E","t":0.3006800939727867,"w":3},"bathA":{"host":"bath","leaf":"single","face":"E","t":0.35,"swing":"in","w":2.67,"hinge":"start"},"bathB":{"host":"bath","leaf":"single","face":"N","t":0.7944103778204558,"swing":"in","w":2.67,"hinge":"start"},"bathC":{"host":"bath","leaf":"single","face":"W","t":0.5,"swing":"in","w":3,"ext":true,"hinge":"start"},"gymWin":{"host":"gym","leaf":"window","face":"W","t":0.5,"w":10},"garA":{"host":"shop","leaf":"overhead","face":"W","t":0.72,"w":10,"on":true,"hinge":"start","swing":"in"},"garB":{"host":"shop","leaf":"overhead","face":"W","t":0.28,"w":10,"on":true,"hinge":"start","swing":"in"}}
+bathFix   = {"wd":{"lx":0.15,"ly":4.83,"rot":180},"vanity":{"lx":6.68,"ly":4.9,"rot":270},"toilet":{"lx":3.33,"ly":4.5,"rot":270},"shower":{"lx":0.2,"ly":0.07,"rot":0,"w":5,"h":3.5}}
+office    = (12.00, 10.00, 140.85, -10.00, "W")  # w,h,e,s,face — north wall
+closet    = off
+bath      = (8.50, 13.00, 140.88, 58.99, "W")  # w,h,e,s,face
+bunk      = (14.50, 13.00, 149.44, 59.02, "E")  # w,h,e,s,face
+media     = (18.00, 13.50, 143.05, 20.01, "N")  # w,h,e,s,face
+weights   = (7.50, 8.00, 155.65, 78.84, "S")  # w,h,e,s,face
+dance     = (30.00, 10.00, 130.34, 73.11, "N")  # w,h,e,s,face
+inshop    = (14.00, 30.00, 165.85, -10.00, "E")  # w,h,e,s,face — east bay
+table     = (8.34, 8.34, 154.53, 36.12, "N")  # w,h,e,s,face
+ptable    = (13.00, 18.00, 141.05, 40.79, "W")  # w,h,e,s,face
+dining    = off
+sit       = off
+bar       = (9.50, 12.50, 154.13, 46.35, "W")  # w,h,e,s,face
+patio     = (14.00, 40.00, 126.85, 32.00, "E")  # w,h,e,s,face
+cage      = (14.00, 70.00, 165.92, 20.17, "N")  # w,h,e,s,face
+court     = (60.00, 30.00, 121.68, 96.79, "N")  # w,h,e,s,face
+pool      = (40.00, 46.00, 75.61, 27.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 99.79, 25.66, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 62.27, 14.88, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 75.85, 86.10, "N")  # w,h,e,s,face
+mirror    = (18.00, 0.80, 131.06, 86.20, "S")  # w,h,e,s,face
+barre     = (12.00, 0.90, 136.83, 72.00, "N")  # w,h,e,s,face
+spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
+spendTot  = 599762`,
+      `# site-studio params  (estate ft: e east, s south; house rear = 0)
+name      = "8. Gym+entry gable west"
+livingW   = 23
+livingD   = 38
+gymW      = 30
+gymD      = 18
+gymSide   = "N"   # N = shop→gym→living · S = shop→living→gym
+garageW   = 31
+garageD   = 26
+shopFlush = "W"
+gymFlush  = "E"
+workW     = 23
+workD     = 18
+workFlush = "W"
+shopLabel = "Garage"
+gymLabel  = ""
+workLabel = "Shop"
+storeLabel = ""
+storeOpen = false
+bandD     = 13
+gymNeckD  = 5
+eastGap   = 23.5     # living east → east fence
+bS0       = -41
+overall   = 48.01 × 119.00  # L
+shop      = e 160.60…191.60  s -41.00…-15.00
+work      = e 160.60…183.60  s -15.00…3.00
+gym       = e 153.60…183.60  s 3.00…21.00
+living    = e 160.60…183.60  s 34.00…72.00
+patioRun  = 38
+patioDep  = 14
+cageLen   = 70
+cageWid   = 14
+courtW    = 20
+courtD    = 44
+barLen    = 12.5
+stools    = 4
+bathAlong = 5
+bathInto  = 9
+bunkLen   = 13
+bunkW     = 14
+bunkD     = 13
+laundryW  = 11
+laundryD  = 13
+hallW     = 5
+hallD     = 4
+porchW    = 16
+porchD    = 6
+bunkDoorAt = "W"
+bunkDoorSwing = "in"
+bunkHinge = "nook"
+mirrorLen = 18
+barreLen  = 12
+danceLen  = 30
+danceWid  = 10
+inshopLen = 30
+inshopWid = 14
+deckW     = 62.5
+deckL     = 76.5
+poolLen   = 8
+diningW   = 3.5
+diningLen = 11
+diningChairs = 5
+diningEnds = true
+sitCfg    = "love"
+mediaCfg  = "converse"
+mediaChairSide = "right"
+livEntryKind = "slider"
+zoom      = 3.50
+viewX     = 149.6
+viewY     = 33.9
+opens     = {"gymEntry":{"host":"gym","leaf":"double","face":"W","t":0.5,"swing":"in","w":6,"hinge":"start","on":false},"gymCage":{"host":"gym","leaf":"slider","face":"E","t":0.8052710649120584,"swing":"in","w":3,"on":true,"hinge":"end"},"gymWin":{"host":"gym","leaf":"window","face":"W","t":0.5,"w":8,"on":true},"livEntry":{"host":"liv","leaf":"slider","face":"W","t":0.22,"swing":"in","w":8,"hinge":"start"},"livWin":{"host":"liv","leaf":"window","face":"W","t":0.5594736842105262,"w":17},"offA":{"host":"office","leaf":"single","face":"W","t":0.5,"swing":"out","w":3,"hinge":"start"},"offB":{"host":"office","leaf":"single","face":"E","t":0.5,"swing":"in","w":3,"on":true,"hinge":"start"},"offWin":{"host":"office","leaf":"window","face":"N","t":0.49,"w":2.8333333333,"h":5.75},"offWin2":{"host":"office","leaf":"window","face":"E","t":0.8337620196056664,"w":3.5,"on":false},"bunkEg":{"host":"bunk","leaf":"window","face":"N","t":0.5,"w":3},"bathA":{"host":"bath","leaf":"single","face":"N","t":0.733,"swing":"in","w":2.67,"hinge":"end"},"bathB":{"host":"bath","leaf":"single","face":"E","t":0.3,"swing":"in","w":2.67,"hinge":"start","on":false},"bathC":{"host":"bath","leaf":"single","face":"W","t":0.5,"swing":"out","w":3,"ext":true,"hinge":"start","on":false},"shopGar":{"host":"work","leaf":"double","face":"N","t":0.8568473076696498,"swing":"in","w":6,"on":true,"hinge":"end"},"shopWest":{"host":"work","leaf":"single","face":"W","t":0.5,"swing":"in","w":3.5,"ext":true,"on":true,"hinge":"start"},"laundryDoor":{"host":"laundry","leaf":"single","face":"W","t":0.45,"swing":"in","w":3,"ext":true,"hinge":"start"},"laundryGym":{"host":"laundry","leaf":"single","face":"N","t":0.7048353141947659,"swing":"out","w":3,"on":true,"hinge":"start"},"laundryLiv":{"host":"laundry","leaf":"open","face":"S","t":0.8180454545454545,"w":4.003,"on":true},"hallOpen":{"host":"hall","leaf":"open","face":"W","t":0.5,"w":4,"hinge":"start","swing":"in"},"garA":{"host":"shop","leaf":"overhead","face":"W","t":0.28123486759779415,"w":10,"on":true,"hinge":"start","swing":"in"},"garB":{"host":"shop","leaf":"overhead","face":"W","t":0.7115675842354764,"w":10,"on":true,"hinge":"start","swing":"in"},"shopWinN":{"host":"shop","leaf":"window","face":"N","t":0.1645,"w":2.8333333333,"h":5.75,"on":true},"porchWin":{"host":"shop","leaf":"window","face":"N","t":0.6612903226,"w":5.8333333333,"h":5.75,"panes":2,"on":true},"storeDoor":{"host":"store","leaf":"double","face":"S","t":0.5,"swing":"out","w":7,"hinge":"start"}}
+bathFix   = {"wd":{"lx":0.2,"ly":0.2,"rot":0,"off":true},"vanity":{"lx":0.11,"ly":0.5,"rot":90},"toilet":{"lx":0,"ly":3.28,"rot":90},"shower":{"lx":0,"ly":6.4,"rot":180,"w":6,"h":2.5}}
+laundryFix = {"wd":{"lx":0.11,"ly":0,"rot":90,"stack":true},"cab":{"face":"N","t":0.39285383944434477,"len":3,"on":true},"cab2":{"face":"S","t":0.232950748109537,"len":5,"on":true}}
+office    = (10.00, 13.00, 191.61, -41.01, "W")  # w,h,e,s,face
+closet    = off
+laundry   = (11.00, 13.00, 153.63, 20.98, "W")  # w,h,e,s,face
+hall      = (5.00, 4.00, 164.53, 20.98, "N")  # w,h,e,s,face
+porch     = (16.00, 6.00, 173.10, -47.00, "S")  # w,h,e,s,face
+store     = off
+kitchen   = off
+bath      = (5.00, 9.00, 164.58, 25.01, "N")  # w,h,e,s,face
+bunk      = (14.00, 13.00, 169.60, 21.00, "E")  # w,h,e,s,face
+media     = (18.00, 13.50, 162.77, 58.35, "S")  # w,h,e,s,face
+weights   = (7.50, 8.00, 175.81, 3.38, "S")  # w,h,e,s,face
+dance     = (30.00, 10.00, 153.56, 10.83, "N")  # w,h,e,s,face
+inshop    = off
+table     = (8.34, 8.34, 174.37, 35.19, "N")  # w,h,e,s,face
+ptable    = (13.00, 18.00, 161.01, 34.37, "E")  # w,h,e,s,face
+dining    = off
+sit       = off
+bar       = (9.50, 12.50, 173.83, 44.98, "W")  # w,h,e,s,face
+patio     = (14.00, 38.00, 146.60, 34.00, "E")  # w,h,e,s,face
+cage      = (14.00, 70.00, 185.58, -14.91, "N")  # w,h,e,s,face
+court     = (20.00, 44.00, 134.38, -50.00, "E")  # w,h,e,s,face
+pool      = (40.00, 46.00, 79.06, 32.31, "N")  # w,h,e,s,face
+spa       = (13.00, 11.00, 102.56, 30.82, "N")  # w,h,e,s,face
+deck      = (62.50, 76.50, 65.46, 14.95, "N")  # w,h,e,s,face
+fire      = (16.00, 16.00, 72.67, 94.78, "N")  # w,h,e,s,face
+mirror    = (18.00, 0.80, 163.23, 20.20, "S")  # w,h,e,s,face
+barre     = (12.00, 0.90, 163.15, 3.00, "N")  # w,h,e,s,face
+spend     = living 165/sf · ac 100/sf · noAc 75/sf · patio 60/sf · drive 8/sf · cage 12/sf · pool 180000
+spendTot  = 597307`,
     ];
+    BUILTIN_PRESETS.unshift(carrieText("A"), carrieText("B"));
     const clone = o => JSON.parse(JSON.stringify(o));
     const loadStore = () => { try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch (_) { return {}; } };
     const saveStore = s => localStorage.setItem(PRESET_KEY, JSON.stringify(s));
     function isNamedPreset(v) { return !!(v && v !== NEW_PRESET); }
     function isBuiltinPreset(v) { return BUILTIN_ORDER.includes(v); }
+    function resolvePresetUrl() {
+      const raw = (new URLSearchParams(location.search).get("m")
+        || new URLSearchParams(location.search).get("preset") || "").trim();
+      if (!raw) return null;
+      if (/^[1-9]\d*$/.test(raw)) return BUILTIN_ORDER[parseInt(raw, 10) - 1] || null;
+      if (isBuiltinPreset(raw)) return raw;
+      const hit = BUILTIN_ORDER.find(n => n.toLowerCase().startsWith(raw.toLowerCase()));
+      if (hit) return hit;
+      return loadStore()[raw] ? raw : null;
+    }
+    function zoomFromUrl() {
+      const n = parseFloat(new URLSearchParams(location.search).get("z")
+        || new URLSearchParams(location.search).get("zoom"));
+      return Number.isFinite(n) ? clamp(n, 0.45, 3.5) : null;
+    }
+    function viewFromUrl() {
+      const q = new URLSearchParams(location.search);
+      const x = parseFloat(q.get("x") || q.get("e"));
+      const y = parseFloat(q.get("y") || q.get("s"));
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+      return { x, y };
+    }
+    function writePresetUrl(name, opts) {
+      if (!opts || opts.capture !== false) captureView();
+      const url = new URL(location.href);
+      url.searchParams.delete("preset");
+      url.searchParams.delete("zoom");
+      if (isBuiltinPreset(name)) {
+        url.searchParams.set("m", String(BUILTIN_ORDER.indexOf(name) + 1));
+      } else if (isNamedPreset(name)) {
+        url.searchParams.set("m", name);
+      } else {
+        url.searchParams.delete("m");
+      }
+      url.searchParams.set("z", String(Math.round(S.zoom * 100) / 100));
+      if (S.viewX != null && S.viewY != null) {
+        url.searchParams.set("x", String(S.viewX));
+        url.searchParams.set("y", String(S.viewY));
+      } else {
+        url.searchParams.delete("x");
+        url.searchParams.delete("y");
+      }
+      const qs = url.searchParams.toString();
+      history.replaceState(null, "", url.pathname + (qs ? "?" + qs : "") + url.hash);
+    }
     function builtinText(name) {
       return BUILTIN_PRESETS.find(t => {
         const named = t.match(/name\s*=\s*"([^"]+)"/);
@@ -5314,11 +7405,13 @@ spendTot  = 670743`,
       const selected = el("presetSel").value;
       if (isBuiltinPreset(selected)) {
         writePreset(uniqueCustomName(`${selected} copy`));
+        writePresetUrl(el("presetSel").value);
         flashBtn(el("presetSave"));
         return;
       }
       if (isNamedPreset(selected)) {
         writePreset(selected);
+        writePresetUrl(selected);
         flashBtn(el("presetSave"));
         return;
       }
@@ -5331,6 +7424,7 @@ spendTot  = 670743`,
       }
       pendingName = "";
       writePreset(isBuiltinPreset(name) ? uniqueCustomName(`${name} copy`) : name);
+      writePresetUrl(el("presetSel").value);
       flashBtn(el("presetSave"));
     }
     function finishPaste(text) {
@@ -5340,6 +7434,7 @@ spendTot  = 670743`,
       refreshPresetSelect(NEW_PRESET);
       el("presetName").value = pendingName;
       syncPresetNameRow();
+      writePresetUrl(NEW_PRESET);
       flashBtn(el("pasteBtn"));
       return true;
     }
@@ -5355,6 +7450,8 @@ spendTot  = 670743`,
       }
       const snap = loadStore()[name];
       if (!snap) return;
+      S.plan = "bands"; S.level = 1;
+      S.rooms = S.pcs = S.ropens = null;
       Object.assign(S, clone(snap.S));
       if (S.stools == null) S.stools = 4;
       if (!S.mediaCfg) S.mediaCfg = "dualL";
@@ -5368,9 +7465,11 @@ spendTot  = 670743`,
       if (snap.S.enDance == null) S.enDance = true;
       S.opens = snap.S.opens ? clone(snap.S.opens) : OPEN_DEFAULTS();
       S.bathFix = snap.S.bathFix ? clone(snap.S.bathFix) : BATH_FIX_DEFAULTS();
+      S.laundryFix = snap.S.laundryFix ? clone(snap.S.laundryFix) : LAUNDRY_FIX_DEFAULTS();
       if (!snap.S.livEntryKind) S.livEntryKind = "slider";
       ensureOpens();
       ensureBathFix();
+      ensureLaundryFix();
       if (snap.S.bunkDoorAt == null) {
         S.bunkDoorAt = (snap.S.bunkDoorHinge && "NSEW".includes(snap.S.bunkDoorHinge)) ? snap.S.bunkDoorHinge : "W";
       }
@@ -5393,6 +7492,8 @@ spendTot  = 670743`,
         });
       }
       if (!F.dance) seedDance();
+      if (!F.inshop) seedInshop();
+      if (snap.S.enInshop == null) S.enInshop = false;
       if (!F.kitchen) {
         seedModule("kitchen", {
           label: "kitchenette", e: 0, s: 0, w: 24, h: 12, face: "S",
@@ -5411,6 +7512,12 @@ spendTot  = 670743`,
           c: "#eae4d6", ec: "#7a6a4a", tc: "#4a3f28"
         });
       }
+      if (!F.porch) {
+        seedModule("porch", {
+          label: "porch", e: 0, s: 0, w: 16, h: 6, face: "S",
+          c: "#efe7d8", ec: "#8a744a", tc: "#6a5a38"
+        });
+      }
       if (!F.store) {
         seedModule("store", {
           label: "storage", e: 0, s: 0, w: 16, h: 6, face: "S",
@@ -5419,6 +7526,7 @@ spendTot  = 670743`,
       }
       if (S.enLaundry == null) S.enLaundry = false;
       if (S.enHall == null) S.enHall = false;
+      if (S.enPorch == null) S.enPorch = false;
       if (S.enStore == null) S.enStore = false;
       if (S.enKitchen == null) S.enKitchen = false;
       if (S.courtW == null && F.court) S.courtW = F.court.w;
@@ -5428,6 +7536,10 @@ spendTot  = 670743`,
       if (S.shopLabel == null) S.shopLabel = "";
       if (S.gymLabel == null) S.gymLabel = "";
       if (S.workLabel == null) S.workLabel = "";
+      if (S.storeLabel == null) S.storeLabel = "";
+      if (S.storeOpen == null) S.storeOpen = /porch/i.test(S.storeLabel || "");
+      if (S.bandD == null) S.bandD = 0;
+      if (S.gymNeckD == null) S.gymNeckD = 0;
       if (S.workW == null) S.workW = S.livingW;
       if (S.workD == null) S.workD = 0;
       if (!S.workFlush) S.workFlush = "W";
@@ -5438,9 +7550,28 @@ spendTot  = 670743`,
       }
       if (S.danceLen == null) S.danceLen = 30;
       if (S.danceWid == null) S.danceWid = 10;
+      if (S.inshopLen == null && F.inshop) {
+        const ns = F.inshop.face === "N" || F.inshop.face === "S";
+        S.inshopLen = ns ? F.inshop.w : F.inshop.h;
+        S.inshopWid = ns ? F.inshop.h : F.inshop.w;
+      }
+      if (S.inshopLen == null) S.inshopLen = 30;
+      if (S.inshopWid == null) S.inshopWid = 14;
       if (S.bunkW == null || S.bunkD == null) {
         if (F.bunk) { S.bunkW = F.bunk.w; S.bunkD = F.bunk.h; }
         else { S.bunkW = 13; S.bunkD = S.bunkLen || 14; }
+      }
+      if (S.laundryW == null || S.laundryD == null) {
+        if (F.laundry) { S.laundryW = F.laundry.w; S.laundryD = F.laundry.h; }
+        else { S.laundryW = 10; S.laundryD = 13; }
+      }
+      if (S.hallW == null || S.hallD == null) {
+        if (F.hall) { S.hallW = F.hall.w; S.hallD = F.hall.h; }
+        else { S.hallW = 6; S.hallD = 4; }
+      }
+      if (S.porchW == null || S.porchD == null) {
+        if (F.porch) { S.porchW = F.porch.w; S.porchD = F.porch.h; }
+        else { S.porchW = 16; S.porchD = 6; }
       }
       bunkDoorNorm();
       draw();
@@ -5455,6 +7586,7 @@ spendTot  = 670743`,
       el("presetName").value = "";
       refreshPresetSelect();
       syncPresetNameRow();
+      writePresetUrl(el("presetSel").value);
       flashBtn(el("presetDelete"));
     }
     el("presetSave").addEventListener("click", savePreset);
@@ -5467,16 +7599,42 @@ spendTot  = 670743`,
       const store = loadStore();
       delete store["C-2 NEW"];
       delete store["L shop 44"];
-      for (const n of BUILTIN_ORDER) delete store[n];
+      for (const n of [
+        ...BUILTIN_ORDER,
+        "Gym entry from patio",
+        "N/S Gym @ South End",
+        "Media Nook + Middle Gym",
+        "Shop kitchen · west bunk",
+        "Gym+entry gable west",
+      ]) delete store[n];
       store.__builtinRev = BUILTIN_REV;
       saveStore(store);
     }
     installBuiltinPresets();
-    refreshPresetSelect(DEFAULT_PRESET);
+    refreshPresetSelect(resolvePresetUrl() || DEFAULT_PRESET);
     loadPreset();
-    syncPresetNameRow();
-    setZoom(2.2);
-    scrollToLiving();
+    {
+      const z0 = zoomFromUrl();
+      const v0 = viewFromUrl();
+      if (z0 != null) S.zoom = z0;
+      if (v0) { S.viewX = v0.x; S.viewY = v0.y; }
+      syncPresetNameRow();
+      setZoom(S.zoom, null, true);
+      const restore = !!(v0 || (S.viewX != null && S.viewY != null));
+      const finish = n => {
+        if (restore) {
+          if (!applyViewScroll() && n < 8) {
+            requestAnimationFrame(() => finish(n + 1));
+            return;
+          }
+          writePresetUrl(el("presetSel").value, { capture: false });
+          return;
+        }
+        if (z0 == null && Math.abs(S.zoom - 2.2) < 0.02) scrollToLiving();
+        writePresetUrl(el("presetSel").value);
+      };
+      requestAnimationFrame(() => finish(0));
+    }
   </script>
 </body>
 
