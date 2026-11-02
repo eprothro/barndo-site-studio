@@ -6855,7 +6855,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     // Site + spend come from Master 9 (garage at the court, cage on the east
     // fence); the building is Carrie's.
     // Master 3 (C): court play lines start where the drive levels out (house
-    // garage face + 15′); its 5′ sideline puts the garage west face 25′ further.
+    // garage face + 15′); the slab's 5′ sideline ends at the garage west face.
+    // Siting tuned by the owner 2026-11-02 (eastGap 11.5, bS0 −33, court s −52).
     const DRIVE_LEVEL_E = HOUSE_E1 + 15;
     function carrieText(variant) {
       const C = variant === "C";
@@ -6865,8 +6866,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       const L = carrieLayout(variant);
       const W8 = 8 / 12;
       const livingW = r3(32 + 2 * W8);
-      const eastGap = C ? r3(EAST_FENCE - (DRIVE_LEVEL_E + 25) - livingW) : 18;
-      const oE = EAST_FENCE - eastGap - livingW, oS = -41;
+      const eastGap = C ? 11.5 : 18;
+      const oE = EAST_FENCE - eastGap - livingW, oS = C ? -33 : -41;
       const gymS0 = 32 + W8 + 4.5 / 12;
       const off = ["office", "closet", "laundry", "hall", "porch", "store", "kitchen", "bath", "bunk", "media", "weights",
         "dance", "inshop", "table", "ptable", "dining", "sit", "bar", "patio", "mirror", "barre"];
@@ -6894,11 +6895,11 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         `cageWid   = 12`,
         `cageMarA  = 2`,
         `cageMarB  = ${C ? 1 : 2}`,
-        `zoom      = 3.00`,
+        ...(C ? [`zoom      = 2.25`, `viewX     = 118.0`, `viewY     = 5.9`] : [`zoom      = 3.00`]),
         ...base.split("\n").filter(l => keep.test(l)),
         ...off.map(k => `${k} = off`),
         `cage      = (12.00, 70.00, ${cageE.toFixed(2)}, ${(oS + 32 + W8 + 4.5 / 12 + 16 + W8).toFixed(2)}, "N")  # w,h,e,s,face`,
-        ...(C ? [`court     = (20.00, 44.00, ${DRIVE_LEVEL_E.toFixed(2)}, -50.00, "E")  # w,h,e,s,face`] : []),
+        ...(C ? [`court     = (20.00, 44.00, ${DRIVE_LEVEL_E.toFixed(2)}, -52.00, "E")  # w,h,e,s,face`] : []),
         `plan      = "rooms"`,
         `rooms     = ${JSON.stringify(L.rooms)}`,
         `pcs       = ${JSON.stringify(L.pcs)}`,
@@ -6920,7 +6921,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       "8. East shop, office north",
       "9. Gym+entry gable west",
     ];
-    const BUILTIN_REV = 42;
+    const BUILTIN_REV = 43;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
 name      = "4. Gym entry from patio"
