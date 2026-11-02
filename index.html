@@ -1044,13 +1044,12 @@
               <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
             </div>
             <div class="row"><label>Margin W / N</label>
-              <input type="range" id="cageMarW" min="0.5" max="3" step="0.5"><span class="val" id="cageMarW_v"></span>
+              <select id="cageMarA"><option value="1">1′</option><option value="2">2′</option></select>
             </div>
             <div class="row"><label>Margin E / S</label>
-              <input type="range" id="cageMarE" min="0.5" max="3" step="0.5"><span class="val" id="cageMarE_v"></span>
+              <select id="cageMarB"><option value="1">1′</option><option value="2">2′</option></select>
             </div>
-            <div class="hint">Solid = net. Dotted = side margin each long side (mower / ball path): 2′ default, 1′
-              where a wall or fence makes the open side. Walk-in through
+            <div class="hint">Solid = net. Dotted = margin each long side, 1′ or 2′ (mower / ball path). Walk-in through
               the net — no door. 4×8 practice mound (rubber centered). Distances are plate apex → rubber front:
               46 / 50 / 60′6″.</div>
           </div>
@@ -1752,7 +1751,7 @@
             <span><b style="color:#8aa06a">gym</b></span>
             <span><b style="color:#c9b896">living</b></span>
             <span><b style="color:#8a744a">covered patio</b> · snaps west</span>
-            <span><b style="color:#3f97b3">cage</b> + 2′ dotted</span>
+            <span><b style="color:#3f97b3">cage</b> + margin dotted</span>
             <span><b style="color:#7d8a82">new drive</b></span>
             <span><b style="color:#3a6fa8">pickleball</b> lines</span>
             <span><b style="color:#2f6f82">pool</b></span>
@@ -1872,7 +1871,6 @@
 
     const BASE_PX = 4.0, M = 52;
     let PXFT = BASE_PX;
-    const CAGE_SIDE = 2.0;           // default side margin (S.cageMarW / S.cageMarE)
     const PATIO_SNAP = 1.25;
     const SPEND_KEY = "site-studio-spend-v2";
     const SPEND_CAP = 600000;        // owner's 2026-08-29 all-in headline
@@ -1915,7 +1913,8 @@
       eastGap: 28,                   // living east → east fence
       bS0: -10,                      // barndo north (pushed up from −20)
       patioRun: 39.5, patioDep: 15,
-      cageLen: 70, cageWid: 14, cageMarW: 2, cageMarE: 2,
+      cageLen: 70, cageWid: 14,
+      cageMarA: 2, cageMarB: 2,              // cage margin on the W/N and E/S long sides
       courtW: 60, courtD: 30,
       barLen: 10.5, stools: 4,
       bathAlong: 7.5, bathInto: 10.5,
@@ -3030,7 +3029,8 @@
       S.eastGap = 28;
       S.bS0 = -10;
       S.patioRun = 39.5; S.patioDep = 15;
-      S.cageLen = 70; S.cageWid = 14; S.cageMarW = 2; S.cageMarE = 2;
+      S.cageLen = 70; S.cageWid = 14;
+      S.cageMarA = 2; S.cageMarB = 2;
       S.courtW = 60; S.courtD = 30;
       S.barLen = 10.5; S.stools = 4;
       S.bathAlong = 7.5; S.bathInto = 10.5;
@@ -3251,8 +3251,8 @@
       el("patioDep_v").textContent = fmtFt(S.patioDep);
       el("cageLen_v").textContent = fmtFt(S.cageLen);
       el("cageWid_v").textContent = fmtFt(S.cageWid);
-      el("cageMarW_v").textContent = fmtFt(S.cageMarW);
-      el("cageMarE_v").textContent = fmtFt(S.cageMarE);
+      el("cageMarA").value = String(S.cageMarA);
+      el("cageMarB").value = String(S.cageMarB);
       el("courtW_v").textContent = fmtFt(S.courtW);
       el("courtD_v").textContent = fmtFt(S.courtD);
       el("barLen_v").textContent = fmtFt(S.barLen);
@@ -3285,7 +3285,7 @@
         ["garageW", "garageW"], ["garageD", "garageD"],
         ["workW", "workW"], ["workD", "workD"],
         ["patioRun", "patioRun"], ["patioDep", "patioDep"],
-        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["cageMarW", "cageMarW"], ["cageMarE", "cageMarE"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
+        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkW", "bunkW"], ["bunkD", "bunkD"],
         ["laundryW", "laundryW"], ["laundryD", "laundryD"], ["hallW", "hallW"], ["hallD", "hallD"],
         ["porchW", "porchW"], ["porchD", "porchD"],
@@ -4503,22 +4503,17 @@
       const f = F.cage;
       const pe = 'style="pointer-events:none"';
       const longNS = (f.face === "N" || f.face === "S");
-      const mA = S.cageMarW ?? CAGE_SIDE, mB = S.cageMarE ?? CAGE_SIDE;
+      const mA = S.cageMarA, mB = S.cageMarB;
       const along = longNS ? f.h : f.w;
+      const m0e = longNS ? mA : 0, m1e = longNS ? mB : 0, m0s = longNS ? 0 : mA, m1s = longNS ? 0 : mB;
       g.s += `<g data-fx="cage" style="cursor:grab">`;
-      const mx0 = longNS ? f.e - mA : f.e, my0 = longNS ? f.s : f.s - mA;
-      const mw = longNS ? f.w + mA + mB : f.w, mh = longNS ? f.h : f.h + mA + mB;
-      if (mA !== mB) {
-        const tc = `font-size="8" fill="${f.tc}" text-anchor="middle" ${pe}`;
-        if (longNS) {
-          g.s += `<text x="${fx(f.e - mA / 2)}" y="${fy(f.s + 6)}" ${tc}>${fmtFt(mA)}</text>`;
-          g.s += `<text x="${fx(f.e + f.w + mB / 2)}" y="${fy(f.s + 6)}" ${tc}>${fmtFt(mB)}</text>`;
-        } else {
-          g.s += `<text x="${fx(f.e + 6)}" y="${fy(f.s - mA / 2) + 3}" ${tc}>${fmtFt(mA)}</text>`;
-          g.s += `<text x="${fx(f.e + 6)}" y="${fy(f.s + f.h + mB / 2) + 3}" ${tc}>${fmtFt(mB)}</text>`;
-        }
+      g.s += `<rect x="${fx(f.e - m0e)}" y="${fy(f.s - m0s)}" width="${(f.w + m0e + m1e) * PXFT}" height="${(f.h + m0s + m1s) * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
+      for (const [m, lo] of [[mA, true], [mB, false]]) {
+        const [te, ts] = longNS
+          ? [lo ? f.e - m / 2 : f.e + f.w + m / 2, f.s + f.h * 0.75]
+          : [f.e + f.w * 0.75, lo ? f.s - m / 2 : f.s + f.h + m / 2];
+        g.s += `<text x="${fx(te)}" y="${fy(ts)}" text-anchor="middle" dominant-baseline="middle" font-size="7" fill="${f.tc}" font-weight="700" transform="rotate(${longNS ? -90 : 0} ${fx(te)} ${fy(ts)})" ${pe}>${m}′</text>`;
       }
-      g.s += `<rect x="${fx(mx0)}" y="${fy(my0)}" width="${mw * PXFT}" height="${mh * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
       g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.35" stroke="${f.ec}" stroke-width="1.4"/>`;
       // Mound at the end farther from the gym door (walk in at the batter).
       // Plates stacked on the centerline at real distances.
@@ -5096,8 +5091,8 @@ patioRun  = ${S.patioRun}
 patioDep  = ${S.patioDep}
 cageLen   = ${S.cageLen}
 cageWid   = ${S.cageWid}
-cageMarW  = ${S.cageMarW}
-cageMarE  = ${S.cageMarE}
+cageMarA  = ${S.cageMarA}
+cageMarB  = ${S.cageMarB}
 courtW    = ${S.courtW}
 courtD    = ${S.courtD}
 barLen    = ${S.barLen}
@@ -5207,7 +5202,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       S.storeOpen = null;
       S.bandD = 0;
       S.gymNeckD = 0;
-      S.cageMarW = S.cageMarE = 2;
+      S.cageMarA = 2; S.cageMarB = 2;
       S.plan = "bands";
       S.level = 1;
       S.rooms = S.pcs = S.ropens = null;
@@ -5459,7 +5454,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     el("patioDep").addEventListener("input", e => { S.patioDep = parseFloat(e.target.value); applyPatio(); draw(); });
     el("cageLen").addEventListener("input", e => { S.cageLen = parseFloat(e.target.value); applyCage(); draw(); });
     el("cageWid").addEventListener("input", e => { S.cageWid = parseFloat(e.target.value); applyCage(); draw(); });
-    for (const k of ["cageMarW", "cageMarE"]) el(k).addEventListener("input", e => { S[k] = parseFloat(e.target.value); draw(); });
+    for (const k of ["cageMarA", "cageMarB"]) el(k).addEventListener("change", e => { S[k] = parseFloat(e.target.value); draw(); });
     el("courtW").addEventListener("input", e => { S.courtW = parseFloat(e.target.value); applyCourt(); draw(); });
     el("courtD").addEventListener("input", e => { S.courtD = parseFloat(e.target.value); applyCourt(); draw(); });
     el("barLen").addEventListener("input", e => { S.barLen = parseFloat(e.target.value); applyBar(); draw(); });
@@ -6654,8 +6649,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("malc", 1, "Mech / trash?", 18.042, 26.833, 4.25, 1.458, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("mech", 1, "Mech", 19.042, 28.667, 3.25, 4, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("shop", 1, "Shop 10×6", 22.667, 26.667, 10, 6, { in: "gar", sub: 1, cls: "noac", wt: W4 });
-      // C: the entry door sits west of the walkway, so the cover runs under the deck to it.
-      R("walk", 1, C ? "Covered walkway · under deck" : "Covered walkway", C ? LX : 0, bY0, walkX1 - (C ? LX : 0), 16, { kind: "cover", cls: "cover" });
+      R("walk", 1, "Covered walkway", 0, bY0, walkX1, 16, { kind: "cover", cls: "cover" });
       R("vest", 1, "Vestibule · W/D", vX0, bY0, vX1 - vX0, bathY0 - W4 - bY0, { cls: "ac", wt: wt(W4, W4, W4, W8) });
       R("bath", 1, "Bath", vX0, bathY0, vX1 - vX0, 6, { cls: "liv", wt: wt(W4, W4, W4, W8) });
       R("gym", 1, "Gym / dance", gymX0, bY0, gymL, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
@@ -6832,6 +6826,28 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         for (const r of rooms) if (r.fl === 1 && slid.has(r.id)) r.x = r3(r.x + LX);
         for (const p of pcs) if (p.fl === 1 && p.y >= lY0 - 0.01) p.x = r3(p.x + LX);
         O("gS", 1, "gym", "S", EF + LX + 2 + 4.5 - gymX0, 3, "door", { sw: "in" });
+        // The entry stays at the walkway's south end (same door as Master 1), so
+        // the walkway still reaches all three doors. Mud is mirrored to the west of
+        // the door; a coat closet takes the NW corner and the kitchen run slides
+        // east into the storage closet.
+        const at = (arr, id) => arr.find(o => o.id === id);
+        const set = (arr, id, o) => Object.assign(at(arr, id), o);
+        const entX = 1 + 3 + 0.5 - 7.083;         // door at x 1–4, as in Master 1
+        set(rooms, "ent", { x: r3(entX) });
+        set(ropens, "entN", { at: r3(1 - entX) });
+        set(ropens, "entS", { at: r3(1 - entX - 0.583) });
+        set(pcs, "mshf", { x: r3(entX) });
+        set(pcs, "mud", { x: r3(entX) });
+        R("coat", 1, "Coat", W8 + LX, lY0, entX - W4 - (W8 + LX), 4.625, { in: "liv", wt: W4 });
+        O("coatS", 1, "coat", "S", 0.375, 2.5, "door", { sw: "out" });
+        const kX = entX + 7.083 + W4;
+        set(pcs, "fr", { x: r3(kX) });
+        set(pcs, "kc", { x: r3(kX + 3) });
+        set(pcs, "fr2", { x: r3(kX + 13.5) });
+        const stoX = kX + 16.625;
+        set(rooms, "sto", { x: r3(stoX), w: r3(EF + LX - W8 - stoX) });
+        set(ropens, "stoS", { at: 0.583, w: 3 });
+        set(pcs, "isl", { x: r3(at(pcs, "isl").x + 1.75) });
       }
       return { rooms, pcs, ropens };
     }
@@ -6876,8 +6892,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         `bS0       = ${oS}`,
         `cageLen   = 70`,
         `cageWid   = 12`,
-        `cageMarW  = 2`,
-        `cageMarE  = ${C ? 1 : 2}`,
+        `cageMarA  = 2`,
+        `cageMarB  = ${C ? 1 : 2}`,
         `zoom      = 3.00`,
         ...base.split("\n").filter(l => keep.test(l)),
         ...off.map(k => `${k} = off`),
