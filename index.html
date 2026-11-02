@@ -627,6 +627,7 @@
       <h1>Site Studio</h1>
       <span id="overallBox"></span>
       <button type="button" class="spend-chip" id="spendBtn" title="Spend estimate">$0</button>
+      <a class="nav" href="index.html">gallery</a>
     </header>
 
     <div class="wrap">
@@ -3599,6 +3600,7 @@
       if (S.enSpa) drawSpa(acc);
       if (S.enCage) drawCage(acc);
       if (S.enCourt) drawCourt(acc);
+      drawDriveSlope(acc);
       if (S.enOffice) drawOffice(acc);
       if (S.enCloset) drawSimple(acc, "closet");
       if (S.enLaundry) drawLaundry(acc);
@@ -6018,6 +6020,18 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       return best;
     }
 
+    // The existing drive falls for 15′ off the house garage, then runs level;
+    // the lawn east of it is flat (owner 2026-11-02).
+    function drawDriveSlope(acc) {
+      const pe = 'style="pointer-events:none"';
+      const e0 = HOUSE_E1, e1 = HOUSE_E1 + 15, s0 = HOUSE_S0, s1 = DRIVE_S1;
+      acc.s += rHatch("hDriveSlope", "#8a5a2b");
+      acc.s += `<rect x="${fx(e0)}" y="${fy(s0)}" width="${(e1 - e0) * PXFT}" height="${(s1 - s0) * PXFT}" fill="url(#hDriveSlope)" stroke="none" ${pe}/>`;
+      acc.s += `<line x1="${fx(e1)}" y1="${fy(s0)}" x2="${fx(e1)}" y2="${fy(s1)}" stroke="#8a5a2b" stroke-width="1.5" stroke-dasharray="5 3" ${pe}/>`;
+      acc.s += `<text x="${fx((e0 + e1) / 2)}" y="${fy(s0) + 12}" text-anchor="middle" font-size="9" fill="#6b4420" font-weight="700" ${pe}>slope ↓ 15′</text>`;
+      acc.s += `<text x="${fx(e1) + 3}" y="${fy(s0) + 12}" font-size="9" fill="#6b4420" font-weight="700" ${pe}>level →</text>`;
+    }
+
     function rHatch(id, col) {
       return `<pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">` +
         `<line x1="0" y1="0" x2="0" y2="8" stroke="${col}" stroke-width="1.2" stroke-opacity="0.55"/></pattern>`;
@@ -6595,13 +6609,16 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       const P = (id, fl, k, x, y, w, h, o) => pcs.push(Object.assign({ id, fl, k, x: r3(x), y: r3(y), w: r3(w), h: r3(h) }, o || {}));
       const O = (id, fl, host, face, at, w, leaf, o) => ropens.push(Object.assign({ id, fl, host, face, at: r3(at), w: r3(w), leaf }, o || {}));
       const wt = (n, e, s, w) => [n, e, s, w].map(r3);
-      const A = variant === "A";
+      // C = Master 1 with the living slid west so a 15′ nook (2′ + 12′ cage + 1′)
+      // opens behind a 30′ gym; the whole building then moves east for the court.
+      const C = variant === "C", A = variant === "A" || C;
+      const gymL = C ? 30 : 32, gymP = C ? 8 : 10, LX = C ? -7 : 0;
 
       const EF = W8 + 32 + W8;                 // garage / living east face 33′-4″
       const bY0 = W8 + 32 + W4, bY1 = bY0 + 16; // gym band clear
       const lY0 = bY1 + W4, lY1 = lY0 + 32;     // living clear
       const SF = lY1 + W8;                      // south face
-      const gymX0 = EF + 10 - W8 - 32;          // gym projects 10′ past the east face
+      const gymX0 = EF + gymP - W8 - gymL;      // gym projects past the east face
       const walkX1 = 5.333, vX0 = walkX1 + W8, vX1 = gymX0 - W4;
       const bathY0 = bY1 - 6, offX0 = 4.333;
 
@@ -6615,7 +6632,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("walk", 1, "Covered walkway", 0, bY0, walkX1, 16, { kind: "cover", cls: "cover" });
       R("vest", 1, "Vestibule · W/D", vX0, bY0, vX1 - vX0, bathY0 - W4 - bY0, { cls: "ac", wt: wt(W4, W4, W4, W8) });
       R("bath", 1, "Bath", vX0, bathY0, vX1 - vX0, 6, { cls: "liv", wt: wt(W4, W4, W4, W8) });
-      R("gym", 1, "Gym / dance", gymX0, bY0, 32, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
+      R("gym", 1, "Gym / dance", gymX0, bY0, gymL, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
       R("liv", 1, "Living", W8, lY0, 32, 32, { cls: "liv", wt: wt(W4, W8, W8, W8), ly: 3.6 });
       R("ent", 1, A ? "Entry · mud" : "Entry · lockers", W8, lY0, 7.083, A ? 4.5 : 5.25, { in: "liv", wt: W4 });
       // "5×8" is her grid count to the outside of the partitions; it is the only
@@ -6641,10 +6658,6 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       P("van1", 1, "vanity", vX1 - 2, bathY0, 2, 3.083, { label: "" });
       P("ridge", 1, "beam", 16.5, lY0, 0.333, 32, { label: "" });
       P("grill", 1, "grill", -3.417, 51.5, 2.75, 2, { label: "Grill" });
-      P("pl1", 1, "planter", -4, 33.417, 4, 6, { label: "4×6" });
-      P("pl2", 1, "planter", -4, 42.75, 4, 7, { label: "" });
-      P("pl3", 1, "planter", -11.417, 34.25, 4, 6, { label: "" });
-      P("pl4", 1, "planter", -12, 44, 4.25, 9.75, { label: "" });
       P("pdin", 1, "table", -14.167, 57.583, 8, 3.417, { cs: { N: 4, S: 4, E: 1, W: 1 }, label: "Outdoor dining" });
       P("psofa1", 1, "sofa", -11.25, 67.333, 8, 3, { f: "N", label: "Couch" });
       P("psofa2", 1, "sofa", -11.25, 77.75, 8, 3, { f: "S", label: "Couch" });
@@ -6744,9 +6757,10 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("off", 2, "Office / bonus", offX0, bY0, 18.667 - offX0, 16, { cls: "ac", wt: wt(W4, W4, W8, W8) });
       R("st2a", 2, "Stair", 14.667, bY0, 4, 6.25, { in: "off", wt: W4 });
       R("ufs", 2, "Unfinished storage", 19.042, bY0, 13.625, 16, { cls: "noac", wt: wt(W4, W8, W8, W4) });
-      R("dk2", 2, "Covered deck", offX0 - W8 - 8, bY0, 8, 16, { kind: "cover", cls: "cover" });
-      R("shed", 2, "Gym shed roof", EF, bY0 - W8, 10, 16 + W8 + W8, { kind: "roof" });
-      R("cgr", 2, "Cage shed roof · 12′ eave", EF, bY1 + W8, 16, 70, { kind: "roof" });
+      const dkX0 = C ? LX : offX0 - W8 - 8;     // C: deck posts line up with the living's west face
+      R("dk2", 2, "Covered deck", dkX0, bY0, offX0 - W8 - dkX0, 16, { kind: "cover", cls: "cover" });
+      R("shed", 2, "Gym shed roof", EF, bY0 - W8, gymP, 16 + W8 + W8, { kind: "roof" });
+      R("cgr", 2, "Cage shed roof · 12′ eave", EF + LX, bY1 + W8, gymP - LX, 70, { kind: "roof" });
 
       P("fl2b", 2, "stair", 14.667, 23.667, 4, 5, { f: "N", label: "UP" });
       P("land2", 2, "landing", 14.667, 28.667, 4, 4, { label: "7′ landing" });
@@ -6786,29 +6800,43 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       O("ufsW", 2, "ufs", "W", 12, 3, "door", { sw: "in" });
       for (const [i, at] of [7.833, 11.333, 14.833].entries()) O("dw" + (i + 1), 2, "apt", "W", at, 3, "window");
       O("gw2", 2, "apt", "N", 14, 4, "window");
+
+      if (C) {
+        const slid = new Set(["liv", "ent", "sto", "pan", "pav"]);
+        for (const r of rooms) if (r.fl === 1 && slid.has(r.id)) r.x = r3(r.x + LX);
+        for (const p of pcs) if (p.fl === 1 && p.y >= lY0 - 0.01) p.x = r3(p.x + LX);
+        O("gS", 1, "gym", "S", EF + LX + 2 + 4.5 - gymX0, 3, "door", { sw: "in" });
+      }
       return { rooms, pcs, ropens };
     }
 
-    // Site + spend come from Master 8 (garage at the court, cage on the east
+    // Site + spend come from Master 9 (garage at the court, cage on the east
     // fence); the building is Carrie's.
+    // Master 3 (C): court play lines start where the drive levels out (house
+    // garage face + 15′); its 5′ sideline puts the garage west face 25′ further.
+    const DRIVE_LEVEL_E = HOUSE_E1 + 15;
     function carrieText(variant) {
-      const base = builtinText("8. Gym+entry gable west") || "";
-      const keep = /^(deckW|deckL|poolLen|courtW|courtD|deck|pool|spa|court|fire|spend)\s*=/;
+      const C = variant === "C";
+      const base = builtinText("9. Gym+entry gable west") || "";
+      const keep = C ? /^(deckW|deckL|poolLen|courtW|courtD|deck|pool|spa|fire|spend)\s*=/
+        : /^(deckW|deckL|poolLen|courtW|courtD|deck|pool|spa|court|fire|spend)\s*=/;
       const L = carrieLayout(variant);
       const W8 = 8 / 12;
       const livingW = r3(32 + 2 * W8);
-      const eastGap = 18;
+      const eastGap = C ? r3(EAST_FENCE - (DRIVE_LEVEL_E + 25) - livingW) : 18;
       const oE = EAST_FENCE - eastGap - livingW, oS = -41;
       const gymS0 = 32 + W8 + 4.5 / 12;
       const off = ["office", "closet", "laundry", "hall", "porch", "store", "kitchen", "bath", "bunk", "media", "weights",
         "dance", "inshop", "table", "ptable", "dining", "sit", "bar", "patio", "mirror", "barre"];
-      const name = variant === "A" ? "1. Carrie 10/9 · fireplace east wall" : "2. Carrie 10/9 · fireplace center";
+      const name = { A: "1. Carrie 10/9 · fireplace east wall", B: "2. Carrie 10/9 · fireplace center",
+        C: "3. Carrie · cage nook, court on level" }[variant];
+      const cageE = oE + livingW + (C ? -7 + 2 : 2);
       return [
         "# site-studio params  (estate ft: e east, s south; house rear = 0)",
         `name      = ${JSON.stringify(name)}`,
         `livingW   = ${livingW}`,
         `livingD   = ${r3(82.083 - gymS0 - 16 - 4.5 / 12 + 4.5 / 12)}`,
-        `gymW      = ${r3(livingW + 10)}`,
+        `gymW      = ${r3(livingW + (C ? 8 : 10))}`,
         `gymD      = ${r3(16 + 4.5 / 12)}`,
         `gymSide   = "N"`,
         `garageW   = ${livingW}`,
@@ -6823,7 +6851,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         `zoom      = 3.00`,
         ...base.split("\n").filter(l => keep.test(l)),
         ...off.map(k => `${k} = off`),
-        `cage      = (12.00, 70.00, ${(oE + livingW + 2).toFixed(2)}, ${(oS + 32 + W8 + 4.5 / 12 + 16 + W8).toFixed(2)}, "N")  # w,h,e,s,face`,
+        `cage      = (12.00, 70.00, ${cageE.toFixed(2)}, ${(oS + 32 + W8 + 4.5 / 12 + 16 + W8).toFixed(2)}, "N")  # w,h,e,s,face`,
+        ...(C ? [`court     = (20.00, 44.00, ${DRIVE_LEVEL_E.toFixed(2)}, -50.00, "E")  # w,h,e,s,face`] : []),
         `plan      = "rooms"`,
         `rooms     = ${JSON.stringify(L.rooms)}`,
         `pcs       = ${JSON.stringify(L.pcs)}`,
@@ -6837,17 +6866,18 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     const BUILTIN_ORDER = [
       "1. Carrie 10/9 · fireplace east wall",
       "2. Carrie 10/9 · fireplace center",
-      "3. Gym entry from patio",
-      "4. N/S Gym @ South End",
-      "5. Media Nook + Middle Gym",
-      "6. Shop kitchen · west bunk",
-      "7. East shop, office north",
-      "8. Gym+entry gable west",
+      "3. Carrie · cage nook, court on level",
+      "4. Gym entry from patio",
+      "5. N/S Gym @ South End",
+      "6. Media Nook + Middle Gym",
+      "7. Shop kitchen · west bunk",
+      "8. East shop, office north",
+      "9. Gym+entry gable west",
     ];
-    const BUILTIN_REV = 40;
+    const BUILTIN_REV = 41;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "3. Gym entry from patio"
+name      = "4. Gym entry from patio"
 livingW   = 23
 livingD   = 52
 gymW      = 34
@@ -6919,7 +6949,7 @@ barre     = (12.00, 0.90, 136.83, 72.00, "N")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599762`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "4. N/S Gym @ South End"
+name      = "5. N/S Gym @ South End"
 livingW   = 25.5
 livingD   = 42
 gymW      = 18
@@ -6991,7 +7021,7 @@ barre     = (0.90, 10.00, 156.95, 79.98, "E")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 588963`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "5. Media Nook + Middle Gym"
+name      = "6. Media Nook + Middle Gym"
 livingW   = 36
 livingD   = 32
 gymW      = 36
@@ -7063,7 +7093,7 @@ barre     = (10.00, 0.90, 166.68, 37.10, "S")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599912`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "6. Shop kitchen · west bunk"
+name      = "7. Shop kitchen · west bunk"
 livingW   = 32
 livingD   = 40
 gymW      = 32
@@ -7148,7 +7178,7 @@ barre     = off
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 670743`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "7. East shop, office north"
+name      = "8. East shop, office north"
 livingW   = 23
 livingD   = 52
 gymW      = 34
@@ -7222,7 +7252,7 @@ barre     = (12.00, 0.90, 136.83, 72.00, "N")  # w,h,e,s,face
 spend     = living 180/sf · ac 90/sf · noAc 70/sf · patio 60/sf · court 13.89/sf · cage 16/sf · pool 180000
 spendTot  = 599762`,
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
-name      = "8. Gym+entry gable west"
+name      = "9. Gym+entry gable west"
 livingW   = 23
 livingD   = 38
 gymW      = 30
@@ -7324,7 +7354,7 @@ barre     = (12.00, 0.90, 163.15, 3.00, "N")  # w,h,e,s,face
 spend     = living 165/sf · ac 100/sf · noAc 75/sf · patio 60/sf · drive 8/sf · cage 12/sf · pool 180000
 spendTot  = 597307`,
     ];
-    BUILTIN_PRESETS.unshift(carrieText("A"), carrieText("B"));
+    BUILTIN_PRESETS.unshift(carrieText("A"), carrieText("B"), carrieText("C"));
     const clone = o => JSON.parse(JSON.stringify(o));
     const loadStore = () => { try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch (_) { return {}; } };
     const saveStore = s => localStorage.setItem(PRESET_KEY, JSON.stringify(s));
