@@ -1043,7 +1043,14 @@
             <div class="row"><label>Width (net)</label>
               <input type="range" id="cageWid" min="12" max="18" step="0.5"><span class="val" id="cageWid_v"></span>
             </div>
-            <div class="hint">Solid = net. Dotted = <b>2′ min</b> each long side (mower / ball path). Walk-in through
+            <div class="row"><label>Margin W / N</label>
+              <input type="range" id="cageMarW" min="0.5" max="3" step="0.5"><span class="val" id="cageMarW_v"></span>
+            </div>
+            <div class="row"><label>Margin E / S</label>
+              <input type="range" id="cageMarE" min="0.5" max="3" step="0.5"><span class="val" id="cageMarE_v"></span>
+            </div>
+            <div class="hint">Solid = net. Dotted = side margin each long side (mower / ball path): 2′ default, 1′
+              where a wall or fence makes the open side. Walk-in through
               the net — no door. 4×8 practice mound (rubber centered). Distances are plate apex → rubber front:
               46 / 50 / 60′6″.</div>
           </div>
@@ -1662,7 +1669,8 @@
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="upper">
-                <td><span class="name">Two-story credit</span><span class="sub">% off all building sf, both floors · less
+                <td><span class="name">Two-story credit</span><span class="sub">% off all building sf, both floors ·
+                    less
                     slab + exterior · Carrie: ~25%</span></td>
                 <td class="num" data-sf></td>
                 <td class="num">− <input id="spend_upperPct" type="number" min="0" max="100" step="1"> %</td>
@@ -1864,7 +1872,7 @@
 
     const BASE_PX = 4.0, M = 52;
     let PXFT = BASE_PX;
-    const CAGE_SIDE = 2.0;           // dotted min each long side
+    const CAGE_SIDE = 2.0;           // default side margin (S.cageMarW / S.cageMarE)
     const PATIO_SNAP = 1.25;
     const SPEND_KEY = "site-studio-spend-v2";
     const SPEND_CAP = 600000;        // owner's 2026-08-29 all-in headline
@@ -1907,7 +1915,7 @@
       eastGap: 28,                   // living east → east fence
       bS0: -10,                      // barndo north (pushed up from −20)
       patioRun: 39.5, patioDep: 15,
-      cageLen: 70, cageWid: 14,
+      cageLen: 70, cageWid: 14, cageMarW: 2, cageMarE: 2,
       courtW: 60, courtD: 30,
       barLen: 10.5, stools: 4,
       bathAlong: 7.5, bathInto: 10.5,
@@ -3022,7 +3030,7 @@
       S.eastGap = 28;
       S.bS0 = -10;
       S.patioRun = 39.5; S.patioDep = 15;
-      S.cageLen = 70; S.cageWid = 14;
+      S.cageLen = 70; S.cageWid = 14; S.cageMarW = 2; S.cageMarE = 2;
       S.courtW = 60; S.courtD = 30;
       S.barLen = 10.5; S.stools = 4;
       S.bathAlong = 7.5; S.bathInto = 10.5;
@@ -3243,6 +3251,8 @@
       el("patioDep_v").textContent = fmtFt(S.patioDep);
       el("cageLen_v").textContent = fmtFt(S.cageLen);
       el("cageWid_v").textContent = fmtFt(S.cageWid);
+      el("cageMarW_v").textContent = fmtFt(S.cageMarW);
+      el("cageMarE_v").textContent = fmtFt(S.cageMarE);
       el("courtW_v").textContent = fmtFt(S.courtW);
       el("courtD_v").textContent = fmtFt(S.courtD);
       el("barLen_v").textContent = fmtFt(S.barLen);
@@ -3275,7 +3285,7 @@
         ["garageW", "garageW"], ["garageD", "garageD"],
         ["workW", "workW"], ["workD", "workD"],
         ["patioRun", "patioRun"], ["patioDep", "patioDep"],
-        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
+        ["cageLen", "cageLen"], ["cageWid", "cageWid"], ["cageMarW", "cageMarW"], ["cageMarE", "cageMarE"], ["courtW", "courtW"], ["courtD", "courtD"], ["barLen", "barLen"],
         ["bathAlong", "bathAlong"], ["bathInto", "bathInto"], ["bunkW", "bunkW"], ["bunkD", "bunkD"],
         ["laundryW", "laundryW"], ["laundryD", "laundryD"], ["hallW", "hallW"], ["hallD", "hallD"],
         ["porchW", "porchW"], ["porchD", "porchD"],
@@ -4493,11 +4503,22 @@
       const f = F.cage;
       const pe = 'style="pointer-events:none"';
       const longNS = (f.face === "N" || f.face === "S");
-      const sideE = longNS ? CAGE_SIDE : 0;
-      const sideS = longNS ? 0 : CAGE_SIDE;
+      const mA = S.cageMarW ?? CAGE_SIDE, mB = S.cageMarE ?? CAGE_SIDE;
       const along = longNS ? f.h : f.w;
       g.s += `<g data-fx="cage" style="cursor:grab">`;
-      g.s += `<rect x="${fx(f.e - sideE)}" y="${fy(f.s - sideS)}" width="${(f.w + 2 * sideE) * PXFT}" height="${(f.h + 2 * sideS) * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
+      const mx0 = longNS ? f.e - mA : f.e, my0 = longNS ? f.s : f.s - mA;
+      const mw = longNS ? f.w + mA + mB : f.w, mh = longNS ? f.h : f.h + mA + mB;
+      if (mA !== mB) {
+        const tc = `font-size="8" fill="${f.tc}" text-anchor="middle" ${pe}`;
+        if (longNS) {
+          g.s += `<text x="${fx(f.e - mA / 2)}" y="${fy(f.s + 6)}" ${tc}>${fmtFt(mA)}</text>`;
+          g.s += `<text x="${fx(f.e + f.w + mB / 2)}" y="${fy(f.s + 6)}" ${tc}>${fmtFt(mB)}</text>`;
+        } else {
+          g.s += `<text x="${fx(f.e + 6)}" y="${fy(f.s - mA / 2) + 3}" ${tc}>${fmtFt(mA)}</text>`;
+          g.s += `<text x="${fx(f.e + 6)}" y="${fy(f.s + f.h + mB / 2) + 3}" ${tc}>${fmtFt(mB)}</text>`;
+        }
+      }
+      g.s += `<rect x="${fx(mx0)}" y="${fy(my0)}" width="${mw * PXFT}" height="${mh * PXFT}" fill="none" stroke="${f.ec}" stroke-width="1.3" stroke-dasharray="5 4" ${pe}/>`;
       g.s += `<rect x="${fx(f.e)}" y="${fy(f.s)}" width="${f.w * PXFT}" height="${f.h * PXFT}" fill="${f.c}" fill-opacity="0.35" stroke="${f.ec}" stroke-width="1.4"/>`;
       // Mound at the end farther from the gym door (walk in at the batter).
       // Plates stacked on the centerline at real distances.
@@ -5075,6 +5096,8 @@ patioRun  = ${S.patioRun}
 patioDep  = ${S.patioDep}
 cageLen   = ${S.cageLen}
 cageWid   = ${S.cageWid}
+cageMarW  = ${S.cageMarW}
+cageMarE  = ${S.cageMarE}
 courtW    = ${S.courtW}
 courtD    = ${S.courtD}
 barLen    = ${S.barLen}
@@ -5184,6 +5207,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       S.storeOpen = null;
       S.bandD = 0;
       S.gymNeckD = 0;
+      S.cageMarW = S.cageMarE = 2;
       S.plan = "bands";
       S.level = 1;
       S.rooms = S.pcs = S.ropens = null;
@@ -5435,6 +5459,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
     el("patioDep").addEventListener("input", e => { S.patioDep = parseFloat(e.target.value); applyPatio(); draw(); });
     el("cageLen").addEventListener("input", e => { S.cageLen = parseFloat(e.target.value); applyCage(); draw(); });
     el("cageWid").addEventListener("input", e => { S.cageWid = parseFloat(e.target.value); applyCage(); draw(); });
+    for (const k of ["cageMarW", "cageMarE"]) el(k).addEventListener("input", e => { S[k] = parseFloat(e.target.value); draw(); });
     el("courtW").addEventListener("input", e => { S.courtW = parseFloat(e.target.value); applyCourt(); draw(); });
     el("courtD").addEventListener("input", e => { S.courtD = parseFloat(e.target.value); applyCourt(); draw(); });
     el("barLen").addEventListener("input", e => { S.barLen = parseFloat(e.target.value); applyBar(); draw(); });
@@ -6629,7 +6654,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       R("malc", 1, "Mech / trash?", 18.042, 26.833, 4.25, 1.458, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("mech", 1, "Mech", 19.042, 28.667, 3.25, 4, { in: "gar", sub: 1, cls: "noac", wt: W4 });
       R("shop", 1, "Shop 10×6", 22.667, 26.667, 10, 6, { in: "gar", sub: 1, cls: "noac", wt: W4 });
-      R("walk", 1, "Covered walkway", 0, bY0, walkX1, 16, { kind: "cover", cls: "cover" });
+      // C: the entry door sits west of the walkway, so the cover runs under the deck to it.
+      R("walk", 1, C ? "Covered walkway · under deck" : "Covered walkway", C ? LX : 0, bY0, walkX1 - (C ? LX : 0), 16, { kind: "cover", cls: "cover" });
       R("vest", 1, "Vestibule · W/D", vX0, bY0, vX1 - vX0, bathY0 - W4 - bY0, { cls: "ac", wt: wt(W4, W4, W4, W8) });
       R("bath", 1, "Bath", vX0, bathY0, vX1 - vX0, 6, { cls: "liv", wt: wt(W4, W4, W4, W8) });
       R("gym", 1, "Gym / dance", gymX0, bY0, gymL, 16, { cls: "ac", wt: wt(W8, W8, W8, W4) });
@@ -6828,8 +6854,10 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       const gymS0 = 32 + W8 + 4.5 / 12;
       const off = ["office", "closet", "laundry", "hall", "porch", "store", "kitchen", "bath", "bunk", "media", "weights",
         "dance", "inshop", "table", "ptable", "dining", "sit", "bar", "patio", "mirror", "barre"];
-      const name = { A: "1. Carrie 10/9 · fireplace east wall", B: "2. Carrie 10/9 · fireplace center",
-        C: "3. Carrie · cage nook, court on level" }[variant];
+      const name = {
+        A: "1. Carrie 10/9 · fireplace east wall", B: "2. Carrie 10/9 · fireplace center",
+        C: "3. Carrie · cage nook, court on level"
+      }[variant];
       const cageE = oE + livingW + (C ? -7 + 2 : 2);
       return [
         "# site-studio params  (estate ft: e east, s south; house rear = 0)",
@@ -6848,6 +6876,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         `bS0       = ${oS}`,
         `cageLen   = 70`,
         `cageWid   = 12`,
+        `cageMarW  = 2`,
+        `cageMarE  = ${C ? 1 : 2}`,
         `zoom      = 3.00`,
         ...base.split("\n").filter(l => keep.test(l)),
         ...off.map(k => `${k} = off`),
@@ -6874,7 +6904,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
       "8. East shop, office north",
       "9. Gym+entry gable west",
     ];
-    const BUILTIN_REV = 41;
+    const BUILTIN_REV = 42;
     const BUILTIN_PRESETS = [
       `# site-studio params  (estate ft: e east, s south; house rear = 0)
 name      = "4. Gym entry from patio"
