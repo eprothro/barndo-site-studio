@@ -1661,8 +1661,8 @@
                 <td class="num" data-cost></td>
               </tr>
               <tr data-spend="upper">
-                <td><span class="name">2nd-floor credit</span><span class="sub">% off floor-2 rooms at their own rate ·
-                    Carrie: ~25%</span></td>
+                <td><span class="name">Two-story credit</span><span class="sub">% off all building sf, both floors · less
+                    slab + exterior · Carrie: ~25%</span></td>
                 <td class="num" data-sf></td>
                 <td class="num">− <input id="spend_upperPct" type="number" min="0" max="100" step="1"> %</td>
                 <td class="num" data-cost></td>
@@ -1875,7 +1875,7 @@
       drive: 8,                      // new concrete to the garage
       cage: 16,                      // ~$10 slab + ~$6 turf; no cage
       pool: 180000,
-      upperPct: 25,                  // Carrie 2026-10-31: going vertical saves ~25% on the stacked floor
+      upperPct: 25,                  // Carrie: a two-story build is ~25% cheaper on total building sf
     };
     const loadSpend = () => {
       try {
@@ -5970,7 +5970,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
 
     function roomsTakeoff() {
       const sum = { liv: 0, ac: 0, noac: 0, cover: 0 };
-      let upper = 0, upperBase = 0;
+      let upper = 0, upperBase = 0, stacked = false;
       const rate = { liv: Spend.living, ac: Spend.ac, noac: Spend.noAc };
       for (const r of S.rooms) {
         if (!r.cls || !(r.cls in sum)) continue;
@@ -5978,7 +5978,8 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         for (const c of S.rooms) if (c.in === r.id && c.sub) a -= c.w * c.h;
         a = Math.max(0, a);
         sum[r.cls] += a;
-        if ((r.fl || 1) > 1 && r.cls in rate) { upper += a; upperBase += a * rate[r.cls]; }
+        if (r.cls in rate) { upper += a; upperBase += a * rate[r.cls]; }
+        if ((r.fl || 1) > 1 && r.cls in rate) stacked = true;
       }
       const driveSf = newDriveSf();
       return {
@@ -5989,7 +5990,7 @@ ropens    = ${JSON.stringify(S.ropens)}` : ""}`;
         drive: { on: driveSf > 0.05, sf: driveSf },
         cage: { on: !!S.enCage, sf: S.enCage ? S.cageWid * S.cageLen : 0 },
         pool: { on: !!S.enPool, sf: 0 },
-        upper: { on: upper > 0.05, sf: upper, base: upperBase },
+        upper: { on: stacked, sf: upper, base: upperBase },
       };
     }
 
